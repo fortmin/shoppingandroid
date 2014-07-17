@@ -19,7 +19,7 @@
 package com.fortmin.proshopping.shopping.model;
 
 /**
- * Model definition for ProductoCollection.
+ * Model definition for Mensaje.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the shopping. For a detailed explanation see:
@@ -29,43 +29,58 @@ package com.fortmin.proshopping.shopping.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class ProductoCollection extends com.google.api.client.json.GenericJson {
+public final class Mensaje extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.util.List<Producto> items;
+  private java.lang.String mensaje;
 
-  static {
-    // hack to force ProGuard to consider Producto used, since otherwise it would be stripped out
-    // see http://code.google.com/p/google-api-java-client/issues/detail?id=528
-    com.google.api.client.util.Data.nullOf(Producto.class);
+  /**
+   * The value may be {@code null}.
+   */
+  @com.google.api.client.util.Key
+  private java.lang.String operacion;
+
+  /**
+   * @return value or {@code null} for none
+   */
+  public java.lang.String getMensaje() {
+    return mensaje;
+  }
+
+  /**
+   * @param mensaje mensaje or {@code null} for none
+   */
+  public Mensaje setMensaje(java.lang.String mensaje) {
+    this.mensaje = mensaje;
+    return this;
   }
 
   /**
    * @return value or {@code null} for none
    */
-  public java.util.List<Producto> getItems() {
-    return items;
+  public java.lang.String getOperacion() {
+    return operacion;
   }
 
   /**
-   * @param items items or {@code null} for none
+   * @param operacion operacion or {@code null} for none
    */
-  public ProductoCollection setItems(java.util.List<Producto> items) {
-    this.items = items;
+  public Mensaje setOperacion(java.lang.String operacion) {
+    this.operacion = operacion;
     return this;
   }
 
   @Override
-  public ProductoCollection set(String fieldName, Object value) {
-    return (ProductoCollection) super.set(fieldName, value);
+  public Mensaje set(String fieldName, Object value) {
+    return (Mensaje) super.set(fieldName, value);
   }
 
   @Override
-  public ProductoCollection clone() {
-    return (ProductoCollection) super.clone();
+  public Mensaje clone() {
+    return (Mensaje) super.clone();
   }
 
 }

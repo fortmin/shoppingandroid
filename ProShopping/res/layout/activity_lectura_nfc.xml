@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="com.fortmin.proshopping.LecturaNfc"
+    tools:ignore="MergeRootFrame" >
+     <TextView
+        android:id="@+id/mensajeUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:text="@string/mensaje"
+        android:textSize="28sp"
+        android:layout_marginTop="10dp"
+         />
+
+     <ImageButton
+        android:id="@+id/btnNFC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mensajeUsuario"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/nfc_tag_android" />
+     
+
+    
+
+  
+    
+</RelativeLayout>
+

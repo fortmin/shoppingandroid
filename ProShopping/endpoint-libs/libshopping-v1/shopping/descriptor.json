@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/shopping/v1/20140713002949/java/1.16.0-rc/fortmin.com-shopping-v1-20140713002949-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-shopping-v1-20140713002949-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/shopping/v1/20140717014523/java/1.16.0-rc/fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-07-13 00:29"
+      "timestamp": "2014-07-17 01:45"
     }, 
     {
-      "path": "fortmin.com-shopping-v1-20140713002949-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "proshopping", 
   "language_version": "1.16.0-rc", 
   "id": "shopping:v1", 
-  "revision": 20140713002949
+  "revision": 20140717014523
 }

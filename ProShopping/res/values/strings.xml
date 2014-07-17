@@ -4,5 +4,10 @@
     <string name="app_name">ProShopping</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="title_activity_lectura_nfc">LecturaNfc</string>
+    <string name="action_settings">Settings</string>
+    <string name="mensaje">Acerque su móvil a:</string>
+    <string name="btnAceptar">Aceptar</string>
+    <string name="title_activity_paquete">Productos del Paquete</string>
 
 </resources>
