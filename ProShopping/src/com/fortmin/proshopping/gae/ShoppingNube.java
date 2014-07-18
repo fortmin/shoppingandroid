@@ -28,9 +28,9 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_GET_PAQUETE_RF = "GetPaqueteRf";
 	public static String OPE_GET_PRODUCTOS_PAQUETE = "GetProductosPaquete";
 	public static String OPE_INSERT_COMERCIO = "InsertComercio";
-	public static String OPE_REGISTRO_USUARIO = "InsertComercio";
-	public static String OPE_LOGIN_USUARIO = "InsertComercio";
-	public static String OPE_LOGOFF_USUARIO = "InsertComercio";
+	public static String OPE_REGISTRO_USUARIO = "RegistroUsuario";
+	public static String OPE_LOGIN_USUARIO = "LoginUsuario";
+	public static String OPE_LOGOFF_USUARIO = "LogoffUsuario";
 
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -82,8 +82,7 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				String nombre = (String) params[2];
 				Log.i(this.TAG, "ShoppingNube->" + OPE_REGISTRO_USUARIO + "->"
 						+ nomUsuario + "::" + email + "::" + nombre);
-				RegistroUsuario execgae = endpoint.registroUsuario(nomUsuario,
-						email, nombre);
+				RegistroUsuario execgae = endpoint.registroUsuario(email,nombre,nomUsuario);
 				Mensaje resp = execgae.execute();
 				Log.i(TAG,
 						"ShoppingNube->" + resp.getOperacion() + "->"

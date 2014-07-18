@@ -37,10 +37,9 @@ public class MainActivity extends Activity {
 		// Intent intent = new Intent(this, RegisterActivity.class);
 		// startActivity(intent);
 
-		Toast.makeText(getApplicationContext(), "Obteniendo paquete",
-				Toast.LENGTH_SHORT).show();
+	//Toast.makeText(getApplicationContext(), "Obteniendo paquete",Toast.LENGTH_SHORT).show();
 		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		Paquete paquete = null;
+/*		Paquete paquete = null;
 		try {
 			paquete = (Paquete) comNube.execute("BEACON001").get();
 		} catch (InterruptedException e1) {
@@ -58,10 +57,10 @@ public class MainActivity extends Activity {
 			Log.i(TAG, "Precio del paquete    : " + paquete.getPrecio());
 			Log.i(TAG, "Cantidad de productos : " + paquete.getCantProductos());
 			Log.i(TAG, "\n");
-		}
+		}*/
 
 		// Si pude obtener el paquete procedo a pedir la lista de productos
-		if (paquete != null) {
+	/*	if (paquete != null) {
 			Toast.makeText(getApplicationContext(), "Obteniendo productos",
 					Toast.LENGTH_SHORT).show();
 			comNube = new ShoppingNube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
@@ -95,7 +94,7 @@ public class MainActivity extends Activity {
 							"Precio del producto   : " + proxprod.getPrecio());
 				}
 			}
-		}
+		}*/
 
 		// -----------------------------------------------------------------------
 		// -----------------------------------------------------------------------
@@ -112,7 +111,7 @@ public class MainActivity extends Activity {
 
 		comNube = new ShoppingNube(ShoppingNube.OPE_REGISTRO_USUARIO);
 		try {
-			Mensaje resp = (Mensaje) comNube.execute(nomUsuario, email, nombre)
+			Mensaje resp = (Mensaje) comNube.execute(email, nombre,nomUsuario)
 					.get();
 			Log.i(TAG, "Respuesta = " + resp.getMensaje());
 			// Respuesta puede ser OK o USUARIO_EXISTENTE (el usuario tiene que
@@ -122,7 +121,7 @@ public class MainActivity extends Activity {
 					+ "InterruptedException");
 		} catch (ExecutionException e) {
 			Log.e(TAG, ShoppingNube.OPE_REGISTRO_USUARIO + "ExecutionException");
-		}
+		} 
 
 		comNube = new ShoppingNube(ShoppingNube.OPE_LOGIN_USUARIO);
 		try {

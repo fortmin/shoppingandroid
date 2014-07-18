@@ -9,5 +9,17 @@
     <string name="mensaje">Acerque su móvil a:</string>
     <string name="btnAceptar">Aceptar</string>
     <string name="title_activity_paquete">Productos del Paquete</string>
-
+    <string name="title_activity_login">Login de Cliente</string>
+    <string name="title_activity_registro">Registro de Cliente</string>
+    <string name="title_activity_inicio">Bienvenido Cliente</string>
+    <string name="bienvenido">Bienvenido </string>
+    <string name="bienvenido2">a tu Shopping amigo </string>
+    <string name="usuario">Ingrese su usuario</string>
+    <string name="registro_nombre">Nombre Completo </string>
+    <string name="registro_email">E-mail</string>
+    <string name="pass">Ingrese su clave</string>
+    <string name="usuarioR">Usuario Registrado </string>
+    <string name="btnLogin">Ingresar</string>
+    <string name="btn_registro">Registrar</string>
+    <string name="usuarioNR">   Nuevo     Usuario </string>
 </resources>

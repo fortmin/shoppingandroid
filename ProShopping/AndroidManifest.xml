@@ -54,19 +54,38 @@
         <activity
             android:name="com.fortmin.proshopping.LecturaNfc"
             android:label="@string/title_activity_lectura_nfc" >
+        </activity>
+        <activity
+            android:name="com.fortmin.proshopping.ProductosPaquete"
+            android:label="@string/title_activity_paquete" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.fortmin.proshopping.Inicio"
+            android:label="@string/title_activity_inicio" >
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.fortmin.proshopping.ProductosPaquete"
-            android:label="@string/title_activity_paquete" >
-             <intent-filter>
-               <category android:name="android.intent.category.LAUNCHER" />
+          <activity
+            android:name="com.fortmin.proshopping.Login"
+            android:label="@string/title_activity_login" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+         <activity
+            android:name="com.fortmin.proshopping.FormularioRegistro"
+            android:label="@string/title_activity_registro" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+   
 
 </manifest>
