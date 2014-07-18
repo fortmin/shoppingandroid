@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#646F3D"
+    tools:context="com.fortmin.proshopping.FormularioRegistro"
+    tools:ignore="MergeRootFrame" >
+
+    <EditText  
+        android:id="@+id/registroemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:inputType="textEmailAddress"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000" 
+        android:textSize="40sp"   
+        android:hint="@string/registro_email" 
+        />
+     <EditText
+        android:id="@+id/registronombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/registroemail"
+        android:textColor="#000000" 
+        android:textSize="40sp"    
+        android:hint="@string/registro_nombre"
+       />
+     <EditText
+        android:id="@+id/registrousuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/registronombre"
+        android:textColor="#000000" 
+        android:textSize="40sp"    
+        android:hint="@string/usuario"
+       />
+     
+
+     <Button
+         android:id="@+id/btnRegistro"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="15dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="30sp"
+         android:layout_below="@+id/registrousuario"
+         android:text="@string/btn_registro" />
+
+     
+
+</RelativeLayout>
+

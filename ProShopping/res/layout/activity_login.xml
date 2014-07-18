@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#646F3D"
+    tools:context="com.fortmin.proshopping.Login"
+    tools:ignore="MergeRootFrame" >
+
+    <EditText  
+        android:id="@+id/usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000" 
+        android:textSize="40sp"   
+        android:hint="@string/usuario" 
+        />
+     <EditText
+        android:id="@+id/pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/usuario"
+        android:inputType="textPassword"
+        android:textColor="#000000" 
+        android:textSize="40sp"    
+        android:hint="@string/pass"
+       />
+
+     <Button
+         android:id="@+id/btnLogeo"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="15dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="30sp"
+         android:layout_below="@+id/pass"
+         android:text="@string/btnLogin" />
+
+     
+
+</RelativeLayout>
+

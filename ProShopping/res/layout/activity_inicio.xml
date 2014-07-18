@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="com.fortmin.proshopping.Inicio"
+    tools:ignore="MergeRootFrame" >
+
+    <TextView
+        android:id="@+id/bienvenida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" 
+        android:textSize="60sp"    
+        android:text="@string/bienvenido"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+     <TextView
+        android:id="@+id/bienvenida2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/bienvenida"
+        android:textColor="#FFFFFF" 
+        android:textSize="40sp"    
+        android:text="@string/bienvenido2"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+     <Button
+         android:id="@+id/btnusuarioR"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="15dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="40sp"
+         android:layout_below="@+id/bienvenida2"
+         android:text="@string/usuarioR" />
+
+     <Button
+         android:id="@+id/btnusuarioNR"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="15dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="40sp"
+         android:layout_below="@+id/btnusuarioR"
+         android:text="@string/usuarioNR" />
+
+</RelativeLayout>
+
