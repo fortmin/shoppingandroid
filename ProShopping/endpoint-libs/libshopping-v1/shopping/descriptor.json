@@ -1,28 +1,28 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/shopping/v1/20140717014523/java/1.16.0-rc/fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/shopping/v1/20140719163527/java/1.16.0-rc/fortmin.com-shopping-v1-20140719163527-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-shopping-v1-20140719163527-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-07-17 01:45"
+      "timestamp": "2014-07-19 16:35"
     }, 
     {
-      "path": "fortmin.com-shopping-v1-20140717014523-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-shopping-v1-20140719163527-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
   "proguard-config": "proguard-google-api-client.txt", 
   "ownerDomain": "fortmin.com", 
-  "moduleName": "com.fortmin.proshopping", 
+  "moduleName": "com.fortmin.proshopping.logica", 
   "name": "shopping", 
   "language": "java", 
   "title": "shopping", 
   "version": "v1", 
   "kind": "discovery#directoryItem", 
-  "modulePath": "com/fortmin/proshopping", 
+  "modulePath": "com/fortmin/proshopping/logica", 
   "maven": {
     "group_id": "com.fortmin", 
-    "artifact_id": "proshopping-shopping", 
+    "artifact_id": "proshopping-logica-shopping", 
     "version": "v1-1.16.0-rc-SNAPSHOT"
   }, 
   "dependencies": [
@@ -699,8 +699,8 @@
     }
   ], 
   "ownerName": "fortmin.com", 
-  "packagePath": "proshopping", 
+  "packagePath": "proshopping.logica", 
   "language_version": "1.16.0-rc", 
   "id": "shopping:v1", 
-  "revision": 20140717014523
+  "revision": 20140719163527
 }

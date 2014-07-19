@@ -7,17 +7,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.fortmin.proshopping.CloudEndpointUtils;
-import com.fortmin.proshopping.shopping.Shopping;
-import com.fortmin.proshopping.shopping.Shopping.GetPaqueteRf;
-import com.fortmin.proshopping.shopping.Shopping.GetProductosPaquete;
-import com.fortmin.proshopping.shopping.Shopping.Insertcomercio;
-import com.fortmin.proshopping.shopping.Shopping.LoginUsuario;
-import com.fortmin.proshopping.shopping.Shopping.LogoffUsuario;
-import com.fortmin.proshopping.shopping.Shopping.RegistroUsuario;
-import com.fortmin.proshopping.shopping.model.Mensaje;
-import com.fortmin.proshopping.shopping.model.Paquete;
-import com.fortmin.proshopping.shopping.model.Producto;
-import com.fortmin.proshopping.shopping.model.ProductoCollection;
+import com.fortmin.proshopping.logica.shopping.Shopping;
+import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
+import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.LoginUsuario;
+import com.fortmin.proshopping.logica.shopping.Shopping.LogoffUsuario;
+import com.fortmin.proshopping.logica.shopping.Shopping.RegistroUsuario;
+import com.fortmin.proshopping.logica.shopping.model.Mensaje;
+import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.Producto;
+import com.fortmin.proshopping.logica.shopping.model.ProductoCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -27,10 +28,11 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 
 	public static String OPE_GET_PAQUETE_RF = "GetPaqueteRf";
 	public static String OPE_GET_PRODUCTOS_PAQUETE = "GetProductosPaquete";
-	public static String OPE_INSERT_COMERCIO = "InsertComercio";
 	public static String OPE_REGISTRO_USUARIO = "RegistroUsuario";
 	public static String OPE_LOGIN_USUARIO = "LoginUsuario";
 	public static String OPE_LOGOFF_USUARIO = "LogoffUsuario";
+	public static String OPE_INGRESO_ESTACIONAMIENTO = "IngresoEstacionamiento";
+	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
 
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -114,28 +116,32 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 								+ resp.getMensaje());
 				return resp;
 			}
-			if (operacion.equals(OPE_INSERT_COMERCIO)) {
-				String nomComercio = (String) params[0];
-				String nomUbicacion = (String) params[1];
-				Log.i(this.TAG, "ShoppingNube->" + OPE_INSERT_COMERCIO + "->"
-						+ nomComercio + "->" + nomUbicacion);
-				Insertcomercio execgae = endpoint.insertcomercio(nomComercio,
-						nomUbicacion);
-				execgae.execute();
-				return null;
+			if (operacion.equals(OPE_INGRESO_ESTACIONAMIENTO)) {
+				String elementoRf = (String) params[0];
+				String usuario = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_INGRESO_ESTACIONAMIENTO + "->"
+						+ elementoRf + "::" + usuario);
+				IngresoEstacionamiento execgae = endpoint.ingresoEstacionamiento(elementoRf,
+						usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_EGRESO_ESTACIONAMIENTO)) {
+				String elementoRf = (String) params[0];
+				String usuario = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_EGRESO_ESTACIONAMIENTO + "->"
+						+ elementoRf + "::" + usuario);
+				EgresoEstacionamiento execgae = endpoint.egresoEstacionamiento(elementoRf,
+						usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-
-	/*
-	 * @SuppressWarnings("unchecked") protected void onPostExecute(Object
-	 * result) { if (result != null) { if (operacion.equals(OPE_GET_PAQUETE_RF))
-	 * { paquete = (Paquete) result; } else if
-	 * (operacion.equals(OPE_GET_PRODUCTOS_PAQUETE)) { productos =
-	 * (LinkedList<Producto>) result; } } }
-	 */
 
 }

@@ -2,15 +2,11 @@ package com.fortmin.proshopping;
 
 import java.util.concurrent.ExecutionException;
 
-import com.fortmin.proshopping.gae.ShoppingNube;
-import com.fortmin.proshopping.shopping.model.Mensaje;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fortmin.proshopping.gae.ShoppingNube;
+import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 
 public class FormularioRegistro extends Activity {
     private EditText nombre;

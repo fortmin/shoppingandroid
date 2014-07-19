@@ -1,18 +1,13 @@
 package com.fortmin.proshopping;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fortmin.proshopping.gae.ShoppingNube;
-import com.fortmin.proshopping.shopping.model.Mensaje;
-import com.fortmin.proshopping.shopping.model.Paquete;
-import com.fortmin.proshopping.shopping.model.Producto;
+import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 
 /**
  * The Main Activity.
@@ -96,14 +91,6 @@ public class MainActivity extends Activity {
 			}
 		}*/
 
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// DE ACA PARA ABAJO ES TODO LO NUEVO...
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		
 		String nomUsuario = "jafortti";
 		String email = "jafortti@gmail.com";
 		String nombre = "Julio Fortti";
@@ -145,6 +132,53 @@ public class MainActivity extends Activity {
 		} catch (ExecutionException e) {
 			Log.e(TAG, ShoppingNube.OPE_LOGOFF_USUARIO + "ExecutionException");
 		}
+
+		// -----------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+		// DE ACA PARA ABAJO ES TODO LO NUEVO DE ESTACIONAMIENTO
+		// -----------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+		
+		String usuario = "jafortti";
+		String elementoRf = "NFCPARKITALIA01";
+
+		comNube = new ShoppingNube(ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO);
+		try {
+			Mensaje resp = (Mensaje) comNube.execute(elementoRf,usuario)
+					.get();
+			Log.i(TAG, "Respuesta = " + resp.getMensaje());
+			// Respuesta puede ser:
+			// SIN_ACCESO_RELACIONADO si es un Tag NFC pero no esta relacionado con un Acceso
+			// NO_ES_ACCESO_ESTACIONAMIENTO porque es un Acceso pero no para Autos (ej: Peatonal)
+			// CLIENTE_INEXISTENTE no se encontro el usuario 
+			// OK si todo salio bien
+		} catch (InterruptedException e) {
+			Log.e(TAG, ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO
+					+ "InterruptedException");
+		} catch (ExecutionException e) {
+			Log.e(TAG, ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO + "ExecutionException");
+		} 
+
+		comNube = new ShoppingNube(ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO);
+		try {
+			Mensaje resp = (Mensaje) comNube.execute(elementoRf,usuario)
+					.get();
+			Log.i(TAG, "Respuesta = " + resp.getMensaje());
+			// Respuesta puede ser:
+			// SIN_ACCESO_RELACIONADO si es un Tag NFC pero no esta relacionado con un Acceso
+			// NO_ES_ACCESO_ESTACIONAMIENTO porque es un Acceso pero no para Autos (ej: Peatonal)
+			// CLIENTE_INEXISTENTE no se encontro el usuario 
+			// OK si todo salio bien
+			// PLAZO_VENCIDO si la fecha hora de salida supera a la fecha hora de entrada
+			// en mas del valor del parametro PLAZO_ESTACIONAMIENTO establecido en la tabla Config
+		} catch (InterruptedException e) {
+			Log.e(TAG, ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO
+					+ "InterruptedException");
+		} catch (ExecutionException e) {
+			Log.e(TAG, ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO + "ExecutionException");
+		} 
 
 	}
 

@@ -2,14 +2,6 @@ package com.fortmin.proshopping;
 
 import java.io.IOException;
 
-import com.fortmin.proshopping.messageEndpoint.MessageEndpoint;
-import com.fortmin.proshopping.messageEndpoint.model.CollectionResponseMessageData;
-import com.fortmin.proshopping.messageEndpoint.model.MessageData;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson.JacksonFactory;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,6 +14,14 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.fortmin.proshopping.messageEndpoint.MessageEndpoint;
+import com.fortmin.proshopping.messageEndpoint.model.CollectionResponseMessageData;
+import com.fortmin.proshopping.messageEndpoint.model.MessageData;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson.JacksonFactory;
 
 /**
  * An activity that communicates with your App Engine backend via Cloud

@@ -19,8 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fortmin.proshopping.gae.ShoppingNube;
-import com.fortmin.proshopping.shopping.model.Paquete;
-import com.fortmin.proshopping.shopping.model.Producto;
+import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.Producto;
 
 public class ProductosPaquete extends Activity {
 	private Paquete paquete = null;
