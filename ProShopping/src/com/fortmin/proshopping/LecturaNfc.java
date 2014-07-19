@@ -20,7 +20,7 @@ public class LecturaNfc extends Activity {
 		btn_nfc.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				// biene el contenido leido del nfc
-				verPaquete("BEACON001");
+				verPaquete("NFC001");
 			}
 		});
 	}

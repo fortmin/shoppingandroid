@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:text="@string/mensaje"
-        android:textSize="28sp"
+        android:textSize="21sp"
         android:layout_marginTop="10dp"
          />
 
@@ -22,9 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mensajeUsuario"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/nfc_tag_android" />
+        android:layout_marginTop="50dp"
+        android:src="@drawable/nfc" />
      
 
     

@@ -3,42 +3,70 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#646F3D"
+    android:background="#000000"
     tools:context="com.fortmin.proshopping.Login"
     tools:ignore="MergeRootFrame" >
-
-    <EditText  
-        android:id="@+id/usuario"
+    
+    
+    
+    <TextView
+        android:id="@+id/tituloLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/titulo_login"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:textColor="#000000" 
-        android:textSize="40sp"   
-        android:hint="@string/usuario" 
         />
-     <EditText
-        android:id="@+id/pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/usuario"
-        android:inputType="textPassword"
-        android:textColor="#000000" 
-        android:textSize="40sp"    
-        android:hint="@string/pass"
-       />
-
-     <Button
-         android:id="@+id/btnLogeo"
+    <TableLayout
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_marginTop="15dp"
-         android:layout_centerHorizontal="true"
-         android:textSize="30sp"
-         android:layout_below="@+id/pass"
-         android:text="@string/btnLogin" />
+         android:layout_below="@+id/tituloLogin"
+         android:layout_centerHorizontal="true" >
+         <TableRow
+             android:id="@+id/tableRow1"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" >
+             <EditText  
+       	      android:id="@+id/usuario"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="40dp"
+              android:textColor="#000000" 
+              android:textSize="40sp"   
+              android:hint="@string/usuario" 
+            />
+         </TableRow>
 
-     
+         <TableRow
+             android:id="@+id/tableRow2"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" >
+             <EditText
+               android:id="@+id/pass"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:inputType="textPassword"
+               android:textColor="#000000" 
+               android:textSize="40sp"    
+               android:hint="@string/pass"
+             />
+         </TableRow>
+
+         <TableRow
+             android:id="@+id/tableRow3"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" >
+             <Button
+               android:id="@+id/btnLogeo"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="30dp"
+               android:textSize="30sp"
+               android:text="@string/btnLogin" />
+         </TableRow>
+
+        
+     </TableLayout>
 
 </RelativeLayout>
 

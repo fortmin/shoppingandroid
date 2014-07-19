@@ -6,6 +6,8 @@ import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.shopping.model.Mensaje;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +23,21 @@ public class FormularioRegistro extends Activity {
     private EditText nombre;
     private EditText e_mail;
     private EditText usuario;
+    private TextView titulo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_formulario_registro);
+		titulo=(TextView) findViewById(R.id.tituloFormulario);
         nombre=(EditText) findViewById(R.id.registronombre);
         e_mail=(EditText) findViewById(R.id.registroemail);
         usuario=(EditText) findViewById(R.id.registrousuario);
         Button registro=(Button)findViewById(R.id.btnRegistro);
         Typeface fuente=Typeface.createFromAsset(getAssets(),"daniela.ttf");
+        Typeface fuente1=Typeface.createFromAsset(getAssets(),"LokiCola.ttf");
+        titulo.setTypeface(fuente1);
+        titulo.setTextColor(Color.WHITE);
+        titulo.setTextSize((float) 60.0);
         usuario.setTypeface(fuente);
         e_mail.setTypeface(fuente);
         nombre.setTypeface(fuente);
@@ -50,8 +58,10 @@ public class FormularioRegistro extends Activity {
 					}
 					if (resp!=null){
 					 String mensaje=resp.getMensaje();	// Respuesta puede ser OK o USUARIO_INEXISTENTE o CLAVE_INCORRECTA
-					 if (mensaje.equals("OK"))
-						mostrarMensaje("Registro exitoso");
+					 if (mensaje.equals("OK")){
+						mostrarMensaje("Registrado correctamente");
+						verOpciones();
+					 }
 					 else if(mensaje.contains("USUARIO_EXISTENTE"))
 						mostrarMensaje("Usuario Ya registrado");
 					 
@@ -88,5 +98,8 @@ public class FormularioRegistro extends Activity {
 	   Toast.makeText(getApplicationContext(), mensaje,Toast.LENGTH_LONG).show();
    }
 	
-
+   public void verOpciones(){
+	   Intent opciones = new Intent(this, MenuCliente.class);
+		startActivity(opciones);
+   }
 }

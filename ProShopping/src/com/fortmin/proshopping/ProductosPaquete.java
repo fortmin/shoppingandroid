@@ -55,7 +55,7 @@ public class ProductosPaquete extends Activity {
 
 			paquete = (Paquete) comNube.execute(nombreNFC).get();
 			detalle_producto.setText("El paquete tiene "
-					+ paquete.getCantProductos() + "Productos" + "\n"
+					+ paquete.getCantProductos() +" "+ "Productos" + "\n"
 					+ "Precio=" + paquete.getPrecio() + "\n" + "puntos="
 					+ paquete.getPuntos());
 

@@ -28,6 +28,7 @@
         <activity
             android:name="com.fortmin.proshopping.MainActivity"
             android:label="@string/app_name" >
+           
         </activity>
 
         <service android:name="com.fortmin.proshopping.GCMIntentService" />
@@ -64,26 +65,34 @@
         <activity
             android:name="com.fortmin.proshopping.Inicio"
             android:label="@string/title_activity_inicio" >
-            <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+          <activity
             android:name="com.fortmin.proshopping.Login"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+         <activity
             android:name="com.fortmin.proshopping.FormularioRegistro"
             android:label="@string/title_activity_registro" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.fortmin.proshopping.MenuCliente"
+            android:label="@string/title_menu_cliente" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
+   
 
 </manifest>
