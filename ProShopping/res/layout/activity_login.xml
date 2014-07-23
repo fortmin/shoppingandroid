@@ -3,24 +3,25 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FB9836"
     tools:context="com.fortmin.proshopping.Login"
     tools:ignore="MergeRootFrame" >
+     <FrameLayout 
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" 
+        android:background="@drawable/shopping">
+        
+     </FrameLayout>
     
     
     
-    <TextView
-        android:id="@+id/tituloLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/titulo_login"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
-        />
     <TableLayout
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/tituloLogin"
+         android:layout_marginTop="10dp"
+         android:layout_below="@+id/titulo"
+        
          android:layout_centerHorizontal="true" >
          <TableRow
              android:id="@+id/tableRow1"
@@ -30,9 +31,9 @@
        	      android:id="@+id/usuario"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="40dp"
+              android:layout_marginTop="20dp"
               android:textColor="#000000" 
-              android:textSize="40sp"   
+            
               android:hint="@string/usuario" 
             />
          </TableRow>
@@ -45,9 +46,10 @@
                android:id="@+id/pass"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
                android:inputType="textPassword"
                android:textColor="#000000" 
-               android:textSize="40sp"    
+               
                android:hint="@string/pass"
              />
          </TableRow>
@@ -56,13 +58,15 @@
              android:id="@+id/tableRow3"
              android:layout_width="match_parent"
              android:layout_height="wrap_content" >
-             <Button
+             <ImageButton
                android:id="@+id/btnLogeo"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               android:src="@drawable/btn_entrar"
+               android:clickable="true"
+               android:background="#FB9836"
                android:layout_marginTop="30dp"
-               android:textSize="30sp"
-               android:text="@string/btnLogin" />
+               />
          </TableRow>
 
         

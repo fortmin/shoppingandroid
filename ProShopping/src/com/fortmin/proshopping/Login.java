@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,32 +21,28 @@ import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 
 public class Login extends Activity {
-    private EditText usuario;
+    private EditText nom_user;
     private EditText pass;
-    private TextView titulo;
+    private String nom_usuario;
+    private usuario user;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		titulo=(TextView) findViewById(R.id.tituloLogin);
-		usuario=(EditText) findViewById(R.id.usuario);
-        pass=(EditText) findViewById(R.id.pass);
-        Button login=(Button)findViewById(R.id.btnLogeo);
-        Typeface fuente=Typeface.createFromAsset(getAssets(),"daniela.ttf");
-        Typeface fuente1=Typeface.createFromAsset(getAssets(),"LokiCola.ttf");
-        titulo.setTypeface(fuente1);
-        titulo.setTextColor(Color.WHITE);
-        titulo.setTextSize((float) 50.0);
-        usuario.setTypeface(fuente);
-        pass.setTypeface(fuente);  
-        login.setBackgroundResource(R.drawable.degradado);
+	    nom_user=(EditText) findViewById(R.id.usuario);
+		pass=(EditText) findViewById(R.id.pass);
+        ImageButton login=(ImageButton)findViewById(R.id.btnLogeo);
+        Typeface fuente=Typeface.createFromAsset(getAssets(),"Roboto-Regular.ttf");
+        nom_user.setTypeface(fuente);
+        pass.setTypeface(fuente); 
+       
         login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_LOGIN_USUARIO);
-				
+				    nom_usuario=nom_user.getText().toString();
 					Mensaje resp = null;
 					try {
-						resp = (Mensaje) comNube.execute( pass.getText().toString(),usuario.getText().toString()).get();
+						resp = (Mensaje) comNube.execute( pass.getText().toString(),nom_usuario).get();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -56,6 +54,8 @@ public class Login extends Activity {
 					 String mensaje=resp.getMensaje();	// Respuesta puede ser OK o USUARIO_INEXISTENTE o CLAVE_INCORRECTA
 					 if (mensaje.equals("OK")){
 						mostrarMensaje("Bienvenido");
+						user=usuario.getInstance();
+						user.setNombre(nom_usuario);
 						verOpciones();
 					 }
 					 else if(mensaje.contains("USUARIO_INEXISTENTE"))
@@ -97,6 +97,6 @@ public class Login extends Activity {
 	
    public void verOpciones(){
 	   Intent opciones = new Intent(this, MenuCliente.class);
-		startActivity(opciones);
+	   startActivity(opciones);
    }
 }

@@ -3,24 +3,23 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FB9836"
     tools:context="com.fortmin.proshopping.FormularioRegistro"
     tools:ignore="MergeRootFrame" >
 
-   <TextView
-        android:id="@+id/tituloFormulario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/titulo_formulario"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
-        />
+   <FrameLayout 
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" 
+        android:background="@drawable/shopping">
+        
+     </FrameLayout>
            
      <TableLayout
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_marginTop="30dp"
-         android:layout_below="@+id/tituloFormulario"
+         android:layout_below="@+id/titulo"
          android:layout_centerHorizontal="true" >
          <TableRow
              android:id="@+id/tableRow1"
@@ -32,7 +31,6 @@
                android:layout_height="wrap_content"
                android:inputType="textEmailAddress"
                android:textColor="#000000" 
-               android:textSize="40sp"   
                android:hint="@string/registro_email" 
             />
          </TableRow>
@@ -46,7 +44,6 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="#000000" 
-              android:textSize="40sp"    
               android:hint="@string/registro_nombre"
        />
          </TableRow>
@@ -60,7 +57,6 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="#000000" 
-              android:textSize="40sp"    
               android:hint="@string/usuario"
             />
          </TableRow>
@@ -69,13 +65,15 @@
              android:id="@+id/tableRow4"
              android:layout_width="match_parent"
              android:layout_height="wrap_content" >
-             <Button
+             <ImageButton
               android:id="@+id/btnRegistro"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+               android:clickable="true"
+              android:background="#FB9836"
               android:layout_marginTop="15dp"
-              android:textSize="30sp"
-              android:text="@string/btn_registro" />
+              android:src="@drawable/btn_registrarse"
+              />
          </TableRow>
      </TableLayout>
      

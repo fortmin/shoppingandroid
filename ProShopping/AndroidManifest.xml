@@ -54,6 +54,13 @@
         <activity
             android:name="com.fortmin.proshopping.LecturaNfc"
             android:label="@string/title_activity_lectura_nfc" >
+            <intent-filter>
+               <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+               <category android:name="android.intent.category.DEFAULT" />
+               <data android:scheme="vnd.android.nfc"
+                android:host="ext"
+                android:pathPrefix="/com.fortmin.proshopping:Shopping"/>
+           </intent-filter>
         </activity>
         <activity
             android:name="com.fortmin.proshopping.ProductosPaquete"
@@ -92,6 +99,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        
     </application>
    
 

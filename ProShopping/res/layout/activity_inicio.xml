@@ -3,71 +3,55 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FB9836"
     tools:context="com.fortmin.proshopping.Inicio"
     tools:ignore="MergeRootFrame" >
-
-    <TextView
-        android:id="@+id/bienvenida"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/bienvenido"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFFFFF"
-        android:textSize="60sp" />
-
-    <TextView
-        android:id="@+id/bienvenida2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bienvenida"
-        android:layout_centerHorizontal="true"
-        android:text="@string/bienvenido2"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFFFFF"
-        android:textSize="40sp" />
-
-  
-
-    
-
-   
-
+    <FrameLayout 
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" 
+        android:background="@drawable/shopping">
+        
+     </FrameLayout>
     <TableLayout
+        android:id="@+id/tableLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bienvenida2"
+        android:layout_below="@+id/titulo"
         android:layout_centerHorizontal="true" >
 
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
-            <Button
-        		android:id="@+id/btnusuarioR"
-       			android:layout_width="wrap_content"
+
+            <ImageButton
+                android:id="@+id/btnusuarioR"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#FB9836"
                 android:layout_marginTop="30dp"
-                android:text="@string/usuarioR"
-                android:textSize="40sp" />
+                android:clickable="true"
+                android:src="@drawable/btn_entrar"
+                />
         </TableRow>
 
         <TableRow
             android:id="@+id/tableRow2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <Button
-               android:id="@+id/btnusuarioNR"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="15dp"
-                android:text="@string/usuarioNR"
-                android:textSize="40sp" /> 
-        </TableRow>
+            android:layout_height="wrap_content" >
 
-      
+            <ImageButton
+                android:id="@+id/btnusuarioNR"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="#FB9836"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/btn_registrarse"
+            />
+        </TableRow>
     </TableLayout>
+
+   
 
 </RelativeLayout>

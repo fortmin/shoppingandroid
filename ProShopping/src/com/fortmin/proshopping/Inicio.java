@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Inicio extends Activity {
@@ -16,18 +18,9 @@ public class Inicio extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
-        TextView titulo=(TextView) findViewById(R.id.bienvenida);
-        TextView titulo2=(TextView) findViewById(R.id.bienvenida2);
-        Button usuarioR=(Button)findViewById(R.id.btnusuarioR);
-        Button usuarioNR=(Button)findViewById(R.id.btnusuarioNR);
-        Typeface fuente = Typeface.createFromAsset(getAssets(),	"Fuente1.ttf");
-        Typeface fuente2=Typeface.createFromAsset(getAssets(),	"daniela.ttf");
-        usuarioR.setTypeface(fuente2);
-        usuarioNR.setTypeface(fuente2);
-        usuarioR.setBackgroundResource(R.drawable.degradado);
-        usuarioNR.setBackgroundResource(R.drawable.degradado);
-		titulo.setTypeface(fuente);
-		titulo2.setTypeface(fuente);
+        ImageButton usuarioR=(ImageButton)findViewById(R.id.btnusuarioR);
+        ImageButton usuarioNR=(ImageButton)findViewById(R.id.btnusuarioNR);
+              
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				logearse();

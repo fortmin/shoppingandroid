@@ -3,57 +3,73 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FB9836"
     tools:context="com.fortmin.proshopping.MenuCliente"
     tools:ignore="MergeRootFrame" >
-   
+    
+    <FrameLayout 
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" 
+        android:background="@drawable/shopping">
+        
+     </FrameLayout>
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_below="@+id/titulo"
         android:layout_centerHorizontal="true" >
 
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
-            <Button
-        		android:id="@+id/btnVerOferta"
-       			android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/veroferta"
-                android:textSize="40sp" />
+               <Spinner
+                  android:id="@+id/spinner"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" 
+                  android:background="#181ECE"
+              /> 
+          
         </TableRow>
 
         <TableRow
             android:id="@+id/tableRow2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <Button
-               android:id="@+id/btnRecibirOfertas"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="15dp"
-                android:text="@string/recibiroferta"
-                android:textSize="40sp" /> 
+              <ImageButton
+        		android:id="@+id/btnVerOferta"
+       			android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FB9836"
+                android:clickable="true"
+                android:src="@drawable/btn_veroferta"
+                android:layout_marginTop="20dp"
+               
+                />
         </TableRow>
         <TableRow
             android:id="@+id/tableRow3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <Button
-               android:id="@+id/btnEstacionamiento"
+             <ImageButton
+               android:id="@+id/btnRecibirOfertas"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_marginTop="15dp"
-                android:text="@string/estacionamiento"
-                android:textSize="40sp" /> 
+               android:clickable="true"
+               android:src="@drawable/btn_recibiroferta"
+               android:background="#FB9836"
+                
+                 /> 
+             
         </TableRow>
         
-
+       
       
     </TableLayout>
-
+    
+      
 </RelativeLayout>
