@@ -12,9 +12,6 @@ import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
-import com.fortmin.proshopping.logica.shopping.Shopping.LoginUsuario;
-import com.fortmin.proshopping.logica.shopping.Shopping.LogoffUsuario;
-import com.fortmin.proshopping.logica.shopping.Shopping.RegistroUsuario;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
@@ -28,9 +25,6 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 
 	public static String OPE_GET_PAQUETE_RF = "GetPaqueteRf";
 	public static String OPE_GET_PRODUCTOS_PAQUETE = "GetProductosPaquete";
-	public static String OPE_REGISTRO_USUARIO = "RegistroUsuario";
-	public static String OPE_LOGIN_USUARIO = "LoginUsuario";
-	public static String OPE_LOGOFF_USUARIO = "LogoffUsuario";
 	public static String OPE_INGRESO_ESTACIONAMIENTO = "IngresoEstacionamiento";
 	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
 
@@ -77,44 +71,6 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				Log.i(TAG, "ShoppingNube->Obtuve cantidad de productos : "
 						+ productos.size());
 				return productos;
-			}
-			if (operacion.equals(OPE_REGISTRO_USUARIO)) {
-				String nomUsuario = (String) params[0];
-				String email = (String) params[1];
-				String nombre = (String) params[2];
-				Log.i(this.TAG, "ShoppingNube->" + OPE_REGISTRO_USUARIO + "->"
-						+ nomUsuario + "::" + email + "::" + nombre);
-				RegistroUsuario execgae = endpoint.registroUsuario(email,nombre,nomUsuario);
-				Mensaje resp = execgae.execute();
-				Log.i(TAG,
-						"ShoppingNube->" + resp.getOperacion() + "->"
-								+ resp.getMensaje());
-				return resp;
-			}
-			if (operacion.equals(OPE_LOGIN_USUARIO)) {
-				String nomUsuario = (String) params[0];
-				String clave = (String) params[1];
-				Log.i(this.TAG, "ShoppingNube->" + OPE_LOGIN_USUARIO + "->"
-						+ nomUsuario);
-				LoginUsuario execgae = endpoint.loginUsuario(nomUsuario, clave);
-				Mensaje resp = execgae.execute();
-				Log.i(TAG,
-						"ShoppingNube->" + resp.getOperacion() + "->"
-								+ resp.getMensaje());
-				return resp;
-			}
-			if (operacion.equals(OPE_LOGOFF_USUARIO)) {
-				String nomUsuario = (String) params[0];
-				String clave = (String) params[1];
-				Log.i(this.TAG, "ShoppingNube->" + OPE_LOGOFF_USUARIO + "->"
-						+ nomUsuario);
-				LogoffUsuario execgae = endpoint.logoffUsuario(nomUsuario,
-						clave);
-				Mensaje resp = execgae.execute();
-				Log.i(TAG,
-						"ShoppingNube->" + resp.getOperacion() + "->"
-								+ resp.getMensaje());
-				return resp;
 			}
 			if (operacion.equals(OPE_INGRESO_ESTACIONAMIENTO)) {
 				String elementoRf = (String) params[0];

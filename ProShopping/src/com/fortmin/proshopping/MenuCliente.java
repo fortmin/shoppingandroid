@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class MenuCliente extends Activity {
     private Spinner opciones;
 	private Intent lecturanfc;
 	private tipoNFC tipo;
-	
+	private com.fortmin.proshopapi.ble.EscucharIbeacons beacons;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class MenuCliente extends Activity {
 		 opciones=(Spinner)findViewById(R.id.spinner);
 	  	ImageButton ver_oferta=(ImageButton)findViewById(R.id.btnVerOferta);
         ImageButton recibir_oferta=(ImageButton)findViewById(R.id.btnRecibirOfertas);
-       
+        beacons = new com.fortmin.proshopapi.ble.EscucharIbeacons(this);
         tipo=tipoNFC.getInstance();
         lista = new ArrayList<String>();
         lista.add("ESTACIONAMIENTO");
@@ -71,7 +72,9 @@ public class MenuCliente extends Activity {
 		});
         recibir_oferta.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				
+				beacons.startScanning();
+				hacerInvisible();
+				startService(new Intent(getBaseContext(), ServicioBle.class));
 			}
 		});
       
@@ -103,5 +106,28 @@ public class MenuCliente extends Activity {
 		startActivity(lecturanfc);
 	}
 	
-	
+	 @Override
+	    protected void onResume() {
+	        super.onResume();
+
+	        // check for Bluetooth enabled on each resume
+	        if (beacons.isBtEnabled() == false)
+	        {
+	            // BT not enabled. Request to turn it on. User needs to restart app once it's turned on.
+	            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+	            startActivity(enableBtIntent);
+	            //finish();
+	        }
+
+	        // inicializacion del ble 
+	        beacons.initialize();
+	       // beacons.startScanning();
+	       //  ListaIbeacon Ibeacons=beacons.getIbeacons();
+		 //    ArrayList<Ibeacon> dispositivos=Ibeacons.IbeaconsEncendidos();
+		 //    beacon=dispositivos.get(0);
+	        
+	    }
+	public void hacerInvisible(){
+		this.setVisible(false);
+	}
 }

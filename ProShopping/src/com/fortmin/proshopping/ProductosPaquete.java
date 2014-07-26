@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
@@ -47,45 +48,25 @@ public class ProductosPaquete extends Activity {
 
 		Bundle bundle = getIntent().getExtras();
 		nombreNFC = bundle.getString("nombreNFC");
-		comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		// Mostrar el ProgressDialog en este Thread
-
-		// new DownloadTask().execute();
-		try {
-
-			paquete = (Paquete) comNube.execute(nombreNFC).get();
-			detalle_producto.setText("El paquete tiene "
-					+ paquete.getCantProductos() +" "+ "Productos" + "\n"
-					+ "Precio=" + paquete.getPrecio() + "\n" + "puntos="
-					+ paquete.getPuntos());
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
+		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(nombreNFC);
 		// Se comienza la nueva Thread que descargará los datos necesarios
 
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete != null) {
+			detalle_producto.setText("El paquete tiene "
+					+ paquete.getCantProductos() + " " + "Productos" + "\n"
+					+ "Precio=" + paquete.getPrecio() + "\n" + "puntos="
+					+ paquete.getPuntos());
+
 			// Toast.makeText(getApplicationContext(), "Obteniendo productos",
 			// Toast.LENGTH_LONG).show();
-			comNube = new ShoppingNube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
+			comNube = new Nube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
 
-			try {
-				productos = (ArrayList<Producto>) comNube.execute(
-						paquete.getNombre()).get();
-				listarNombresProductos();// paso los nombres de productos a
-											// cargar en el listview a un
-											// arreglo de string
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
+			productos = (ArrayList<Producto>) comNube.ejecutarGetProductosPaquete(paquete.getNombre());
+			listarNombresProductos();// paso los nombres de productos a
+										// cargar en el listview a un
+										// arreglo de string
 		}
 		lstOpciones.setOnItemClickListener(new OnItemClickListener() {
 

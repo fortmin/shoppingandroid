@@ -16,7 +16,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="endpoint-libs/libadministracion-v1/administracion/administracion-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libdeviceinfoendpoint-v1/deviceinfoendpoint/deviceinfoendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libgestion-v1/gestion/gestion-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libmessageEndpoint-v1/messageEndpoint/messageendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libseguridad-v1/seguridad/seguridad-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libshopping-v1/shopping/shopping-v1-generated-source"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
