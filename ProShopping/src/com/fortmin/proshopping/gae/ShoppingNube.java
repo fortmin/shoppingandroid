@@ -9,11 +9,13 @@ import android.util.Log;
 import com.fortmin.proshopping.CloudEndpointUtils;
 import com.fortmin.proshopping.logica.shopping.Shopping;
 import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
 import com.fortmin.proshopping.logica.shopping.model.ProductoCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -25,6 +27,7 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 
 	public static String OPE_GET_PAQUETE_RF = "GetPaqueteRf";
 	public static String OPE_GET_PRODUCTOS_PAQUETE = "GetProductosPaquete";
+	public static String OPE_GET_PAQUETE_COMPLETO = "GetPaqueteCompleto";
 	public static String OPE_INGRESO_ESTACIONAMIENTO = "IngresoEstacionamiento";
 	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
 
@@ -55,6 +58,17 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 						+ idElementoRF);
 				GetPaqueteRf execgae = endpoint.getPaqueteRf(idElementoRF);
 				Paquete paquete = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->Obtuve el paquete : "
+								+ paquete.getNombre());
+				return paquete;
+			}
+			if (operacion.equals(OPE_GET_PAQUETE_COMPLETO)) {
+				String idElementoRF = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_PAQUETE_COMPLETO + "->"
+						+ idElementoRF);
+				GetPaqueteCompleto execgae = endpoint.getPaqueteCompleto(idElementoRF);
+				PaqueteVO paquete = execgae.execute();
 				Log.i(TAG,
 						"ShoppingNube->Obtuve el paquete : "
 								+ paquete.getNombre());

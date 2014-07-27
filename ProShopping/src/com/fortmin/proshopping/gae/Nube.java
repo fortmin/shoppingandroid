@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
 
 import android.util.Log;
@@ -62,6 +63,19 @@ public class Nube {
 		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_RF);
 		try {
 			resp = (Paquete) comNube.execute(elemRf).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG,e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG,e.toString());
+		}
+		return resp;
+	}
+
+	public PaqueteVO ejecutarGetPaqueteCompleto(String elemRf) {
+		PaqueteVO resp = null;
+		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_COMPLETO);
+		try {
+			resp = (PaqueteVO) comNube.execute(elemRf).get();
 		} catch (InterruptedException e) {
 			Log.e(TAG,e.toString());
 		} catch (ExecutionException e) {
