@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="#FB9836"
     tools:context="com.fortmin.proshopping.Inicio"
@@ -13,6 +13,7 @@
         android:background="@drawable/shopping">
         
      </FrameLayout>
+     
     <TableLayout
         android:id="@+id/tableLayout1"
         android:layout_width="wrap_content"
@@ -24,8 +25,7 @@
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
-
-            <ImageButton
+             <ImageButton
                 android:id="@+id/btnusuarioR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +33,8 @@
                 android:layout_marginTop="30dp"
                 android:clickable="true"
                 android:src="@drawable/btn_entrar"
-                />
+                /> 
+           
         </TableRow>
 
         <TableRow
@@ -43,8 +44,8 @@
 
             <ImageButton
                 android:id="@+id/btnusuarioNR"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="#FB9836"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/btn_registrarse"

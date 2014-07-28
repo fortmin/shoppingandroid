@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class Base extends SQLiteOpenHelper {
 	
@@ -28,13 +29,13 @@ public class Base extends SQLiteOpenHelper {
 			RSSI + " INTEGER," +
 			PAQUETE + " TEXT)";
 	
-	String sqlCreatePaquetes = "CREATE TABLE Paquetes (" +
+	String sqlCreatePaquetes = "CREATE TABLE " + TABLE_PAQUETES +" (" +
 			PAQUETE + " TEXT PRIMARY KEY," +
 			CANTPROD + " INTEGER," +
 			PUNTOS + " INTEGER," +
 			PRECIO + " REAL)";
 	
-	String sqlCreateProductos = "CREATE TABLE Productos (" +
+	String sqlCreateProductos = "CREATE TABLE " +TABLE_PRODUCTOS+" (" +
 			PAQUETE + " TEXT," +
 			COMERCIO + " TEXT," +
 			PRODUCTO + " TEXT," +
@@ -49,6 +50,7 @@ public class Base extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Se ejecuta la sentencia SQL de creación de la tabla
+		Log.e("Base Datos","BD creada");
 		db.execSQL(sqlCreateElemRf);
 		db.execSQL(sqlCreatePaquetes);
 		db.execSQL(sqlCreateProductos);

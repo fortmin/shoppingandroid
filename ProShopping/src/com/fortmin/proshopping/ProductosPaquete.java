@@ -2,6 +2,7 @@ package com.fortmin.proshopping;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -21,53 +22,61 @@ import android.widget.TextView;
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
+import com.fortmin.proshopping.logica.shopping.model.ProductoVO;
+import com.fortmin.proshopping.persistencia.DatosLocales;
 
 public class ProductosPaquete extends Activity {
 	private Paquete paquete = null;
 	private ArrayList<String> datos = new ArrayList<String>();
-	private ArrayList<Producto> productos;
+	private List<ProductoVO> productos;
 	private ListView lstOpciones;
 	private ShoppingNube comNube;
-	private Iterator<Producto> iprods;
+	private Iterator<ProductoVO> iprods;
 	private TextView detalle_producto;
 	private ProgressDialog PD = null;
-
-	String nombreNFC;
-
-	@SuppressWarnings("unchecked")
+	private String nombrePaquete;
+    private DatosLocales paquete_productos;
+    PaqueteVO paquete_prod=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		this.PD = ProgressDialog.show(this, "Procesando",
-				"Espere unos segundos...", true, false);
+		paquete_productos=DatosLocales.getInstance();
+		
+		/*this.PD = ProgressDialog.show(this, "Procesando",
+				"Espere unos segundos...", true, false);*/
 		setContentView(R.layout.activity_paquete);
 		lstOpciones = (ListView) findViewById(R.id.mainListView);
 		detalle_producto = (TextView) findViewById(R.id.datosProducto);
 
 		Bundle bundle = getIntent().getExtras();
-		nombreNFC = bundle.getString("nombreNFC");
-		Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(nombreNFC);
+		
+		nombrePaquete = bundle.getString("nombrePaquete");
+		Log.e("ProductoPaquete",nombrePaquete);
+	    paquete_prod=paquete_productos.obtenerPaquetes(this, nombrePaquete);
+		
+	//	Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
+	//	Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(nombrePaquete);
 		// Se comienza la nueva Thread que descargará los datos necesarios
 
 		// Si pude obtener el paquete procedo a pedir la lista de productos
-		if (paquete != null) {
+	  if (paquete_prod != null) {
 			detalle_producto.setText("El paquete tiene "
-					+ paquete.getCantProductos() + " " + "Productos" + "\n"
-					+ "Precio=" + paquete.getPrecio() + "\n" + "puntos="
-					+ paquete.getPuntos());
-
+					+ paquete_prod.getCantProductos() + " " + "Productos" + "\n"
+					+ "Precio=" +  paquete_prod.getPrecio()+ "\n" + "puntos="
+					+  paquete_prod.getPuntos());
+            
 			// Toast.makeText(getApplicationContext(), "Obteniendo productos",
 			// Toast.LENGTH_LONG).show();
-			comNube = new Nube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
-
-			productos = (ArrayList<Producto>) comNube.ejecutarGetProductosPaquete(paquete.getNombre());
+			//comNube = new Nube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
+            productos= paquete_prod.getProductos();
+	
 			listarNombresProductos();// paso los nombres de productos a
 										// cargar en el listview a un
 										// arreglo de string
-		}
+	
 		lstOpciones.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -87,7 +96,7 @@ public class ProductosPaquete extends Activity {
 
 	}
 
-	private class DownloadTask extends AsyncTask<Object, Object, Object> {
+	class DownloadTask extends AsyncTask<Object, Object, Object> {
 		@Override
 		protected void onPreExecute() {
 
@@ -107,13 +116,9 @@ public class ProductosPaquete extends Activity {
 			return paq;
 
 		}
+	}
 
-		@Override
-		protected void onPostExecute(Object result) {
-			super.onPostExecute(result);
-
-			PD.dismiss();
-		}
+		
 
 	}
 
@@ -148,31 +153,34 @@ public class ProductosPaquete extends Activity {
 
 		if (productos != null) {
 			iprods = productos.iterator();
+			
 			while (iprods.hasNext()) {
-				String nombre = iprods.next().getProducto().intern();
+				ProductoVO p=new ProductoVO();
+				p=iprods.next();
+				String nombre = p.getNombre();
 				datos.add(nombre);
 				Log.e("dato", nombre);
 				// iprods.next();
 			}
-			// datos.add("productos");
+			 //datos.add("productos");
 			ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
 					R.layout.simplerow, datos);
 			lstOpciones.setAdapter(adaptador);
-			PD.dismiss();
+			//PD.dismiss();
 		}
 	}
 
 	public String darComercio(String nombre_producto) {
 		String nombre_comercio = null;
-		;
+		
 		if (productos != null) {
 			iprods = productos.iterator();
 			boolean encontre = false;
 			while (iprods.hasNext() && !encontre) {
-				Producto p = iprods.next();
-				String nombre = p.getProducto().intern();
+				ProductoVO p=iprods.next();
+				String nombre = p.getNombre();
 				if (nombre_producto.equalsIgnoreCase(nombre)) {
-					nombre_comercio = p.getComercio().intern();
+					nombre_comercio = p.getComercio();
 					encontre = true;
 				}
 
@@ -185,13 +193,13 @@ public class ProductosPaquete extends Activity {
 
 	public String darPrecio(String nombre_producto) {
 		String precio = null;
-		;
+		
 		if (productos != null) {
 			iprods = productos.iterator();
 			boolean encontre = false;
 			while (iprods.hasNext() && !encontre) {
-				Producto p = iprods.next();
-				String nombre = p.getProducto().intern();
+				ProductoVO p=iprods.next();
+				String nombre = p.getNombre();
 				if (nombre_producto.equalsIgnoreCase(nombre)) {
 					precio = String.valueOf(p.getPrecio());
 					encontre = true;

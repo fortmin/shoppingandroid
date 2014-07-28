@@ -3,6 +3,7 @@ package com.fortmin.proshopping.persistencia;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.fortmin.proshopping.tipoNFC;
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
@@ -12,32 +13,49 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class DatosLocales {
 
 	private static String DBPROSHOP = "DbProshop";
 	private Base base;
 	private SQLiteDatabase db;
+	private Context cont;
+	private static DatosLocales instancia;
+	private DatosLocales(){
+		  
+	 }
+	 public static DatosLocales getInstance(){
+			if(instancia==null)
+				instancia= new DatosLocales();
+			return instancia;
+			
+		}
 
-	public SQLiteDatabase obtenerBaseEscritura(Context contexto) {
-		base = new Base(contexto, DBPROSHOP, null, 1);
-		return base.getWritableDatabase();
+	public void obtenerBaseEscritura(Context contexto) {
+		cont=contexto;
+		base = new Base(cont, DBPROSHOP, null, 1);
+		db= base.getWritableDatabase();
 	}
 	
-	public SQLiteDatabase obtenerBaseLectura(Context contexto) {
-		base = new Base(contexto, DBPROSHOP, null, 1);
-		return base.getReadableDatabase();
+	public void obtenerBaseLectura(Context contexto) {
+		cont=contexto;
+		base = new Base(cont, DBPROSHOP, null, 1);
+		db= base.getReadableDatabase();
 	}
+	
 
 	/*
 	 * Funcion para obtener todos los datos del paquete incluyendo sus productos
 	 * Se usa para desplegarle al cliente el paquete y sus productos
 	 */
 	public PaqueteVO obtenerPaquetes(Context contexto, String nomPaquete) {
+		
 		PaqueteVO paquete = null;
-		db = this.obtenerBaseEscritura(contexto);
+		obtenerBaseLectura(cont);
 		paquete = leerPaquete(nomPaquete);
-		db.close();
+		
+		Log.e("PaqueteVO","retorno el paquete");
 		return paquete;
 	}
 	
@@ -49,7 +67,8 @@ public class DatosLocales {
 	 */
 	public String encontreElementoRf(Context contexto, BDElementoRf bdElemRf) {
 		String resp = null;
-		db = this.obtenerBaseEscritura(contexto);		
+		obtenerBaseEscritura(contexto);	
+		
 		if (hasElementoRf(bdElemRf.getElementoRf())) {
 			if (bdElemRf.getTipo().equals("BEACON")) {
 				int result = updateElementoRf(bdElemRf);
@@ -82,36 +101,43 @@ public class DatosLocales {
 	}
 	
 	public PaqueteVO leerPaquete(String nomPaquete) {
-		PaqueteVO paquete = null;
+		PaqueteVO paquete = new PaqueteVO();
+		//Cursor c= db.rawQuery("SELECT Base.PAQUETE,Base.CANTPROD, Base.PUNTOS, Base.PRECIO FROM Base.TABLE_PAQUETES WHERE BASE.PAQUETE='nomPaquete'",null);
 		Cursor c = db.query(Base.TABLE_PAQUETES, new String[] {Base.PAQUETE, Base.CANTPROD, Base.PUNTOS, Base.PRECIO}, Base.PAQUETE+" =?", new String[] {nomPaquete}, null, null, null, null);
-		paquete = new PaqueteVO();
-		paquete.setNombre(c.getString(0));
-		paquete.setCantProductos(c.getInt(1));
-		paquete.setPuntos(c.getInt(2));
-		paquete.setPrecio(c.getFloat(3));
+		c.moveToFirst();
+		Log.e("leerPaquete",Integer.toString(c.getCount()));
+		paquete.setNombre(c.getString(c.getColumnIndex(Base.PAQUETE)));
+		paquete.setCantProductos(c.getInt(c.getColumnIndex(Base.CANTPROD)));
+		paquete.setPuntos(c.getInt(c.getColumnIndex(Base.PUNTOS)));
+		paquete.setPrecio(c.getFloat(c.getColumnIndex(Base.PRECIO)));
+		Log.e("leerPaquete","caMpos seteados");
 		paquete.setProductos(leerProductos(nomPaquete));
+		db.close();
 		return paquete;
 	}
 	
 	public LinkedList<ProductoVO> leerProductos(String nomPaquete) {
 		LinkedList<ProductoVO> prods = new LinkedList<ProductoVO>();
 		Cursor c = db.query(Base.TABLE_PRODUCTOS, new String[] {Base.COMERCIO, Base.PRODUCTO, Base.PRECIO}, Base.PAQUETE+" =?", new String[] {nomPaquete}, null, null, null, null);
-		if (c.moveToFirst()) {
-			boolean termine = false;
-			ProductoVO producto = new ProductoVO();
-			while (!termine) {
+		c.moveToFirst();
+		
+			boolean termine = true;
+			
+			while (termine) {
+				ProductoVO producto = new ProductoVO();
 				producto.setComercio(c.getString(0));
 				producto.setNombre(c.getString(1));
 				producto.setPrecio(c.getFloat(2));
 				prods.add(producto);
 				termine = c.moveToNext();
 			}
-		}
+		
 		return prods;
 	}
 	
 	public boolean hasElementoRf(String elemRf) {
 		Cursor c = db.query(Base.TABLE_ELEMENTOSRF, new String[] {Base.ELEMENTORF}, Base.ELEMENTORF+" =?", new String[] {elemRf}, null, null, null, null);
+		
 		return (c.getCount() == 1);
 	}
 	
@@ -133,6 +159,7 @@ public class DatosLocales {
 	}
 
 	public long insertPaquete(PaqueteVO paquete) {
+		obtenerBaseEscritura(cont);
 		ContentValues valuespaq = new ContentValues();
 		valuespaq.put(Base.PAQUETE, paquete.getNombre());
 		valuespaq.put(Base.CANTPROD, paquete.getCantProductos());
@@ -145,12 +172,15 @@ public class DatosLocales {
 			Iterator<ProductoVO> iprods = paquete.getProductos().iterator();
 			while (iprods.hasNext()) {
 				prod = iprods.next();
+				Log.e("Inserto Paquete","inserte el paquete");
 				valuesprod.put(Base.PAQUETE, paquete.getNombre());
 				valuesprod.put(Base.PRODUCTO, prod.getNombre());
 				valuesprod.put(Base.COMERCIO, prod.getComercio());
 				valuesprod.put(Base.PRECIO, prod.getPrecio());
 				db.insert(Base.TABLE_PRODUCTOS, null, valuesprod);
+				
 			}
+			db.close();
 		}
 		return result;
 	}

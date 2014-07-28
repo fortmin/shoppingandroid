@@ -1,6 +1,7 @@
 package com.fortmin.proshopping;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,19 +20,24 @@ import android.widget.Toast;
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
+import com.fortmin.proshopping.logica.shopping.model.Paquete;
+import com.fortmin.proshopping.logica.shopping.model.Producto;
+import com.fortmin.proshopping.persistencia.BDElementoRf;
+import com.fortmin.proshopping.persistencia.DatosLocales;
 
 public class LecturaNfc extends Activity {
 
 	private Intent paquete;
 	private usuario nombre_usuario;
-
+    private tipoNFC tipo;
+    private String nombre_paquete;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lectura_nfc);
 		ImageButton btn_nfc = (ImageButton) findViewById(R.id.btnNFC);
 		nombre_usuario = usuario.getInstance();
-		// tipo= tipoNFC.getInstance();
+		 tipo= tipoNFC.getInstance();
 		// Log.e("usuario",nombre_usuario.getNombre());
 		// escucho el tag nfc para obtener el id
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
@@ -59,12 +65,12 @@ public class LecturaNfc extends Activity {
 			}
 		}
 
-		btn_nfc.setOnClickListener(new View.OnClickListener() {
+	/*	btn_nfc.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				// viene el contenido leido del nfc
 				// verPaquete("NFC001");
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -87,11 +93,11 @@ public class LecturaNfc extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void verPaquete(String nfc) {
+	public void verPaquete(String nombrepaquete) {
 		// llamo a mostrarPaquete
 
 		paquete = new Intent(this, ProductosPaquete.class);
-		paquete.putExtra("nombreNFC", nfc);
+		paquete.putExtra("nombrePaquete", nombrepaquete);
 		startActivity(paquete);
 
 	}
@@ -175,6 +181,7 @@ public class LecturaNfc extends Activity {
 	}
 
 	public void AnalizarId(String id) {
+	    nombre_paquete = null;
 		Log.e("ID", id);
 		Log.e("NomUsuario", nombre_usuario.getNombre());
 		String nfc = id.substring(3);
@@ -185,7 +192,21 @@ public class LecturaNfc extends Activity {
 
 		} else if (id.contains("SAL"))
 			entradaEstacionamiento("salida", nombre_usuario.getNombre(), nfc);
-		else
-			verPaquete(id);
+		else{
+			Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
+			Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(id);
+			// Se comienza la nueva Thread que descargará los datos necesarios
+
+			// Si pude obtener el paquete procedo a pedir la lista de productos
+			if (paquete != null) {
+				nombre_paquete=paquete.getNombre();
+			}
+			Log.e("Nombre Paquete", nombre_paquete);
+			BDElementoRf tag=new BDElementoRf(id, "NFC", 0, nombre_paquete);
+			DatosLocales datos = DatosLocales.getInstance();
+			
+			datos.encontreElementoRf(this, tag);
+			verPaquete(nombre_paquete);
+		}
 	}
 }

@@ -52,9 +52,10 @@ public class Login extends Activity {
 						editor.putString("Usuario", nom_usuario = nom_user
 								.getText().toString());
 						editor.commit();
-						mostrarMensaje("Bienvenido");
 						user = usuario.getInstance();
 						user.setNombre(nom_usuario);
+						mostrarMensaje("Bienvenido");
+						
 						verOpciones();
 					} else if (mensaje.contains("USUARIO_INEXISTENTE"))
 						mostrarMensaje("Usuario inexistente");
