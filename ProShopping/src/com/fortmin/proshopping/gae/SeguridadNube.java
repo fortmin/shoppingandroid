@@ -2,6 +2,9 @@ package com.fortmin.proshopping.gae;
 
 import java.io.IOException;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import com.fortmin.proshopping.CloudEndpointUtils;
 import com.fortmin.proshopping.logica.seguridad.Seguridad;
 import com.fortmin.proshopping.logica.seguridad.Seguridad.LoginUsuario;
@@ -12,9 +15,6 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
-
-import android.os.AsyncTask;
-import android.util.Log;
 
 public class SeguridadNube extends AsyncTask<Object, Void, Object> {
 	

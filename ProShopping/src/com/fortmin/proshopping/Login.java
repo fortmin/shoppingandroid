@@ -30,16 +30,10 @@ public class Login extends Activity {
 		nom_user = (EditText) findViewById(R.id.usuario);
 		pass = (EditText) findViewById(R.id.pass);
 		ImageButton login = (ImageButton) findViewById(R.id.btnLogeo);
-		Typeface fuente = Typeface.createFromAsset(getAssets(),
-				"Roboto-Regular.ttf");
+		Typeface fuente = Typeface.createFromAsset(getAssets(),"Roboto-Regular.ttf");
 		nom_user.setTypeface(fuente);
 		pass.setTypeface(fuente);
-		SharedPreferences preferencias = getPreferences(MODE_PRIVATE);
-		String nombre = preferencias.getString("Usuario","no existe");
-		if  (!nombre.equals("no existe")){
-			mostrarMensaje("Bienvenido");
-			verOpciones();
-		}
+		
 		login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				

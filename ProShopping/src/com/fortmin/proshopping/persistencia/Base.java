@@ -83,4 +83,5 @@ public class Base extends SQLiteOpenHelper {
 		db.execSQL(sqlCreateProductos);
 		db.execSQL(sqlCreateImagenes);
 	}
+	
 }

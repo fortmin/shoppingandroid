@@ -2,6 +2,7 @@ package com.fortmin.proshopping;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,16 @@ public class Inicio extends Activity {
 
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				logearse();
+				SharedPreferences prefs = getSharedPreferences("configuracion",MODE_PRIVATE);
+				String nombre = prefs.getString("Usuario","no existe");
+				if  (!nombre.equals("no existe")){
+				  verOpciones();
+				}
+				else
+				  logearse();
 			}
+
+		
 		});
 		usuarioNR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -58,5 +67,10 @@ public class Inicio extends Activity {
 	public void registrarse() {
 		Intent registro = new Intent(this, FormularioRegistro.class);
 		startActivity(registro);
+	}
+	private void verOpciones() {
+		// TODO Auto-generated method stub
+		Intent opciones = new Intent(this, LecturaNfc.class);
+		startActivity(opciones);
 	}
 }

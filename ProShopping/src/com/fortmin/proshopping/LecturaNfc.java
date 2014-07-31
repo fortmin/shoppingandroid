@@ -15,6 +15,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class LecturaNfc extends Activity {
 	private Intent paquete;
 	private usuario nombre_usuario;
 	private tagRecibido tag_recibido;
+	private DatosLocales datos=DatosLocales.getInstance();
 	private com.fortmin.proshopapi.ble.EscucharIbeacons beacons;
 	private BeaconRecibido beacon_recibido;
 	private Timer mTimer;
@@ -46,10 +48,24 @@ public class LecturaNfc extends Activity {
 		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
 		ImageButton btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
 		nombre_usuario = usuario.getInstance();
-
-		beacon_recibido = BeaconRecibido.getInstance();
-		// service.stop();
-		// Log.e("usuario",nombre_usuario.getNombre());
+        beacon_recibido = BeaconRecibido.getInstance();
+        btn_puntos.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				Nube nube = new Nube(ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
+				Mensaje resp = nube.ejecutarGetPuntajeCliente(nombre_usuario.getNombre());
+				mostrarMensaje(resp.getValor().toString());
+				
+			}
+		});
+        btn_paquetes.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+			  if(datos.getHaydatos())	
+				 verPaquetes();
+			  else
+				  mostrarMensaje("No ha visto paquetes aun");
+			}
+		});
+		
 		// escucho el tag nfc para obtener el id
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 			Log.e("tag", "leyendo tag nfc");
@@ -63,14 +79,8 @@ public class LecturaNfc extends Activity {
 					String delimiter = ":";
 					String[] temp = payload.split(delimiter);
 					String Id = temp[0];
-					// if(tipo.getTipo().equals("tag")){
-					// Log.e("opcion","tag");
+					// analizar si es de estacionamiento de paquetes o de imagenes
 					AnalizarId(Id);
-
-					// }
-					// else
-					// entradaEstacionamiento(tipo.getTipo(),nombre_usuario.getNombre(),Id);
-
 				}
 
 			}
@@ -225,11 +235,12 @@ public class LecturaNfc extends Activity {
 		} else if (id.contains("SAL"))
 			entradaEstacionamiento("salida", nombre_usuario.getNombre(), nfc);
 		else {
+			// si es nfc de comercio o smartposter
 			Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
 			Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(id);
-			// Se comienza la nueva Thread que descargará los datos necesarios
+			
 
-			// Si pude obtener el paquete procedo a pedir la lista de productos
+			// Si pude obtener el paquete  obtengo el n ombre para guardarlo en la base de datos
 			if (paquete != null) {
 				nombre_paquete = paquete.getNombre();
 			}
@@ -274,17 +285,16 @@ public class LecturaNfc extends Activity {
 
 	public void persistirBeacon() {
 		Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(tag_recibido
-				.getNombre());
+		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(tag_recibido.getNombre());
 		if (paquete != null) {
 			nombre_paquete = paquete.getNombre();
-			BDElementoRf tag = new BDElementoRf(tag_recibido.getNombre(),
-					tag_recibido.getTipo(), tag_recibido.getRssi(),
-					paquete.getNombre());
+			BDElementoRf tag = new BDElementoRf(tag_recibido.getNombre(),tag_recibido.getTipo(), tag_recibido.getRssi(),paquete.getNombre());
 			DatosLocales datos = DatosLocales.getInstance();
 			Log.e("grabacion beacon", "antes de ir a la tabla");
 			String resultado = datos.encontreElementoRf(this, tag);
 			Log.e("grabacion beacon", resultado);
+			//beacons.stopScanning();
+			Log.e("voy a ver el paquete",nombre_paquete);
 			verPaquete(nombre_paquete);
 			// beacons.startScanning();
 
@@ -298,5 +308,11 @@ public class LecturaNfc extends Activity {
 		startService(servicio);
 
 	}
+	public void verPaquetes(){
+		Intent mostrar_paquetes=new Intent(this,MostrarPaquetes.class);
+		startActivity(mostrar_paquetes);
+		
+	}
+	
 
 }

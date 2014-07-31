@@ -15,6 +15,7 @@ import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetPuntajeCliente;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.model.Imagen;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
@@ -38,6 +39,7 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
 	public static String OPE_GET_CALIBRADO_BEACON = "GetCalibradoBeacon";
 	public static String OPE_GET_IMAGEN = "GetImagen";	
+	public static String OPE_GET_PUNTAJE_CLIENTE = "GetPuntajeCliente";	
 	
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -144,8 +146,17 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 						+ comercio + "::" + producto);
 				GetImagen execgae = endpoint.getImagen(comercio,producto);
 				Imagen imagen = execgae.execute();
-				Log.i(TAG,"ShoppingNube->" + imagen.getTipoImg());
+				Log.i(TAG,"ShoppingNube->imagen recibida de size " + imagen.size());
 				return imagen;
+			}
+			if (operacion.equals(OPE_GET_PUNTAJE_CLIENTE)) {
+				String usuario = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_PUNTAJE_CLIENTE + "->"
+						+ usuario);
+				GetPuntajeCliente execgae = endpoint.getPuntajeCliente(usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getValor());
+				return resp;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

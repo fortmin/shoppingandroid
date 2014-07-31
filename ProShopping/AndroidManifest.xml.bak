@@ -9,6 +9,8 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <permission
         android:name="com.fortmin.proshopping.permission.C2D_MESSAGE"
@@ -28,7 +30,6 @@
         <activity
             android:name="com.fortmin.proshopping.MainActivity"
             android:label="@string/app_name" >
-           
         </activity>
 
         <service android:name="com.fortmin.proshopping.GCMIntentService" />
@@ -38,12 +39,10 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <category android:name="com.fortmin.proshopping" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
                 <category android:name="com.fortmin.proshopping" />
             </intent-filter>
         </receiver>
@@ -55,13 +54,15 @@
             android:name="com.fortmin.proshopping.LecturaNfc"
             android:label="@string/title_activity_lectura_nfc" >
             <intent-filter>
-               <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-               <category android:name="android.intent.category.DEFAULT" />
-               <data android:scheme="vnd.android.nfc"
-                android:host="ext"
-                android:pathPrefix="/com.fortmin.proshopping:Shopping"/>
-           </intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="ext"
+                    android:pathPrefix="/com.fortmin.proshopping:Shopping"
+                    android:scheme="vnd.android.nfc" />
+            </intent-filter>
         </activity>
+
         <activity
             android:name="com.fortmin.proshopping.ProductosPaquete"
             android:label="@string/title_activity_paquete" >
@@ -69,39 +70,54 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.fortmin.proshopping.Inicio"
             android:label="@string/title_activity_inicio" >
-             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+            <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-          <activity
+        
+        <activity
             android:name="com.fortmin.proshopping.Login"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
+        
+        <activity
             android:name="com.fortmin.proshopping.FormularioRegistro"
             android:label="@string/title_activity_registro" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.fortmin.proshopping.ServicioBle"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
         <activity
-            android:name="com.fortmin.proshopping.MenuCliente"
-            android:label="@string/title_menu_cliente" >
+            android:name="com.fortmin.proshopping.PruebasUnitarias"
+            android:label="@string/title_activity_pruebas_unitarias" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.fortmin.proshopping.CargarImagen"
+            android:label="@string/title_activity_cargar_imagen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         
-        
-    </application>
-   
+   </application>
 
 </manifest>

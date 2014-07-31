@@ -7,7 +7,7 @@
     <string name="title_activity_lectura_nfc">LecturaNfc</string>
     <string name="action_settings">Settings</string>
     <string name="mensaje">Debe buscar a lo largo del shopping este logo y acercar su dispositivo móvil</string>
-     <string name="mensaje_est">Debe buscar en la barrera este logo y acercar su dispositivo móvil</string>
+    <string name="mensaje_est">Debe buscar en la barrera este logo y acercar su dispositivo móvil</string>
     <string name="btnAceptar">Aceptar</string>
     <string name="title_activity_paquete">Productos del Paquete</string>
     <string name="title_activity_login">Login de Cliente</string>
@@ -30,4 +30,8 @@
     <string name="recibiroferta">Recibir Oferta</string>
     <string name="estacionamiento">Estacionamiento</string>
     <string name="usuarioNR"> Registrarse </string>
+    <string name="title_activity_mostrar_paquetes">MostrarPaquetes</string>
+	<string name="title_activity_pruebas_unitarias">Pruebas Unitarias</string>
+    <string name="title_activity_cargar_imagen">Cargar Imagen</string>
+
 </resources>

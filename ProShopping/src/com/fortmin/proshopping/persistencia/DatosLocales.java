@@ -22,6 +22,9 @@ public class DatosLocales {
 	private SQLiteDatabase db;
 	private Context cont;
 	private static DatosLocales instancia;
+	private boolean haydatos=false;
+
+	
 
 	private DatosLocales() {
 	}
@@ -30,7 +33,6 @@ public class DatosLocales {
 		if (instancia == null)
 			instancia = new DatosLocales();
 		return instancia;
-
 	}
 
 	/*
@@ -49,6 +51,13 @@ public class DatosLocales {
 		cont = contexto;
 		base = new Base(cont, DBPROSHOP, null, 1);
 		db = base.getReadableDatabase();
+	}
+	
+	/*
+	 * Cerrar la base
+	 */
+	public void cerrarBase() {
+		db.close();
 	}
 
 	/*
@@ -100,6 +109,7 @@ public class DatosLocales {
 		obtenerBaseEscritura(contexto);
 		if (hasElementoRf(bdElemRf.getElementoRf())) {
 			if (bdElemRf.getTipo().equals("BEACON")) {
+				Log.i("DBPROSHOP","DatosLocales->encontreElementoRf->Voy a hacer el update del Beacon");
 				int result = updateElementoRf(bdElemRf);
 				if (result == 1)
 					resp = "UPDATE_OK";
@@ -109,15 +119,20 @@ public class DatosLocales {
 				resp = "TIPO_NFC";
 		} else {
 			Nube nube = new Nube(ShoppingNube.OPE_GET_PAQUETE_COMPLETO);
-			PaqueteVO paquete = nube.ejecutarGetPaqueteCompleto(bdElemRf
-					.getElementoRf());
+			PaqueteVO paquete = nube.ejecutarGetPaqueteCompleto(bdElemRf.getElementoRf());
+			if (paquete != null)
+				Log.i("DBPROSHOP","DatosLocales->ejecutarGetPaqueteCompleto->Paquete="+paquete.getNombre());
+			else
+				Log.i("DBPROSHOP","DatosLocales->ejecutarGetPaqueteCompleto->No devolvio nada");				
 			if (paquete != null) {
 				bdElemRf.setPaquete(paquete.getNombre());
 				long result = insertElementoRf(bdElemRf);
 				if (result != -1) {
 					result = insertPaquete(paquete);
-					if (result != -1)
+					if (result != -1){
 						resp = "INSERT_OK";
+						haydatos=true;
+						}
 					else
 						resp = "INSERT_PAQUETE_FALLIDO";
 				} else
@@ -133,20 +148,22 @@ public class DatosLocales {
 	 * Devuelve un paquete completo con todos sus productos
 	 */
 	public PaqueteVO leerPaquete(String nomPaquete) {
-		PaqueteVO paquete = new PaqueteVO();
+		PaqueteVO paquete = null;
 		Cursor c = db.query(Base.TABLE_PAQUETES, new String[] { Base.PAQUETE,
 				Base.CANTPROD, Base.PUNTOS, Base.PRECIO },
 				Base.PAQUETE + " =?", new String[] { nomPaquete }, null, null,
 				null, null);
-		c.moveToFirst();
-		Log.e("leerPaquete", Integer.toString(c.getCount()));
-		paquete.setNombre(c.getString(c.getColumnIndex(Base.PAQUETE)));
-		paquete.setCantProductos(c.getInt(c.getColumnIndex(Base.CANTPROD)));
-		paquete.setPuntos(c.getInt(c.getColumnIndex(Base.PUNTOS)));
-		paquete.setPrecio(c.getFloat(c.getColumnIndex(Base.PRECIO)));
-		Log.e("leerPaquete", "campos seteados");
-		paquete.setProductos(leerProductos(nomPaquete));
-		db.close();
+		if (c.getCount() > 0) {
+			paquete = new PaqueteVO();
+			c.moveToFirst();
+			Log.e("leerPaquete", Integer.toString(c.getCount()));
+			paquete.setNombre(c.getString(c.getColumnIndex(Base.PAQUETE)));
+			paquete.setCantProductos(c.getInt(c.getColumnIndex(Base.CANTPROD)));
+			paquete.setPuntos(c.getInt(c.getColumnIndex(Base.PUNTOS)));
+			paquete.setPrecio(c.getFloat(c.getColumnIndex(Base.PRECIO)));
+			Log.e("leerPaquete", "campos seteados");
+			paquete.setProductos(leerProductos(nomPaquete));
+		}
 		return paquete;
 	}
 
@@ -190,7 +207,7 @@ public class DatosLocales {
 		values.put(Base.TIPO, bdElemRf.getTipo());
 		values.put(Base.RSSI, bdElemRf.getRssi());
 		values.put(Base.PAQUETE, bdElemRf.getPaquete());
-		long result = db.insert(Base.TABLE_ELEMENTOSRF, null, values);
+		long result = db.insertWithOnConflict(Base.TABLE_ELEMENTOSRF, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 		return result;
 	}
 
@@ -216,12 +233,13 @@ public class DatosLocales {
 		valuespaq.put(Base.PRECIO, paquete.getPrecio());
 		long result = db.insert(Base.TABLE_PAQUETES, null, valuespaq);
 		if (result != -1) {
+			Log.i("DBPROSHOP","DatosLocales->insertPaquete->Paquete="+paquete.getNombre()+"->OK");
 			ContentValues valuesprod = new ContentValues();
 			ProductoVO prod = null;
 			Iterator<ProductoVO> iprods = paquete.getProductos().iterator();
 			while (iprods.hasNext()) {
 				prod = iprods.next();
-				Log.e("Inserto Paquete", "inserte el paquete");
+				Log.i("DBPROSHOP","DatosLocales->insertPaquete->Producto="+prod.getNombre()+"->OK");
 				valuesprod.put(Base.PAQUETE, paquete.getNombre());
 				valuesprod.put(Base.PRODUCTO, prod.getNombre());
 				valuesprod.put(Base.COMERCIO, prod.getComercio());
@@ -268,7 +286,7 @@ public class DatosLocales {
 		ContentValues valuesimg = new ContentValues();
 		valuesimg.put(Base.COMERCIO, comercio);
 		valuesimg.put(Base.PRODUCTO, producto);
-		valuesimg.put(Base.TIPOIMAGEN, imagen.getTipoImg());
+		valuesimg.put(Base.TIPOIMAGEN, "image/png");
 		valuesimg.put(Base.IMAGEN, imagen.getImagen());
 		long result = db.insert(Base.TABLE_IMAGENES, null, valuesimg);
 		db.close();
@@ -295,6 +313,76 @@ public class DatosLocales {
 				null, null, null, null);
 		return (c.getCount() == 1);
 	}
+	
+	public void listarTablaElementos() {
+		Log.i("FER","** Listado de tabla Elementos **");
+		Cursor c = db.query(Base.TABLE_ELEMENTOSRF,
+				new String[] { Base.ELEMENTORF, Base.TIPO, Base.RSSI, Base.PAQUETE }, null,
+				null, null, null, null, null);
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			boolean termine = true;
+			while (termine) {
+				Log.i("FER",c.getString(0)+"::"+c.getString(1)+"::"+c.getInt(2)+"::"+c.getString(3));
+				termine = c.moveToNext();
+			}
+		}
+		else
+			Log.i("FER","Listar tabla ElementosRF no devolvio nada");
+	}
+
+	public void listarTablaPaquetes() {
+		Log.i("FER","** Listado de tabla Paquetes **");
+		Cursor c = db.query(Base.TABLE_PAQUETES,
+				new String[] { Base.PAQUETE, Base.CANTPROD, Base.PUNTOS, Base.PRECIO }, null,
+				null, null, null, null, null);
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			boolean termine = true;
+			while (termine) {
+				Log.i("FER",c.getString(0)+"::"+c.getInt(1)+"::"+c.getInt(2)+"::"+c.getFloat(3));
+				termine = c.moveToNext();
+			}
+		}
+		else
+			Log.i("FER","Listar tabla Paquetes no devolvio nada");
+	}
+	
+	public void listarTablaProductos() {
+		Log.i("FER","** Listado de tabla Productos **");
+		Cursor c = db.query(Base.TABLE_PRODUCTOS,
+				new String[] { Base.PAQUETE, Base.COMERCIO, Base.PRODUCTO, Base.PRECIO }, null,
+				null, null, null, null, null);
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			boolean termine = true;
+			while (termine) {
+				Log.i("FER",c.getString(0)+"::"+c.getString(1)+"::"+c.getString(2)+"::"+c.getFloat(3));
+				termine = c.moveToNext();
+			}
+		}
+		else
+			Log.i("FER","Listar tabla Productos no devolvio nada");
+	}
+
+	public void limpiarBase() {
+		int result = db.delete(Base.TABLE_ELEMENTOSRF, "1", null);
+		Log.i("FER","Tabla ELEMENTOSRF -> Se borraron filas : "+result);
+		result = db.delete(Base.TABLE_PAQUETES, "1", null);
+		Log.i("FER","Tabla PAQUETES -> Se borraron filas : "+result);
+		result = db.delete(Base.TABLE_PRODUCTOS, "1", null);
+		Log.i("FER","Tabla PRODUCTOS -> Se borraron filas : "+result);
+		result = db.delete(Base.TABLE_IMAGENES, "1", null);
+		Log.i("FER","Tabla IMAGENES -> Se borraron filas : "+result);
+	}
+	public boolean getHaydatos() {
+		return haydatos;
+	}
+
+	public void setHaydatos(boolean haydatos) {
+		this.haydatos = haydatos;
+	}
+
 
 	/*
 	 * 

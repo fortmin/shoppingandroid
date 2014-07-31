@@ -200,6 +200,26 @@ public class Nube {
 			Log.e(TAG, e.toString());
 		}
 	}
+	
+	/*
+	 * Obtiene el puntaje del cliente y lo devuelve en Mensaje
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje ejecutarGetPuntajeCliente(
+			String usuario) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(
+				ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
 
 	public String getOperacion() {
 		return operacion;

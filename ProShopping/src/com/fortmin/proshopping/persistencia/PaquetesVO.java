@@ -36,5 +36,9 @@ public class PaquetesVO {
 		}
 		return esta;
 	}
+	
+	public LinkedList<PaqueteVO> getPaquetes() {
+		return paquetes;
+	}
 
 }

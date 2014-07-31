@@ -52,23 +52,12 @@ public class ProductosPaquete extends Activity {
 		setContentView(R.layout.activity_paquete);
 		lstOpciones = (ListView) findViewById(R.id.mainListView);
 		detalle_producto = (TextView) findViewById(R.id.datosProducto);
-		if (tag_recibido.getTipo().equals("NFC")) {
-			Bundle bundle = getIntent().getExtras();
-			nombrePaquete = bundle.getString("nombrePaquete");
-			paquete_prod = paquete_productos
-					.obtenerPaquete(this, nombrePaquete);
-		} else {
-			nombrePaquete = tag_recibido.getNombre_paquete();
-			paquete_prod = paquete_productos
-					.obtenerPaquete(this, nombrePaquete);
-		}
-
+		Bundle bundle = getIntent().getExtras();
+		nombrePaquete = bundle.getString("nombrePaquete");
+		paquete_prod = paquete_productos.obtenerPaquete(this, nombrePaquete);
 		Log.e("ProductoPaquete", nombrePaquete);
 
-		// Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		// Paquete paquete = (Paquete)
-		// comNube.ejecutarGetPaqueteRf(nombrePaquete);
-		// Se comienza la nueva Thread que descargará los datos necesarios
+		
 
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {

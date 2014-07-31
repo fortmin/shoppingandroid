@@ -96,14 +96,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
 
         <service
             android:name="com.fortmin.proshopping.ServicioBle"
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name="com.fortmin.proshopping.MostrarPaquetes"
+            android:label="@string/title_activity_mostrar_paquetes" >
+        </activity>
+
+        <activity
+            android:name="com.fortmin.proshopping.PruebasUnitarias"
+            android:label="@string/title_activity_pruebas_unitarias" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.fortmin.proshopping.CargarImagen"
+            android:label="@string/title_activity_cargar_imagen" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
+
+
+
+
+
+
     </application>
-   
 
 </manifest>
