@@ -1,7 +1,9 @@
 package com.fortmin.proshopping;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,7 +20,8 @@ import com.fortmin.proshopping.logica.seguridad.model.Mensaje;
 public class FormularioRegistro extends Activity {
 	private EditText nombre;
 	private EditText e_mail;
-	private EditText usuario;
+	private EditText user;
+	private usuario user_guardado;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +29,18 @@ public class FormularioRegistro extends Activity {
 		setContentView(R.layout.activity_formulario_registro);
 		nombre = (EditText) findViewById(R.id.registronombre);
 		e_mail = (EditText) findViewById(R.id.registroemail);
-		usuario = (EditText) findViewById(R.id.registrousuario);
+		user = (EditText) findViewById(R.id.registrousuario);
 		ImageButton registro = (ImageButton) findViewById(R.id.btnRegistro);
 		Typeface fuente = Typeface.createFromAsset(getAssets(),
 				"Roboto-Regular.ttf");
-		usuario.setTypeface(fuente);
+		user.setTypeface(fuente);
 		e_mail.setTypeface(fuente);
 		nombre.setTypeface(fuente);
 
 		registro.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				Nube comNube = new Nube(SeguridadNube.OPE_REGISTRO_USUARIO);
-				Mensaje resp = comNube.ejecutarRegistro(usuario.getText()
+				Mensaje resp = comNube.ejecutarRegistro(user.getText()
 						.toString(), e_mail.getText().toString(), nombre
 						.getText().toString());
 				if (resp != null) {
@@ -46,6 +49,13 @@ public class FormularioRegistro extends Activity {
 														// USUARIO_INEXISTENTE o
 														// CLAVE_INCORRECTA
 					if (mensaje.equals("OK")) {
+						SharedPreferences prefs = getSharedPreferences(
+								"configuracion", Context.MODE_PRIVATE);
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putString("Usuario", user.getText().toString());
+						editor.commit();
+						user_guardado = usuario.getInstance();
+						user_guardado.setNombre(user.getText().toString());
 						mostrarMensaje("Registrado correctamente");
 						verOpciones();
 					} else if (mensaje.contains("USUARIO_EXISTENTE"))
@@ -85,7 +95,7 @@ public class FormularioRegistro extends Activity {
 	}
 
 	public void verOpciones() {
-		Intent opciones = new Intent(this, MenuCliente.class);
+		Intent opciones = new Intent(this, LecturaNfc.class);
 		startActivity(opciones);
 	}
 }

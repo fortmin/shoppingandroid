@@ -9,15 +9,20 @@ import android.util.Log;
 import com.fortmin.proshopping.CloudEndpointUtils;
 import com.fortmin.proshopping.logica.shopping.Shopping;
 import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetCalibradoBeacon;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetImagen;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetProductoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.model.Imagen;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
 import com.fortmin.proshopping.logica.shopping.model.ProductoCollection;
+import com.fortmin.proshopping.logica.shopping.model.ProductoExtVO;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -27,10 +32,13 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 
 	public static String OPE_GET_PAQUETE_RF = "GetPaqueteRf";
 	public static String OPE_GET_PRODUCTOS_PAQUETE = "GetProductosPaquete";
+	public static String OPE_GET_PRODUCTO_COMPLETO = "GetProductoCompleto";	
 	public static String OPE_GET_PAQUETE_COMPLETO = "GetPaqueteCompleto";
 	public static String OPE_INGRESO_ESTACIONAMIENTO = "IngresoEstacionamiento";
 	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
-
+	public static String OPE_GET_CALIBRADO_BEACON = "GetCalibradoBeacon";
+	public static String OPE_GET_IMAGEN = "GetImagen";	
+	
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
 
@@ -86,6 +94,27 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 						+ productos.size());
 				return productos;
 			}
+			if (operacion.equals(OPE_GET_PRODUCTO_COMPLETO)) {
+				String comercio = (String) params[0];
+				String codprod = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_PRODUCTO_COMPLETO
+						+ "->" + comercio + "::" + codprod);
+				GetProductoCompleto execgae = endpoint.getProductoCompleto(comercio, codprod);
+				ProductoExtVO producto = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->Obtuve el producto : "
+								+ producto.getComercio() + "::" + producto.getCodigo());
+				return producto;
+			}
+			if (operacion.equals(OPE_GET_CALIBRADO_BEACON)) {
+				String elementoRf = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_CALIBRADO_BEACON
+						+ "->" + elementoRf);
+				GetCalibradoBeacon execgae = endpoint.getCalibradoBeacon(elementoRf);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
+			}
 			if (operacion.equals(OPE_INGRESO_ESTACIONAMIENTO)) {
 				String elementoRf = (String) params[0];
 				String usuario = (String) params[1];
@@ -107,6 +136,16 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				Mensaje resp = execgae.execute();
 				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
 				return resp;
+			}
+			if (operacion.equals(OPE_GET_IMAGEN)) {
+				String comercio = (String) params[0];
+				String producto = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_IMAGEN + "->"
+						+ comercio + "::" + producto);
+				GetImagen execgae = endpoint.getImagen(comercio,producto);
+				Imagen imagen = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + imagen.getTipoImg());
+				return imagen;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

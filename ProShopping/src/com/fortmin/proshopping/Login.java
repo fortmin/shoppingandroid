@@ -34,9 +34,15 @@ public class Login extends Activity {
 				"Roboto-Regular.ttf");
 		nom_user.setTypeface(fuente);
 		pass.setTypeface(fuente);
-
+		SharedPreferences preferencias = getPreferences(MODE_PRIVATE);
+		String nombre = preferencias.getString("Usuario","no existe");
+		if  (!nombre.equals("no existe")){
+			mostrarMensaje("Bienvenido");
+			verOpciones();
+		}
 		login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				
 				Nube comNube = new Nube(SeguridadNube.OPE_LOGIN_USUARIO);
 				nom_usuario = nom_user.getText().toString();
 				Mensaje resp = comNube.ejecutarLogin(pass.getText().toString(),nom_usuario);
@@ -95,7 +101,7 @@ public class Login extends Activity {
 	}
 
 	public void verOpciones() {
-		Intent opciones = new Intent(this, MenuCliente.class);
+		Intent opciones = new Intent(this, LecturaNfc.class);
 		startActivity(opciones);
 	}
 }

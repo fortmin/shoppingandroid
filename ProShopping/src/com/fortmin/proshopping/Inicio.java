@@ -2,15 +2,11 @@ package com.fortmin.proshopping;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class Inicio extends Activity {
 
@@ -18,9 +14,9 @@ public class Inicio extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
-        ImageButton usuarioR=(ImageButton)findViewById(R.id.btnusuarioR);
-        ImageButton usuarioNR=(ImageButton)findViewById(R.id.btnusuarioNR);
-              
+		ImageButton usuarioR = (ImageButton) findViewById(R.id.btnusuarioR);
+		ImageButton usuarioNR = (ImageButton) findViewById(R.id.btnusuarioNR);
+
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				logearse();
@@ -31,7 +27,7 @@ public class Inicio extends Activity {
 				registrarse();
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -54,11 +50,12 @@ public class Inicio extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void logearse(){
+	public void logearse() {
 		Intent logeo = new Intent(this, Login.class);
 		startActivity(logeo);
 	}
-	public void registrarse(){
+
+	public void registrarse() {
 		Intent registro = new Intent(this, FormularioRegistro.class);
 		startActivity(registro);
 	}

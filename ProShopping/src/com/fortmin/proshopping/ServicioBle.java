@@ -1,16 +1,57 @@
 package com.fortmin.proshopping;
 
-import android.app.Notification;
-import android.app.NotificationManager;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.IBinder;
+import android.util.Log;
+
+import com.fortmin.proshopapi.ble.Ibeacon;
 
 public class ServicioBle extends Service {
+	private BeaconRecibido beacon;
+	Ibeacon ble;
+	private boolean notificacion = false;
+	private NotifyManager notify;
+	private String uuid;
+	private tagRecibido tag_recibido;
+	private boolean beacondescubierto = false;
+	private boolean notificar = false;
+	private Timer mTimer;
+
+	@Override
+	public void onCreate() {
+		tag_recibido = tagRecibido.getInstance();
+		beacon = BeaconRecibido.getInstance();
+		this.mTimer = new Timer();
+		this.mTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				ble = beacon.getBeacon();
+				if (ble != null) {
+					uuid = ble.getProximityUuid();
+					if (uuid.contains("3705") && !beacondescubierto) {
+						tag_recibido.setNombre("BEACON001");
+						Log.e("notificacion", "beacon001");
+						tag_recibido.setTipo("BEACON");
+						tag_recibido.setRssi(ble.darValorRssi());
+						tag_recibido.setAtendido(false);
+						beacondescubierto = true;
+
+					}
+				}
+				if (!notificar && beacondescubierto) {
+					notify = new NotifyManager();
+					notify.playNotification(getApplicationContext(),
+							LecturaNfc.class, ble.getProximityUuid(),
+							"Ver Paquete", R.drawable.ic_launcher);
+					notificar = true;
+				}
+			}
+		}, 0, 1000 * 60);
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -19,38 +60,18 @@ public class ServicioBle extends Service {
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
-
-		/*
-		 * if (beacons.isBtEnabled() == false) { // BT not enabled. Request to
-		 * turn it on. User needs to restart app once it's turned on. Intent
-		 * enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		 * startActivity(enableBtIntent); //finish(); }
-		 */
-
-		// inicializacion del ble
-
-		Uri defaultSound = RingtoneManager
-				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		Notification.Builder mBuilder = new Notification.Builder(this)
-				.setSmallIcon(android.R.drawable.stat_sys_warning)
-				.setLargeIcon(
-						(((BitmapDrawable) getResources().getDrawable(
-								R.drawable.ic_launcher)).getBitmap()))
-				.setContentTitle("Oferta Nueva").setContentText("prueba")
-				.setSound(defaultSound).setContentInfo("4")
-				.setTicker("Alerta!");
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-		mNotificationManager.notify(1, mBuilder.build());
-		return START_STICKY;
-	}
-
-	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 
 	}
+
+	public int onStartCommand(Intent intent, int flags, int startId) {
+
+		// notificacion=true;
+
+		return Service.START_STICKY;
+
+	}
+
 }

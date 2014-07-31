@@ -11,6 +11,7 @@ public class Base extends SQLiteOpenHelper {
 	public static String TABLE_ELEMENTOSRF = "ElementosRF";
 	public static String TABLE_PAQUETES = "Paquetes"; 
 	public static String TABLE_PRODUCTOS = "Productos"; 
+	public static String TABLE_IMAGENES = "Imagenes"; 
 	
 	public static String ELEMENTORF = "elementoRf";
 	public static String TIPO = "tipo";
@@ -21,6 +22,9 @@ public class Base extends SQLiteOpenHelper {
 	public static String PRECIO = "precio";
 	public static String COMERCIO = "comercio";
 	public static String PRODUCTO = "producto";
+	public static String TIPOIMAGEN = "tipoImagen";
+	public static String IMAGEN = "imagen";
+	public static String DETALLE = "detalle";
 	
 	// Sentencia SQL para crear la tabla de Usuarios
 	String sqlCreateElemRf = "CREATE TABLE " + TABLE_ELEMENTOSRF + " (" +
@@ -29,18 +33,26 @@ public class Base extends SQLiteOpenHelper {
 			RSSI + " INTEGER," +
 			PAQUETE + " TEXT)";
 	
-	String sqlCreatePaquetes = "CREATE TABLE " + TABLE_PAQUETES +" (" +
+	String sqlCreatePaquetes = "CREATE TABLE " + TABLE_PAQUETES + " (" +
 			PAQUETE + " TEXT PRIMARY KEY," +
 			CANTPROD + " INTEGER," +
 			PUNTOS + " INTEGER," +
 			PRECIO + " REAL)";
 	
-	String sqlCreateProductos = "CREATE TABLE " +TABLE_PRODUCTOS+" (" +
+	String sqlCreateProductos = "CREATE TABLE " + TABLE_PRODUCTOS + " (" +
 			PAQUETE + " TEXT," +
 			COMERCIO + " TEXT," +
 			PRODUCTO + " TEXT," +
 			PRECIO + " REAL," +
+			DETALLE + " TEXT," +
 			"PRIMARY KEY (paquete, comercio, producto))";
+	
+	String sqlCreateImagenes = "CREATE TABLE " + TABLE_IMAGENES + " (" +
+			COMERCIO + " TEXT," +
+			PRODUCTO + " TEXT," +
+			TIPOIMAGEN + " TEXT," +			
+			IMAGEN + " BLOB," +
+			"PRIMARY KEY (comercio, producto))";
 	
 	public Base(Context contexto, String nombre,
 			CursorFactory factory, int version) {
@@ -54,7 +66,8 @@ public class Base extends SQLiteOpenHelper {
 		db.execSQL(sqlCreateElemRf);
 		db.execSQL(sqlCreatePaquetes);
 		db.execSQL(sqlCreateProductos);
-		}
+		db.execSQL(sqlCreateImagenes);
+	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int versionAnterior,
@@ -63,9 +76,11 @@ public class Base extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS ElementosRF");
 		db.execSQL("DROP TABLE IF EXISTS Paquetes");
 		db.execSQL("DROP TABLE IF EXISTS Productos");
+		db.execSQL("DROP TABLE IF EXISTS Imagenes");		
 		// Se crea la nueva versión de la tabla
 		db.execSQL(sqlCreateElemRf);
 		db.execSQL(sqlCreatePaquetes);
 		db.execSQL(sqlCreateProductos);
+		db.execSQL(sqlCreateImagenes);
 	}
 }

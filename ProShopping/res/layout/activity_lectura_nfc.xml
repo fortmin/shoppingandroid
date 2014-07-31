@@ -15,7 +15,7 @@
      </FrameLayout>
 
      <ImageButton
-        android:id="@+id/btnNFC"
+        android:id="@+id/btnPuntos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titulo"
@@ -24,7 +24,18 @@
         android:background="#FB9836"
         android:clickable="true"
         android:layout_marginTop="10dp"
-        android:src="@drawable/nfc" />
+        android:src="@drawable/btn_puntos" />
+      <ImageButton
+        android:id="@+id/btnPaquetes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnPuntos"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#FB9836"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/btn_paquetes" />
      
 
     

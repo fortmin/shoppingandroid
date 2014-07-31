@@ -96,13 +96,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.fortmin.proshopping.MenuCliente"
-            android:label="@string/title_menu_cliente" >
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+      
 
         <service
             android:name="com.fortmin.proshopping.ServicioBle"

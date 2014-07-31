@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/administracion/v1/20140728181932/java/1.16.0-rc/fortmin.com-administracion-v1-20140728181932-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-administracion-v1-20140728181932-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/administracion/v1/20140731030956/java/1.16.0-rc/fortmin.com-administracion-v1-20140731030956-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-administracion-v1-20140731030956-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-07-28 18:19"
+      "timestamp": "2014-07-31 03:09"
     }, 
     {
-      "path": "fortmin.com-administracion-v1-20140728181932-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-administracion-v1-20140731030956-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "proshopping.logica", 
   "language_version": "1.16.0-rc", 
   "id": "administracion:v1", 
-  "revision": 20140728181932
+  "revision": 20140731030956
 }
