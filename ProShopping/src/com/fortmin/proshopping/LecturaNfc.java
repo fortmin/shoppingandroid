@@ -1,17 +1,13 @@
 package com.fortmin.proshopping;
 
-import java.nio.charset.Charset;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +15,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.fortmin.proshopapi.ProShopMgr;
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
@@ -28,66 +25,73 @@ import com.fortmin.proshopping.persistencia.DatosLocales;
 
 public class LecturaNfc extends Activity {
 
-	private Intent paquete;
+	private Intent servicio, paquete, lectura_tag;
 	private usuario nombre_usuario;
 	private tagRecibido tag_recibido;
-	private DatosLocales datos=DatosLocales.getInstance();
+	private DatosLocales datos = DatosLocales.getInstance();
 	private com.fortmin.proshopapi.ble.EscucharIbeacons beacons;
 	private BeaconRecibido beacon_recibido;
 	private Timer mTimer;
 	private boolean servicioiniciado = false;
 	private boolean scanning = false;
 	private String nombre_paquete;
-	private Intent servicio;
+	ProShopMgr apiNfc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		apiNfc = new ProShopMgr();
 		tag_recibido = tagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_nfc);
 		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
 		ImageButton btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
-		nombre_usuario = usuario.getInstance();
-        beacon_recibido = BeaconRecibido.getInstance();
-        btn_puntos.setOnClickListener(new View.OnClickListener() {
+		ImageButton btn_compras = (ImageButton) findViewById(R.id.btnMiCarrito);
+		nombre_usuario = usuario.getInstance();// para que el nombre de usuario
+												// pueda ser utilizado en
+												// cualquier activity
+		beacon_recibido = BeaconRecibido.getInstance();// esta clase la
+														// actualiza
+														// ActualizarBeacons,
+														// muestra el ibeacons
+														// instantaneo
+		btn_puntos.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				Nube nube = new Nube(ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
-				Mensaje resp = nube.ejecutarGetPuntajeCliente(nombre_usuario.getNombre());
-				mostrarMensaje(resp.getValor().toString());
-				
+				Mensaje resp = nube.ejecutarGetPuntajeCliente(nombre_usuario
+						.getNombre());
+				mostrarMensaje("Usted dispone de : "
+						+ resp.getValor().toString() + " puntos");
+
 			}
 		});
-        btn_paquetes.setOnClickListener(new View.OnClickListener() {
+		btn_paquetes.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-			  if(datos.getHaydatos())	
-				 verPaquetes();
-			  else
-				  mostrarMensaje("No ha visto paquetes aun");
+				if (datos.getHaydatos()) // si aun no se ha crado la base de
+											// datos
+					verPaquetes();
+				else
+					mostrarMensaje("No ha visto paquetes aun");
 			}
 		});
-		
-		// escucho el tag nfc para obtener el id
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-			Log.e("tag", "leyendo tag nfc");
-			NdefMessage[] messages = getNdefMessages(getIntent());
-			for (int i = 0; i < messages.length; i++) {
-				for (int j = 0; j < messages[0].getRecords().length; j++) {
-					NdefRecord record = messages[i].getRecords()[j];
-					String payload = new String(record.getPayload(), 0,
-							record.getPayload().length,
-							Charset.forName("UTF-8"));
-					String delimiter = ":";
-					String[] temp = payload.split(delimiter);
-					String Id = temp[0];
-					// analizar si es de estacionamiento de paquetes o de imagenes
-					AnalizarId(Id);
-				}
+		btn_compras.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				CanastaCompras canasta = CanastaCompras.getInstance();
+				if (canasta.hayPaquetesComprados()) {
+					hacerCompra();
+				} else
+					mostrarMensaje("No ha agregado productos a su carrito");
 
 			}
+		});
+		// escucho tag propietario
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 
+			AnalizarId(apiNfc.id_tag_leido(getIntent()));
 		}
+
 		beacons = new com.fortmin.proshopapi.ble.EscucharIbeacons(this);
 
+		// hace un loop cada 60 segundos
 		this.mTimer = new Timer();
 		this.mTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -96,11 +100,14 @@ public class LecturaNfc extends Activity {
 				if (scanning) {
 
 					beacon_recibido.setBeacon(beacons.darIbeacon());
-					beacons.stopScanning();
+					beacon_recibido.setBeacon_leido(true);
+					beacon_recibido.setDispositivoencendido(beacons
+							.getEsta_recibiendo());
+					beacons.setEsta_recibiendo(false);
 
 				}
 
-				if (!servicioiniciado) {
+				if (!servicioiniciado && beacon_recibido.getBeacon_leido()) {
 					servicioiniciado = true;
 					encenderServicio();
 
@@ -111,6 +118,7 @@ public class LecturaNfc extends Activity {
 
 		if (!tag_recibido.getAtendido()) {
 			tag_recibido.setAtendido(true);
+
 			persistirBeacon();
 		}
 
@@ -138,35 +146,12 @@ public class LecturaNfc extends Activity {
 
 	public void verPaquete(String nombrepaquete) {
 		// llamo a mostrarPaquete
-
+		this.setVisible(false);
 		paquete = new Intent(this, ProductosPaquete.class);
 		paquete.putExtra("nombrePaquete", nombrepaquete);
+		this.setVisible(false);
 		startActivity(paquete);
 
-	}
-
-	public NdefMessage[] getNdefMessages(Intent intent) {
-		NdefMessage[] message = null;
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-			Parcelable[] rawMessages = intent
-					.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-			if (rawMessages != null) {
-				message = new NdefMessage[rawMessages.length];
-				for (int i = 0; i < rawMessages.length; i++) {
-					message[i] = (NdefMessage) rawMessages[i];
-				}
-			} else {
-				byte[] empty = new byte[] {};
-				NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN,
-						empty, empty, empty);
-				NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
-				message = new NdefMessage[] { msg };
-			}
-		} else {
-
-			finish();
-		}
-		return message;
 	}
 
 	public void entradaEstacionamiento(String acceso, String nom_usuario,
@@ -238,9 +223,9 @@ public class LecturaNfc extends Activity {
 			// si es nfc de comercio o smartposter
 			Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
 			Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(id);
-			
 
-			// Si pude obtener el paquete  obtengo el n ombre para guardarlo en la base de datos
+			// Si pude obtener el paquete obtengo el n ombre para guardarlo en
+			// la base de datos
 			if (paquete != null) {
 				nombre_paquete = paquete.getNombre();
 			}
@@ -285,16 +270,19 @@ public class LecturaNfc extends Activity {
 
 	public void persistirBeacon() {
 		Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(tag_recibido.getNombre());
+		Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(tag_recibido
+				.getNombre());
 		if (paquete != null) {
 			nombre_paquete = paquete.getNombre();
-			BDElementoRf tag = new BDElementoRf(tag_recibido.getNombre(),tag_recibido.getTipo(), tag_recibido.getRssi(),paquete.getNombre());
+			BDElementoRf tag = new BDElementoRf(tag_recibido.getNombre(),
+					tag_recibido.getTipo(), tag_recibido.getRssi(),
+					paquete.getNombre());
 			DatosLocales datos = DatosLocales.getInstance();
 			Log.e("grabacion beacon", "antes de ir a la tabla");
 			String resultado = datos.encontreElementoRf(this, tag);
 			Log.e("grabacion beacon", resultado);
-			//beacons.stopScanning();
-			Log.e("voy a ver el paquete",nombre_paquete);
+			// beacons.stopScanning();
+			Log.e("voy a ver el paquete", nombre_paquete);
 			verPaquete(nombre_paquete);
 			// beacons.startScanning();
 
@@ -308,11 +296,16 @@ public class LecturaNfc extends Activity {
 		startService(servicio);
 
 	}
-	public void verPaquetes(){
-		Intent mostrar_paquetes=new Intent(this,MostrarPaquetes.class);
+
+	public void verPaquetes() {
+		Intent mostrar_paquetes = new Intent(this, MostrarPaquetes.class);
 		startActivity(mostrar_paquetes);
-		
+
 	}
-	
+
+	public void hacerCompra() {
+		Intent hacer_compra = new Intent(this, CanastodeCompras.class);
+		startActivity(hacer_compra);
+	}
 
 }

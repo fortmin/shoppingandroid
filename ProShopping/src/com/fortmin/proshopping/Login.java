@@ -54,13 +54,12 @@ public class Login extends Activity {
 						editor.commit();
 						user = usuario.getInstance();
 						user.setNombre(nom_usuario);
-						mostrarMensaje("Bienvenido");
-						
+						mostrarMensaje("Bienvenido " +nom_usuario);
 						verOpciones();
 					} else if (mensaje.contains("USUARIO_INEXISTENTE"))
-						mostrarMensaje("Usuario inexistente");
+						mostrarMensaje("USUARIO NO REGISTRADO");
 					else if (mensaje.contains("CLAVE_INCORRECTA"))
-						mostrarMensaje("error en password ");
+						mostrarMensaje("CLAVE INCORRECTA ");
 				}
 
 			}

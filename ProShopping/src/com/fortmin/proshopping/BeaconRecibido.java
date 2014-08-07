@@ -4,6 +4,10 @@ import com.fortmin.proshopapi.ble.Ibeacon;
 
 public class BeaconRecibido {
 private Ibeacon beacon;
+private boolean beacon_leido=false;
+private boolean notificar=false;
+private boolean dispositivoencendido;
+
 private static BeaconRecibido instancia;
 private BeaconRecibido(){
 	  
@@ -23,5 +27,22 @@ public void setBeacon(Ibeacon beacon) {
 public String darNombreBeacon(){
 	return beacon.getValor_nombre();
 }
-
+public boolean getEstadoNotificacion() {
+	return notificar;
+}
+public void setEstadoNotificacion(boolean notificar) {
+	this.notificar = notificar;
+}
+public boolean getBeacon_leido() {
+	return beacon_leido;
+}
+public void setBeacon_leido(boolean beacon_leido) {
+	this.beacon_leido = beacon_leido;
+}
+public boolean getDispositivoencendido() {
+	return dispositivoencendido;
+}
+public void setDispositivoencendido(boolean dispositivoencendido) {
+	this.dispositivoencendido = dispositivoencendido;
+}
 }

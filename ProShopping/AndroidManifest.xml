@@ -18,6 +18,7 @@
 
     <uses-permission android:name="com.fortmin.proshopping.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -56,9 +57,9 @@
             android:name="com.fortmin.proshopping.LecturaNfc"
             android:label="@string/title_activity_lectura_nfc" >
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <data
                     android:host="ext"
@@ -107,7 +108,6 @@
             android:name="com.fortmin.proshopping.MostrarPaquetes"
             android:label="@string/title_activity_mostrar_paquetes" >
         </activity>
-
         <activity
             android:name="com.fortmin.proshopping.PruebasUnitarias"
             android:label="@string/title_activity_pruebas_unitarias" >
@@ -115,7 +115,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.fortmin.proshopping.CargarImagen"
             android:label="@string/title_activity_cargar_imagen" >
@@ -123,15 +122,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-
-
-
-
-
-
+        <activity
+            android:name="com.fortmin.proshopping.CanastodeCompras"
+            android:label="@string/title_activity_canastode_compras" >
+        </activity>
     </application>
 
 </manifest>

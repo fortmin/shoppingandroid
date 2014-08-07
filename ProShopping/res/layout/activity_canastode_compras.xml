@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+  android:orientation="vertical"  
+  android:layout_width="fill_parent" 
+  android:layout_height="fill_parent"
+  android:background="#FB9836"> 
+            
+    <ListView android:layout_width="fill_parent"   
+      android:layout_height="wrap_content"   
+      android:background="#FFFFFF"
+      android:id="@+id/listaComprados"
+      >  
+    </ListView> 
+     <ImageButton
+        android:id="@+id/imagenComprar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+         android:background="#FB9836"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/btn_comprar">
+     </ImageButton>
+      <ImageButton
+        android:id="@+id/imagenAnular"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+         android:background="#FB9836"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/btn_eliminar_compra">
+        
+    </ImageButton>
+     
+   
+      
+</LinearLayout>
+

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TabActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +17,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
@@ -31,6 +35,7 @@ public class ProductosPaquete extends Activity {
 	private ListView lstOpciones;
 	private ShoppingNube comNube;
 	private Iterator<ProductoVO> iprods;
+	private ImageView imagen;
 	private TextView detalle_producto;
 	private ProgressDialog PD = null;
 	private String nombrepaquete;
@@ -50,6 +55,7 @@ public class ProductosPaquete extends Activity {
 		 * "Espere unos segundos...", true, false);
 		 */
 		setContentView(R.layout.activity_paquete);
+		imagen=(ImageView)findViewById(R.id.imagenProducto);
 		lstOpciones = (ListView) findViewById(R.id.mainListView);
 		detalle_producto = (TextView) findViewById(R.id.datosProducto);
 		Bundle bundle = getIntent().getExtras();
@@ -62,10 +68,10 @@ public class ProductosPaquete extends Activity {
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
 			tag_recibido.setAtendido(true);
-			detalle_producto.setText("El paquete tiene "
+			detalle_producto.setText("Este paquete tiene "
 					+ paquete_prod.getCantProductos() + " " + "Productos"
-					+ "\n" + "Precio=" + paquete_prod.getPrecio() + "\n"
-					+ "puntos=" + paquete_prod.getPuntos());
+					+ "\n" + paquete_prod.getPrecio() + " $" +"\n"
+					+ paquete_prod.getPuntos() +"puntos acumulados");
 
 			// Toast.makeText(getApplicationContext(), "Obteniendo productos",
 			// Toast.LENGTH_LONG).show();
@@ -82,12 +88,16 @@ public class ProductosPaquete extends Activity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					// TODO Auto-generated method stub
-					String nombre_producto = parent.getItemAtPosition(position)
-							.toString();
+					String nombre_producto = parent.getItemAtPosition(position)	.toString();
 					String nombre_comercio = darComercio(nombre_producto);
 					String precio = darPrecio(nombre_producto);
-					detalle_producto.setText("Nombre del Comercio:"
-							+ nombre_comercio + "\n" + "Precio=" + precio);
+					detalle_producto.setText(nombre_comercio + "\n" + "$ "+ precio);
+					if (nombre_producto.contains("Led"))
+						imagen.setImageResource(R.drawable.img_tvled32);
+					else if (nombre_producto.contains("Bebe"))
+						imagen.setImageResource(R.drawable.img_buzobebe);
+					else if(nombre_producto.contains("audifonos"))
+						imagen.setImageResource(R.drawable.img_auriculares);
 
 				}
 
@@ -123,8 +133,19 @@ public class ProductosPaquete extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.paquete, menu);
+		super.onCreateOptionsMenu(menu);
+		CrearMenu(menu);
 		return true;
+	}
+
+	@SuppressLint({ "NewApi", "InlinedApi" })
+	private void CrearMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuItem canasto=menu.add(0,0,0,"Agregar al Canasto");
+		{
+			canasto.setIcon(R.drawable.canasta);
+			canasto.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
 	}
 
 	@Override
@@ -132,11 +153,24 @@ public class ProductosPaquete extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		return MenuSelecciona(item);
+	}
+
+	private boolean MenuSelecciona(MenuItem item) {
+		// TODO Auto-generated method stub
+		boolean opcion_elegida=false;
+		if(item.getItemId()==0){
+			CanastaCompras miscompras=CanastaCompras.getInstance();
+			miscompras.agregarPaqueteCarrito(nombrePaquete);
+			miscompras.setPrecio(paquete_prod.getPrecio());
+			mostrarMensaje("Paquete agregado a su canasto");
+			opcion_elegida= true;
 		}
-		return super.onOptionsItemSelected(item);
+		return opcion_elegida;
+	}
+	public void mostrarMensaje(String mensaje) {
+		Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG)
+				.show();
 	}
 
 	@Override

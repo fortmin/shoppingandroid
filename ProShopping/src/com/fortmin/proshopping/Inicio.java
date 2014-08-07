@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class Inicio extends Activity {
 
@@ -23,6 +24,7 @@ public class Inicio extends Activity {
 				SharedPreferences prefs = getSharedPreferences("configuracion",MODE_PRIVATE);
 				String nombre = prefs.getString("Usuario","no existe");
 				if  (!nombre.equals("no existe")){
+				  mostrarMensaje("Bienvenido "+nombre);	
 				  verOpciones();
 				}
 				else
@@ -72,5 +74,9 @@ public class Inicio extends Activity {
 		// TODO Auto-generated method stub
 		Intent opciones = new Intent(this, LecturaNfc.class);
 		startActivity(opciones);
+	}
+	public void mostrarMensaje(String mensaje) {
+		Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG)
+				.show();
 	}
 }

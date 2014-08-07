@@ -31,7 +31,8 @@
     <string name="estacionamiento">Estacionamiento</string>
     <string name="usuarioNR"> Registrarse </string>
     <string name="title_activity_mostrar_paquetes">MostrarPaquetes</string>
-	<string name="title_activity_pruebas_unitarias">Pruebas Unitarias</string>
+    <string name="title_activity_pruebas_unitarias">Pruebas Unitarias</string>
     <string name="title_activity_cargar_imagen">Cargar Imagen</string>
+    <string name="title_activity_canastode_compras">CanastodeCompras</string>
 
 </resources>

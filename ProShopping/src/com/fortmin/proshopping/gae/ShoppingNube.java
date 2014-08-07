@@ -8,8 +8,12 @@ import android.util.Log;
 
 import com.fortmin.proshopping.CloudEndpointUtils;
 import com.fortmin.proshopping.logica.shopping.Shopping;
+import com.fortmin.proshopping.logica.shopping.Shopping.ActualizarPosicion;
+import com.fortmin.proshopping.logica.shopping.Shopping.AgregarItemCarrito;
 import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.EliminarItemCarrito;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetCalibradoBeacon;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetCarritoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetImagen;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
@@ -17,6 +21,7 @@ import com.fortmin.proshopping.logica.shopping.Shopping.GetProductoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPuntajeCliente;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.model.CarritoVO;
 import com.fortmin.proshopping.logica.shopping.model.Imagen;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
@@ -40,6 +45,10 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_GET_CALIBRADO_BEACON = "GetCalibradoBeacon";
 	public static String OPE_GET_IMAGEN = "GetImagen";	
 	public static String OPE_GET_PUNTAJE_CLIENTE = "GetPuntajeCliente";	
+	public static String OPE_ACTUALIZAR_POSICION = "ActualizarPosicion";
+	public static String OPE_AGREGAR_ITEM_CARRITO = "AgregarItemCarrito";
+	public static String OPE_ELIMINAR_ITEM_CARRITO = "EliminarItemCarrito";
+	public static String OPE_GET_CARRITO_COMPLETO = "GetCarritoCompleto";
 	
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -156,6 +165,49 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				GetPuntajeCliente execgae = endpoint.getPuntajeCliente(usuario);
 				Mensaje resp = execgae.execute();
 				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getValor());
+				return resp;
+			}
+			if (operacion.equals(OPE_ACTUALIZAR_POSICION)) {
+				String usuario = (String) params[0];
+				String elementoRf = (String) params[1];
+				String tipo = (String) params[2];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_ACTUALIZAR_POSICION + "->"
+						+ usuario + "::" + elementoRf + "::" + tipo);
+				ActualizarPosicion execgae = endpoint.actualizarPosicion(usuario, elementoRf, tipo);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_AGREGAR_ITEM_CARRITO)) {
+				String usuario = (String) params[0];
+				String nomPaquete = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_AGREGAR_ITEM_CARRITO + "->"
+						+ usuario + "::" + nomPaquete);
+				AgregarItemCarrito execgae = endpoint.agregarItemCarrito(usuario, nomPaquete);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_ELIMINAR_ITEM_CARRITO)) {
+				String usuario = (String) params[0];
+				String nomPaquete = (String) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_ELIMINAR_ITEM_CARRITO + "->"
+						+ usuario + "::" + nomPaquete);
+				EliminarItemCarrito execgae = endpoint.eliminarItemCarrito(usuario, nomPaquete);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,"ShoppingNube->" + resp.getOperacion() + "->" + resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_GET_CARRITO_COMPLETO)) {
+				String usuario = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_CARRITO_COMPLETO + "->" + usuario);
+				GetCarritoCompleto execgae = endpoint.getCarritoCompleto(usuario);
+				CarritoVO resp = execgae.execute();
+				if (resp != null) {
+					Log.i(TAG,"ShoppingNube->" + resp.getCliente() + "->" + "Items=" + resp.getCantItems());
+				}
+				else
+					Log.i(TAG,"ShoppingNube->NULL");
 				return resp;
 			}
 		} catch (IOException e) {
