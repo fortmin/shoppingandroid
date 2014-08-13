@@ -3,31 +3,33 @@
   android:orientation="vertical"  
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
+   android:id="@+id/mirecibo"
   android:background="#FB9836"> 
-            
+    <TextView 
+        android:layout_width="fill_parent"  
+        android:layout_height="wrap_content" 
+        android:textSize="20sp"
+        android:background="#D94DFF" 
+        android:id="@+id/precioPuntos">
+        
+    </TextView>    
     <ListView android:layout_width="fill_parent"   
       android:layout_height="wrap_content"   
       android:background="#FFFFFF"
       android:id="@+id/listaComprados"
       >  
     </ListView> 
-     <ImageButton
-        android:id="@+id/imagenComprar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-         android:background="#FB9836"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/btn_comprar">
-     </ImageButton>
+   
       <ImageButton
-        android:id="@+id/imagenAnular"
-        android:layout_width="fill_parent"
+        android:id="@+id/btnRecibo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         android:background="#FB9836"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/btn_eliminar_compra">
-        
-    </ImageButton>
+        android:background="#FB9836"
+        android:clickable="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/btn_micarrito" />
+    
      
    
       

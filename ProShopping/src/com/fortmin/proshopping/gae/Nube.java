@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.fortmin.proshopping.logica.gestion.model.Imagen;
 import com.fortmin.proshopping.logica.shopping.model.CarritoVO;
+import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
@@ -201,7 +202,7 @@ public class Nube {
 			Log.e(TAG, e.toString());
 		}
 	}
-	
+
 	/*
 	 * Obtiene el puntaje del cliente y lo devuelve en Mensaje
 	 */
@@ -222,12 +223,10 @@ public class Nube {
 	}
 
 	/*
-	 * Actualiza la posicion del usuario en referencia al elemento "elemRf" del 
-	 * tipo detectado (NFCTAG o BEACON)
-	 * Devuelve:
-	 *          OK - Si se pudo actualizar la posicion
-	 *          USUARIO_INEXISTENTE - Si el usuario no existe como cliente
-	 *          SIN_UBICACION_DEFINIDA - Si el elemento no tienen una ubicacion definida
+	 * Actualiza la posicion del usuario en referencia al elemento "elemRf" del
+	 * tipo detectado (NFCTAG o BEACON) Devuelve: OK - Si se pudo actualizar la
+	 * posicion USUARIO_INEXISTENTE - Si el usuario no existe como cliente
+	 * SIN_UBICACION_DEFINIDA - Si el elemento no tienen una ubicacion definida
 	 */
 	public com.fortmin.proshopping.logica.shopping.model.Mensaje actualizarPosicion(
 			String usuario, String elemRf, String tipo) {
@@ -247,11 +246,10 @@ public class Nube {
 
 	/*
 	 * Agrega el paquete de nombre "nomPaquete" al carrito del cliente "usuario"
-	 * Devuelve:
-	 *          OK - Si el paquete fue agregado con exito
-	 *          PAQUETE_NO_AGREGADO - Si no se pudo agregar el paquete (ej: ya estaba)
-	 *          USUARIO_INEXISTENTE - Si el usuario no existe como cliente
-	 *          PAQUETE_INEXISTENTE - Si no existe un paquete con ese nombre
+	 * Devuelve: OK - Si el paquete fue agregado con exito PAQUETE_NO_AGREGADO -
+	 * Si no se pudo agregar el paquete (ej: ya estaba) USUARIO_INEXISTENTE - Si
+	 * el usuario no existe como cliente PAQUETE_INEXISTENTE - Si no existe un
+	 * paquete con ese nombre
 	 */
 	public com.fortmin.proshopping.logica.shopping.model.Mensaje agregarItemCarrito(
 			String usuario, String nomPaquete) {
@@ -270,11 +268,10 @@ public class Nube {
 	}
 
 	/*
-	 * Elimina el paquete de nombre "nomPaquete" del carrito del cliente "usuario"
-	 * Devuelve:
-	 *          OK - Si el paquete fue eliminado con exito
-	 *          PAQUETE_NO_ELIMINADO - Si no se pudo eliminar el paquete (ej: no estaba)
-	 *          USUARIO_INEXISTENTE - Si el usuario no existe como cliente
+	 * Elimina el paquete de nombre "nomPaquete" del carrito del cliente
+	 * "usuario" Devuelve: OK - Si el paquete fue eliminado con exito
+	 * PAQUETE_NO_ELIMINADO - Si no se pudo eliminar el paquete (ej: no estaba)
+	 * USUARIO_INEXISTENTE - Si el usuario no existe como cliente
 	 */
 	public com.fortmin.proshopping.logica.shopping.model.Mensaje eliminarItemCarrito(
 			String usuario, String nomPaquete) {
@@ -293,17 +290,52 @@ public class Nube {
 	}
 
 	/*
-	 * Devuelve el carrito completo con todos sus paquetes
-	 * Incluye puntaje acumulado, precio acumulado y la cantidad de Items
-	 * Si no encuentra el usuario o en algun otro caso devuelve Null
+	 * Devuelve el carrito completo con todos sus paquetes Incluye puntaje
+	 * acumulado, precio acumulado y la cantidad de Items Si no encuentra el
+	 * usuario o en algun otro caso devuelve Null
 	 */
-	public CarritoVO getCarritoCompleto(
-			String usuario) {
+	public CarritoVO getCarritoCompleto(String usuario) {
 		CarritoVO resp = null;
 		ShoppingNube comNube = new ShoppingNube(
 				ShoppingNube.OPE_GET_CARRITO_COMPLETO);
 		try {
 			resp = (CarritoVO) comNube.execute(usuario).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	/*
+	 * Realiza el checkout del carrito de compras del cliente "usuario"
+	 * Devuelve: OK - Si se completo con exito el ckeckout CARRITO_VACIO - Si el
+	 * carrito no tiene ninguna compra USUARIO_INEXISTENTE - Si el usuario no
+	 * existe como cliente
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje checkoutCarrito(
+			String usuario) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(
+				ShoppingNube.OPE_CHECKOUT_CARRITO);
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<ComprasVO> getCompras(String usuario) {
+		ArrayList<ComprasVO> resp = null;
+		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_COMPRAS);
+		try {
+			resp = (ArrayList<ComprasVO>) comNube.execute(usuario).get();
 		} catch (InterruptedException e) {
 			Log.e(TAG, e.toString());
 		} catch (ExecutionException e) {

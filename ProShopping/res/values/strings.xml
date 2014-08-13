@@ -34,5 +34,24 @@
     <string name="title_activity_pruebas_unitarias">Pruebas Unitarias</string>
     <string name="title_activity_cargar_imagen">Cargar Imagen</string>
     <string name="title_activity_canastode_compras">CanastodeCompras</string>
-
+      <string name="create_pdf_button">New Button</string>
+    <string name="create_pdf_file">Crear documento PDF</string>
+    <string name="read_pdf_file">Leer documento PDF</string>
+    <string name="email_pdf_file">Enviar PDF por Email</string>
+     <string name="invoice_number">Nº</string>
+    <string name="invoice_date">Date:</string>
+    <string name="company">Company:</string>
+    <string name="client_title">Client info</string>
+    <string name="client_name">Client name:</string>
+    <string name="client_telephone">Client telephone:</string>
+    <string name="client_country">Client country:</string>
+     <string name="detail_code">Code</string>
+    <string name="detail_description">Description</string>
+    <string name="detail_amount">Amount</string>
+    <string name="detail_price">Price</string>
+    <string name="detail_total">Total</string>
+     <string name="invoice_subtotal">Subtotal:</string>
+    <string name="invoice_tax">Tax:</string>
+    <string name="pdf_hint">Enter text to be PDF\'d</string>
+    <string name="pdf_go">Save And Share</string>
 </resources>

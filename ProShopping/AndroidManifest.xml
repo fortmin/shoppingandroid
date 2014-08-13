@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="19"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +22,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
+    
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -31,6 +33,12 @@
         <activity
             android:name="com.fortmin.proshopping.MainActivity"
             android:label="@string/app_name" >
+             <intent-filter>
+               
+                 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> 
+           
         </activity>
 
         <service android:name="com.fortmin.proshopping.GCMIntentService" />
@@ -77,11 +85,11 @@
         <activity
             android:name="com.fortmin.proshopping.Inicio"
             android:label="@string/title_activity_inicio" >
-            <intent-filter>
+             <intent-filter>
+               
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> 
         </activity>
         <activity
             android:name="com.fortmin.proshopping.Login"
@@ -126,6 +134,15 @@
             android:name="com.fortmin.proshopping.CanastodeCompras"
             android:label="@string/title_activity_canastode_compras" >
         </activity>
+         <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.fortmin.proshopping"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

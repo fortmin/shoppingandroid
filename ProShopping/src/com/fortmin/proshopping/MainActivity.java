@@ -1,187 +1,111 @@
 package com.fortmin.proshopping;
 
-import java.util.concurrent.ExecutionException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfDocument.Page;
+import android.graphics.pdf.PdfDocument.PageInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintAttributes.Margins;
+import android.print.PrintAttributes.Resolution;
+import android.print.pdf.PrintedPdfDocument;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 
-import com.fortmin.proshopping.gae.SeguridadNube;
-import com.fortmin.proshopping.gae.ShoppingNube;
-import com.fortmin.proshopping.logica.shopping.model.Mensaje;
+public class MainActivity extends Activity implements Runnable {
 
-/**
- * The Main Activity.
- * 
- * This activity starts up the RegisterActivity immediately, which communicates
- * with your App Engine backend using Cloud Endpoints. It also receives push
- * notifications from backend via Google Cloud Messaging (GCM).
- * 
- * Check out RegisterActivity.java for more details.
- */
-public class MainActivity extends Activity {
+	private Intent mShareIntent;
 
-	private String TAG = "ProShopping";
+	private OutputStream os;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+	}
 
-		// Start up RegisterActivity right away
-		// Intent intent = new Intent(this, RegisterActivity.class);
-		// startActivity(intent);
+	/** PDF Gen should run in own thread to not slow the GUI */
+	public void makeAndSharePDF(View buttonSource) {
+		new Thread(this).start();
+	}
 
-		// Toast.makeText(getApplicationContext(),
-		// "Obteniendo paquete",Toast.LENGTH_SHORT).show();
-		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_RF);
-		SeguridadNube segNube = new SeguridadNube(
-				SeguridadNube.OPE_REGISTRO_USUARIO);
-		/*
-		 * Paquete paquete = null; try { paquete = (Paquete)
-		 * comNube.execute("BEACON001").get(); } catch (InterruptedException e1)
-		 * { Log.e(TAG, ShoppingNube.OPE_GET_PAQUETE_RF +
-		 * "InterruptedException"); } catch (ExecutionException e1) { Log.e(TAG,
-		 * ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE + "ExecutionException"); }
-		 * 
-		 * // Codigo para mostrar datos del paquete en el log if (paquete !=
-		 * null) { Log.i(TAG, "Nombre del paquete    : " + paquete.getNombre());
-		 * Log.i(TAG, "Elemento RF asociado  : " + paquete.getElementoRF());
-		 * Log.i(TAG, "Puntos del paquete    : " + paquete.getPuntos());
-		 * Log.i(TAG, "Precio del paquete    : " + paquete.getPrecio());
-		 * Log.i(TAG, "Cantidad de productos : " + paquete.getCantProductos());
-		 * Log.i(TAG, "\n"); }
-		 */
+	public void run() {
 
-		// Si pude obtener el paquete procedo a pedir la lista de productos
-		/*
-		 * if (paquete != null) { Toast.makeText(getApplicationContext(),
-		 * "Obteniendo productos", Toast.LENGTH_SHORT).show(); comNube = new
-		 * ShoppingNube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
-		 * ArrayList<Producto> productos = null; try { productos =
-		 * (ArrayList<Producto>) comNube.execute( paquete.getNombre()).get(); }
-		 * catch (InterruptedException e) { Log.e(TAG,
-		 * ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE + "InterruptedException"); }
-		 * catch (ExecutionException e) { Log.e(TAG,
-		 * ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE + "ExecutionException"); }
-		 * 
-		 * // Si pude obtener la lista de productos la muestro // Codigo para
-		 * mostrar la lista de productos en el log if (productos != null) {
-		 * Producto proxprod = null; Iterator<Producto> iprods =
-		 * productos.iterator(); while (iprods.hasNext()) { proxprod =
-		 * iprods.next(); Log.i(TAG,
-		 * "----------------------------------------------"); Log.i(TAG,
-		 * "Codigo del producto   : " + proxprod.getCodigo()); Log.i(TAG,
-		 * "Comercio del producto : " + proxprod.getComercio()); Log.i(TAG,
-		 * "Nombre del producto   : " + proxprod.getNombre()); Log.i(TAG,
-		 * "Precio del producto   : " + proxprod.getPrecio()); } } }
-		 */
+		// Create a shiny new (but blank) PDF document in memory
+		// We want it to optionally be printable, so add PrintAttributes
+		// and use a PrintedPdfDocument. Simpler: new PdfDocument().
+		PrintAttributes printAttrs = new PrintAttributes.Builder()
+				.setColorMode(PrintAttributes.COLOR_MODE_COLOR)
+				.setMediaSize(PrintAttributes.MediaSize.NA_LETTER)
+				.setResolution(new Resolution("zooey", PRINT_SERVICE, 700, 700))
+				.setMinMargins(Margins.NO_MARGINS).build();
+		PdfDocument document = new PrintedPdfDocument(this, printAttrs);
+		// crate a page description
+		PageInfo pageInfo = new PageInfo.Builder(1200, 1200, 1).create();
 
-		String nomUsuario = "jafortti";
-		String email = "jafortti@gmail.com";
-		String nombre = "Julio Fortti";
-		String clave = "mundial";
+		// create a new page from the PageInfo
+		Page page = document.startPage(pageInfo);
 
-		segNube = new SeguridadNube(SeguridadNube.OPE_REGISTRO_USUARIO);
+		// repaint the user's text into the page
+		View content = findViewById(R.id.pantalla);
+
+		content.draw(page.getCanvas());
+
+		// do final processing of the page
+		document.finishPage(page);
+
+		// Here you could add more pages in a longer doc app, but you'd have
+		// to handle page-breaking yourself in e.g., write your own word
+		// processor...
+
+		// Now write the PDF document to a file; it actually needs to be a file
+		// since the Share mechanism can't accept a byte[]. though it can
+		// accept a String/CharSequence. Meh.
 		try {
-			Mensaje resp = (Mensaje) comNube.execute(email, nombre, nomUsuario)
-					.get();
-			Log.i(TAG, "Respuesta = " + resp.getMensaje());
-			// Respuesta puede ser OK o USUARIO_EXISTENTE (el usuario tiene que
-			// elegir otro nombre de usuario)
-		} catch (InterruptedException e) {
-			Log.e(TAG, SeguridadNube.OPE_REGISTRO_USUARIO
-					+ "InterruptedException");
-		} catch (ExecutionException e) {
-			Log.e(TAG, SeguridadNube.OPE_REGISTRO_USUARIO
-					+ "ExecutionException");
-		}
+			File pdfDirPath = new File(getFilesDir(), "pdfs");
 
-		segNube = new SeguridadNube(SeguridadNube.OPE_LOGIN_USUARIO);
-		try {
-			Mensaje resp = (Mensaje) comNube.execute(nomUsuario, clave).get();
-			Log.i(TAG, "Respuesta = " + resp.getMensaje());
-			// Respuesta puede ser OK o USUARIO_INEXISTENTE o CLAVE_INCORRECTA
-		} catch (InterruptedException e) {
-			Log.e(TAG, SeguridadNube.OPE_LOGIN_USUARIO + "InterruptedException");
-		} catch (ExecutionException e) {
-			Log.e(TAG, SeguridadNube.OPE_LOGIN_USUARIO + "ExecutionException");
-		}
+			pdfDirPath.mkdirs();
+			File file = new File(pdfDirPath, "pdfsend.pdf");
+			Uri contentUri = FileProvider.getUriForFile(this,
+					"com.fortmin.proshopping", file);
+			Log.e("PDF", "contentUri");
+			os = new FileOutputStream(file);
+			document.writeTo(os);
+			document.close();
+			os.close();
 
-		segNube = new SeguridadNube(SeguridadNube.OPE_LOGOFF_USUARIO);
-		try {
-			Mensaje resp = (Mensaje) comNube.execute(nomUsuario, clave).get();
-			Log.i(TAG, "Respuesta = " + resp.getMensaje());
-			// Respuesta puede ser OK o USUARIO_INEXISTENTE o CLAVE_INCORRECTA o
-			// SIN_LOGIN_PREVIO
-		} catch (InterruptedException e) {
-			Log.e(TAG, SeguridadNube.OPE_LOGOFF_USUARIO
-					+ "InterruptedException");
-		} catch (ExecutionException e) {
-			Log.e(TAG, SeguridadNube.OPE_LOGOFF_USUARIO + "ExecutionException");
-		}
-
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// DE ACA PARA ABAJO ES TODO LO NUEVO DE ESTACIONAMIENTO
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-		// -----------------------------------------------------------------------
-
-		String usuario = "jafortti";
-		String elementoRf = "NFCPARKITALIA01";
-
-		comNube = new ShoppingNube(ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO);
-		try {
-			Mensaje resp = (Mensaje) comNube.execute(elementoRf, usuario).get();
-			Log.i(TAG, "Respuesta = " + resp.getMensaje());
-			// Respuesta puede ser:
-			// SIN_ACCESO_RELACIONADO si es un Tag NFC pero no esta relacionado
-			// con un Acceso
-			// NO_ES_ACCESO_ESTACIONAMIENTO porque es un Acceso pero no para
-			// Autos (ej: Peatonal)
-			// CLIENTE_INEXISTENTE no se encontro el usuario
-			// OK si todo salio bien
-		} catch (InterruptedException e) {
-			Log.e(TAG, ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO
-					+ "InterruptedException");
-		} catch (ExecutionException e) {
-			Log.e(TAG, ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO
-					+ "ExecutionException");
-		}
-
-		comNube = new ShoppingNube(ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO);
-		try {
-			Mensaje resp = (Mensaje) comNube.execute(elementoRf, usuario).get();
-			Log.i(TAG, "Respuesta = " + resp.getMensaje());
-			// Respuesta puede ser:
-			// SIN_ACCESO_RELACIONADO si es un Tag NFC pero no esta relacionado
-			// con un Acceso
-			// NO_ES_ACCESO_ESTACIONAMIENTO porque es un Acceso pero no para
-			// Autos (ej: Peatonal)
-			// CLIENTE_INEXISTENTE no se encontro el usuario
-			// OK si todo salio bien
-			// PLAZO_VENCIDO si la fecha hora de salida supera a la fecha hora
-			// de entrada
-			// en mas del valor del parametro PLAZO_ESTACIONAMIENTO establecido
-			// en la tabla Config
-		} catch (InterruptedException e) {
-			Log.e(TAG, ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO
-					+ "InterruptedException");
-		} catch (ExecutionException e) {
-			Log.e(TAG, ShoppingNube.OPE_EGRESO_ESTACIONAMIENTO
-					+ "ExecutionException");
+			shareDocument(contentUri);
+		} catch (IOException e) {
+			throw new RuntimeException("Error generating file", e);
 		}
 
 	}
 
-	/*
-	 * public void onResume() {
-	 * 
-	 * 
-	 * }
-	 */
+	private void shareDocument(Uri uri) {
+		mShareIntent = new Intent();
+		mShareIntent.setAction(Intent.ACTION_SEND);
+		mShareIntent.setType("application/pdf");
+		// Assuming it may go via eMail:
+		mShareIntent.putExtra(Intent.EXTRA_SUBJECT, "Enviado de Proshooping");
+		// Attach the PDf as a Uri, since Android can't take it as bytes yet.
+		mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+		startActivity(mShareIntent);
+		return;
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
 }

@@ -36,6 +36,7 @@ public class ServicioBle extends Service {
 		this.mTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
+				
 				ble = beacon.getBeacon();
 				if (ble != null) {
 					uuid = ble.getProximityUuid();

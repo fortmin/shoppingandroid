@@ -11,24 +11,32 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class Inicio extends Activity {
-
+  private String nombre;
+  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
 		ImageButton usuarioR = (ImageButton) findViewById(R.id.btnusuarioR);
 		ImageButton usuarioNR = (ImageButton) findViewById(R.id.btnusuarioNR);
+		SharedPreferences prefs = getSharedPreferences("configuracion",MODE_PRIVATE);
+	    nombre = prefs.getString("Usuario","no existe");
+		if  (!nombre.equals("no existe")){
+		  mostrarMensaje("Bienvenido "+nombre);	
+		  verOpciones();
+		}
 
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				SharedPreferences prefs = getSharedPreferences("configuracion",MODE_PRIVATE);
-				String nombre = prefs.getString("Usuario","no existe");
 				if  (!nombre.equals("no existe")){
-				  mostrarMensaje("Bienvenido "+nombre);	
-				  verOpciones();
-				}
+					  mostrarMensaje("Bienvenido "+nombre);	
+					  verOpciones();
+					}
 				else
-				  logearse();
+				{
+			    		
+				 logearse();
+				}
 			}
 
 		

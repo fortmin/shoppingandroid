@@ -46,8 +46,7 @@ public class Login extends Activity {
 														// USUARIO_INEXISTENTE o
 														// CLAVE_INCORRECTA
 					if (mensaje.equals("OK")) {
-						SharedPreferences prefs = getSharedPreferences(
-								"configuracion", Context.MODE_PRIVATE);
+						SharedPreferences prefs = getSharedPreferences(	"configuracion", Context.MODE_PRIVATE);
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putString("Usuario", nom_usuario = nom_user
 								.getText().toString());
