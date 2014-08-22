@@ -21,7 +21,7 @@ public class Login extends Activity {
 	private EditText nom_user;
 	private EditText pass;
 	private String nom_usuario;
-	private usuario user;
+	private Usuario user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,30 +30,35 @@ public class Login extends Activity {
 		nom_user = (EditText) findViewById(R.id.usuario);
 		pass = (EditText) findViewById(R.id.pass);
 		ImageButton login = (ImageButton) findViewById(R.id.btnLogeo);
-		Typeface fuente = Typeface.createFromAsset(getAssets(),"Roboto-Regular.ttf");
+		Typeface fuente = Typeface.createFromAsset(getAssets(),
+				"Roboto-Regular.ttf");
 		nom_user.setTypeface(fuente);
 		pass.setTypeface(fuente);
-		
+
 		login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				
+
 				Nube comNube = new Nube(SeguridadNube.OPE_LOGIN_USUARIO);
 				nom_usuario = nom_user.getText().toString();
-				Mensaje resp = comNube.ejecutarLogin(pass.getText().toString(),nom_usuario);
+				Mensaje resp = comNube.ejecutarLogin(pass.getText().toString(),
+						nom_usuario);
 				if (resp != null) {
 					String mensaje = resp.getMensaje(); // Respuesta puede ser
 														// OK o
 														// USUARIO_INEXISTENTE o
 														// CLAVE_INCORRECTA
 					if (mensaje.equals("OK")) {
-						SharedPreferences prefs = getSharedPreferences(	"configuracion", Context.MODE_PRIVATE);
+
+						SharedPreferences prefs = getSharedPreferences(
+								"configuracion", Context.MODE_PRIVATE);
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putString("Usuario", nom_usuario = nom_user
 								.getText().toString());
 						editor.commit();
-						user = usuario.getInstance();
+
+						user = Usuario.getInstance();
 						user.setNombre(nom_usuario);
-						mostrarMensaje("Bienvenido " +nom_usuario);
+						mostrarMensaje("Bienvenido " + nom_usuario);
 						verOpciones();
 					} else if (mensaje.contains("USUARIO_INEXISTENTE"))
 						mostrarMensaje("USUARIO NO REGISTRADO");
@@ -96,4 +101,5 @@ public class Login extends Activity {
 		Intent opciones = new Intent(this, LecturaNfc.class);
 		startActivity(opciones);
 	}
+
 }

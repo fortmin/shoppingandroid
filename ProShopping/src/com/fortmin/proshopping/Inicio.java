@@ -11,35 +11,34 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class Inicio extends Activity {
-  private String nombre;
-  
+	private String nombre;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
 		ImageButton usuarioR = (ImageButton) findViewById(R.id.btnusuarioR);
 		ImageButton usuarioNR = (ImageButton) findViewById(R.id.btnusuarioNR);
-		SharedPreferences prefs = getSharedPreferences("configuracion",MODE_PRIVATE);
-	    nombre = prefs.getString("Usuario","no existe");
-		if  (!nombre.equals("no existe")){
-		  mostrarMensaje("Bienvenido "+nombre);	
-		  verOpciones();
+
+		SharedPreferences prefs = getSharedPreferences("configuracion",
+				MODE_PRIVATE);
+		nombre = prefs.getString("Usuario", "no existe");
+		if (!nombre.equals("no existe")) {
+			mostrarMensaje("Bienvenido " + nombre);
+			verOpciones();
 		}
 
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				if  (!nombre.equals("no existe")){
-					  mostrarMensaje("Bienvenido "+nombre);	
-					  verOpciones();
-					}
-				else
-				{
-			    		
-				 logearse();
+				if (!nombre.equals("no existe")) {
+					mostrarMensaje("Bienvenido " + nombre);
+					verOpciones();
+				} else {
+
+					logearse();
 				}
 			}
 
-		
 		});
 		usuarioNR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -78,11 +77,14 @@ public class Inicio extends Activity {
 		Intent registro = new Intent(this, FormularioRegistro.class);
 		startActivity(registro);
 	}
+
 	private void verOpciones() {
 		// TODO Auto-generated method stub
 		Intent opciones = new Intent(this, LecturaNfc.class);
 		startActivity(opciones);
+		this.finish();
 	}
+
 	public void mostrarMensaje(String mensaje) {
 		Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG)
 				.show();

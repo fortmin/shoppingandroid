@@ -1,14 +1,14 @@
 package com.fortmin.proshopping;
 
-public class usuario {
+public class Usuario {
   private String nombre;
-  private static usuario instancia;
-  private usuario(){
+  private static Usuario instancia;
+  private Usuario(){
 	  
   }
-public static usuario getInstance(){
+public static Usuario getInstance(){
 	if(instancia==null)
-		instancia= new usuario();
+		instancia= new Usuario();
 	return instancia;
 	
 }

@@ -10,6 +10,7 @@ import com.fortmin.proshopping.CloudEndpointUtils;
 import com.fortmin.proshopping.logica.shopping.Shopping;
 import com.fortmin.proshopping.logica.shopping.Shopping.ActualizarPosicion;
 import com.fortmin.proshopping.logica.shopping.Shopping.AgregarItemCarrito;
+import com.fortmin.proshopping.logica.shopping.Shopping.AgregarPuntos;
 import com.fortmin.proshopping.logica.shopping.Shopping.CheckoutCarrito;
 import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.Shopping.EliminarItemCarrito;
@@ -23,6 +24,7 @@ import com.fortmin.proshopping.logica.shopping.Shopping.GetProductoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPuntajeCliente;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.QuitarPuntos;
 import com.fortmin.proshopping.logica.shopping.model.CarritoVO;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVOCollection;
@@ -55,6 +57,8 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_GET_CARRITO_COMPLETO = "GetCarritoCompleto";
 	public static String OPE_CHECKOUT_CARRITO = "CheckoutCarrito";
 	public static String OPE_GET_COMPRAS = "GetCompras";
+	public static String OPE_AGREGAR_PUNTOS = "AgregarPuntos";
+	public static String OPE_QUITAR_PUNTOS = "QuitarPuntos";
 
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -259,9 +263,38 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				GetCompras execgae = endpoint.getCompras(usuario);
 				ComprasVOCollection resp = execgae.execute();
 				List<ComprasVO> compras = resp.getItems();
-				Log.i(TAG,
-						"ShoppingNube->Cantidad de compras->" + compras.size());
+				if (compras != null)
+					Log.i(TAG,
+							"ShoppingNube->Cantidad de compras->"
+									+ compras.size());
+				else
+					Log.i(TAG,
+							"ShoppingNube->Cantidad de compras->Devolvio null");
 				return compras;
+			}
+			if (operacion.equals(OPE_AGREGAR_PUNTOS)) {
+				String usuario = (String) params[0];
+				int puntos = (Integer) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_AGREGAR_PUNTOS + "->"
+						+ usuario + "->" + puntos);
+				AgregarPuntos execgae = endpoint.agregarPuntos(puntos, usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->" + resp.getOperacion() + "->"
+								+ resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_QUITAR_PUNTOS)) {
+				String usuario = (String) params[0];
+				int puntos = (Integer) params[1];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_QUITAR_PUNTOS + "->"
+						+ usuario + "->" + puntos);
+				QuitarPuntos execgae = endpoint.quitarPuntos(puntos, usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->" + resp.getOperacion() + "->"
+								+ resp.getMensaje());
+				return resp;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

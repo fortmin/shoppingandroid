@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+  android:orientation="vertical"  
+  android:layout_width="fill_parent" 
+  android:layout_height="fill_parent"
+  android:background="#FB9836"> 
+     
+    <TextView
+         android:id="@+id/mispuntos"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content">
+        
+    </TextView>
+    <EditText
+        android:id="@+id/transfpuntos"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+         android:layout_below="@+id/mispuntos"
+         android:hint="Digite los puntos a transferir">
+    </EditText>
+     
+   <ImageButton
+        android:id="@+id/btnpasarPtos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/transfpuntos"
+        android:layout_centerHorizontal="true"
+        android:background="#FB9836"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/btn_pasarpuntos" >
+    </ImageButton>    
+      
+</RelativeLayout>
+
+
+

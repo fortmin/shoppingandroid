@@ -1,37 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>  
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-  android:orientation="vertical"  
-  android:layout_width="fill_parent" 
-  android:layout_height="fill_parent"
-   android:id="@+id/mirecibo"
-  android:background="#FB9836"> 
-    <TextView 
-        android:layout_width="fill_parent"  
-        android:layout_height="wrap_content" 
-        android:textSize="20sp"
-        android:background="#D94DFF" 
-        android:id="@+id/precioPuntos">
-        
-    </TextView>    
-    <ListView android:layout_width="fill_parent"   
-      android:layout_height="wrap_content"   
-      android:background="#FFFFFF"
-      android:id="@+id/listaComprados"
-      >  
-    </ListView> 
-   
-      <ImageButton
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mirecibo"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FB9836"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/precioPuntos"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#D94DFF"
+        android:textSize="20sp" >
+    </TextView>
+
+    <ListView
+        android:id="@+id/listaComprados"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF" >
+    </ListView>
+
+    <ImageButton
         android:id="@+id/btnRecibo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
         android:background="#FB9836"
         android:clickable="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/btn_micarrito" />
-    
-     
-   
-      
-</LinearLayout>
+        android:src="@drawable/btn_checkout" />
 
+</LinearLayout>

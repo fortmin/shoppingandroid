@@ -7,58 +7,54 @@ import java.util.List;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 
 public class CanastaCompras {
-   private static CanastaCompras instancia;	
-   private List<PaqueteVO> paquetes_comprados;
-   private float precio;
-   private int puntos;
-  
+	private static CanastaCompras instancia;
+	private List<PaqueteVO> paquetes_comprados;
+	private float precio;
+	private int puntos;
 
-  public static CanastaCompras getInstance(){
-		if(instancia==null)
-			instancia= new CanastaCompras();
+	public static CanastaCompras getInstance() {
+		if (instancia == null)
+			instancia = new CanastaCompras();
 		return instancia;
-		
-	}
-   
-   private CanastaCompras(){
-		  paquetes_comprados= new ArrayList<PaqueteVO>();
-   }
-   
-   public boolean hayPaquetesComprados(){
-	   return !paquetes_comprados.isEmpty();
-   }
-   
-   public List<PaqueteVO> getPaquetes_comprados() {
-	return paquetes_comprados;
-   }
-  
-  public void agregarPaqueteCarrito(PaqueteVO nombre_paquete){
-	  paquetes_comprados.add(nombre_paquete);
-  }
-  
 
-	
-	public void anularCanasta(){
+	}
+
+	private CanastaCompras() {
+		paquetes_comprados = new ArrayList<PaqueteVO>();
+	}
+
+	public boolean hayPaquetesComprados() {
+		return !paquetes_comprados.isEmpty();
+	}
+
+	public List<PaqueteVO> getPaquetes_comprados() {
+		return paquetes_comprados;
+	}
+
+	public void agregarPaqueteCarrito(PaqueteVO nombre_paquete) {
+		paquetes_comprados.add(nombre_paquete);
+	}
+
+	public void anularCanasta() {
 		paquetes_comprados.clear();
 	}
-	
-    public void eliminarPaquete(String nomPaq){
-    	Iterator <PaqueteVO> iterator=paquetes_comprados.iterator();
-    	boolean termine=false;
-    	while(!termine){
-    	  if (iterator.hasNext()){
-    		  PaqueteVO paquete=iterator.next();
-    		  if(paquete.equals(nomPaq)){
-    			precio=precio-paquete.getPrecio();
-    		    puntos=puntos-paquete.getPuntos();
-    		    iterator.remove();
-    		    termine=true;
-    		  }
-    	  }
-    	  else
-    		  termine=true;
-    	}
-    }
+
+	public void eliminarPaquete(String nomPaq) {
+		Iterator<PaqueteVO> iterator = paquetes_comprados.iterator();
+		boolean termine = false;
+		while (!termine) {
+			if (iterator.hasNext()) {
+				PaqueteVO paquete = iterator.next();
+				if (paquete.equals(nomPaq)) {
+					precio = precio - paquete.getPrecio();
+					puntos = puntos - paquete.getPuntos();
+					iterator.remove();
+					termine = true;
+				}
+			} else
+				termine = true;
+		}
+	}
 
 	public float getPrecio() {
 		return precio;

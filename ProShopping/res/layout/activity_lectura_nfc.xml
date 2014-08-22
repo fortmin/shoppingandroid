@@ -6,52 +6,73 @@
     android:background="#FB9836"
     tools:context="com.fortmin.proshopping.LecturaNfc"
     tools:ignore="MergeRootFrame" >
-      <FrameLayout 
+
+    <FrameLayout
         android:id="@+id/titulo"
         android:layout_width="match_parent"
-        android:layout_height="120dp" 
-        android:background="@drawable/shopping">
-        
-     </FrameLayout>
+        android:layout_height="120dp"
+        android:background="@drawable/shopping" >
+    </FrameLayout>
 
-     <ImageButton
+    <ImageButton
         android:id="@+id/btnPuntos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titulo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
         android:background="#FB9836"
         android:clickable="true"
-        android:layout_marginTop="10dp"
         android:src="@drawable/btn_puntos" />
-      <ImageButton
+
+    <ImageButton
         android:id="@+id/btnPaquetes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnPuntos"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
         android:background="#FB9836"
         android:clickable="true"
-        android:layout_marginTop="10dp"
         android:src="@drawable/btn_paquetes" />
-      <ImageButton
+
+    <ImageButton
         android:id="@+id/btnMiCarrito"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnPaquetes"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
         android:background="#FB9836"
         android:clickable="true"
-        android:layout_marginTop="10dp"
         android:src="@drawable/btn_micarrito" />
-     
 
+    <ImageButton
+        android:id="@+id/btnMisCompras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnMiCarrito"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:background="#FB9836"
+        android:clickable="true"
+        android:src="@drawable/btn_miscompras" />
+
+    <ImageButton
+        android:id="@+id/btnPasarPuntos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnMisCompras"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:background="#FB9836"
+        android:clickable="true"
+        android:src="@drawable/btn_pasarpuntos" />
     
 
-  
-    
 </RelativeLayout>
-

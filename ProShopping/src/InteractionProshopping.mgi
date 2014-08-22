@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass
+        name="com.fortmin.proshopping.RegisterActivity.State" x="194" y="526"/>
+    <CommunicationClass name="com.fortmin.proshopping.usuario" x="770" y="431"/>
+    <CommunicationClass name="com.fortmin.proshopping.GCMIntentService"
+        x="404" y="10"/>
+    <CommunicationClass name="com.fortmin.proshopping.tipoNFC" x="275" y="527"/>
+    <CommunicationClass name="com.fortmin.proshopping.ServicioBle"
+        x="225" y="114">
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.NotifyManager"
+            endpointName="notify" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.BeaconRecibido"
+            endpointName="beacon" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.BeaconRecibido"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.ServiceManager"
+        x="30" y="299"/>
+    <CommunicationClass
+        name="com.fortmin.proshopping.FormularioRegistro" x="-7" y="355">
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="user_guardado" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.LecturaNfc"
+        x="542" y="345">
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="nombre_usuario" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.tipoTag"
+            endpointName="tipo" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.BeaconRecibido"
+            endpointName="beacon_recibido" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.CanastaCompras"/>
+        <Communication destinationClassName="com.fortmin.proshopping.BeaconRecibido"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.CanastaCompras"
+        x="678" y="163"/>
+    <CommunicationClass name="com.fortmin.proshopping.BeaconRecibido"
+        x="422" y="125"/>
+    <CommunicationClass name="com.fortmin.proshopping.AbstractService"
+        x="36" y="115"/>
+    <CommunicationClass name="com.fortmin.proshopping.CanastodeCompras"
+        x="807" y="20">
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.CanastaCompras"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.Inicio" x="72" y="509"/>
+    <CommunicationClass
+        name="com.fortmin.proshopping.RegisterActivity.QueryMessagesTask"
+        x="3" y="15">
+        <Communication destinationClassName="com.fortmin.proshopping.RegisterActivity"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.tagRecibido"
+        x="340" y="261"/>
+    <CommunicationClass name="com.fortmin.proshopping.tipoTag" x="738" y="504"/>
+    <CommunicationClass name="com.fortmin.proshopping.Login" x="54" y="433">
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="user" kind="Simple"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.ProductosPaquete"
+        x="187" y="370">
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="com.fortmin.proshopping.CloudEndpointUtils" x="583" y="20"/>
+    <CommunicationClass
+        name="com.fortmin.proshopping.AbstractService.IncomingHandler"
+        x="45" y="216">
+        <Communication destinationClassName="com.fortmin.proshopping.AbstractService"/>
+    </CommunicationClass>
+    <CommunicationClass name="com.fortmin.proshopping.MostrarPaquetes"
+        x="536" y="522"/>
+    <CommunicationClass name="com.fortmin.proshopping.NotifyManager"
+        x="365" y="528"/>
+    <CommunicationClass name="com.fortmin.proshopping.RegisterActivity"
+        x="218" y="10">
+        <Association
+            destinationClassName="com.fortmin.proshopping.RegisterActivity.State"
+            endpointName="curState" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.GCMIntentService"/>
+    </CommunicationClass>
+</ClassDiagram>

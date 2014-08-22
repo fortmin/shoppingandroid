@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="com.fortmin.proshopping.usuario" x="537" y="176">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.ServicioBle" x="722" y="468">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.NotifyManager"
+            endpointName="notify" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.BeaconRecibido"
+            endpointName="beacon" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.BeaconRecibido"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.ServiceManager" x="-83" y="679">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.FormularioRegistro" x="421" y="-7">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="user_guardado" kind="Simple"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.LecturaNfc" x="232" y="612">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="nombre_usuario" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.tipoTag"
+            endpointName="tipo" kind="Simple"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.BeaconRecibido"
+            endpointName="beacon_recibido" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.CanastaCompras"/>
+        <Communication destinationClassName="com.fortmin.proshopping.BeaconRecibido"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.CanastaCompras" x="-85" y="345">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.BeaconRecibido" x="610" y="731">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.AbstractService" x="-84" y="490">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.CanastodeCompras" x="-88" y="125">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.CanastaCompras"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.Inicio" x="-88" y="-6">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.tagRecibido" x="723" y="289">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.tipoTag" x="390" y="961">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.Login" x="694" y="129">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.usuario"
+            endpointName="user" kind="Simple"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.ProductosPaquete" x="207" y="231">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.fortmin.proshopping.tagRecibido"
+            endpointName="tag_recibido" kind="Simple"/>
+        <Communication destinationClassName="com.fortmin.proshopping.usuario"/>
+        <Communication destinationClassName="com.fortmin.proshopping.tagRecibido"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.MostrarPaquetes" x="750" y="11">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.fortmin.proshopping.NotifyManager" x="625" y="914">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+</ClassDiagram>

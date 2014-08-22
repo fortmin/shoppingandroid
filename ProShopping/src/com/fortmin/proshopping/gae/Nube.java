@@ -344,6 +344,47 @@ public class Nube {
 		return resp;
 	}
 
+	/*
+	 * Agrega punto al usuario producto de una transferencia de otro usuario
+	 * Devuelve: OK - Si se completo con exito el agregado de puntos
+	 * USUARIO_INEXISTENTE - Si el usuario no existe
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje agregarPuntos(
+			String usuario, int puntos) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_AGREGAR_PUNTOS);
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario, puntos).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	/*
+	 * Agrega punto al usuario producto de una transferencia de otro usuario
+	 * Devuelve: OK - Si se completo con exito el agregado de puntos
+	 * USUARIO_INEXISTENTE - Si el usuario no existe SALDO_INSUFICIENTE - Si el
+	 * saldo de puntos es insuficiente
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje quitarPuntos(
+			String usuario, int puntos) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_QUITAR_PUNTOS);
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario, puntos).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
 	public String getOperacion() {
 		return operacion;
 	}

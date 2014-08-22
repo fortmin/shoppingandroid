@@ -40,17 +40,18 @@ public class ProductosPaquete extends Activity {
 	private TextView detalle_producto;
 	private ProgressDialog PD = null;
 	private String nombrepaquete;
-	private tagRecibido tag_recibido;
+	private TagRecibido tag_recibido;
 	private DatosLocales paquete_productos;
 	private String nombrePaquete;
 	PaqueteVO paquete_prod = null;
+	private ArrayList<String> colores_Lista;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		paquete_productos = DatosLocales.getInstance();
-		tag_recibido = tagRecibido.getInstance();
+		tag_recibido = TagRecibido.getInstance();
 		/*
 		 * this.PD = ProgressDialog.show(this, "Procesando",
 		 * "Espere unos segundos...", true, false);
@@ -64,7 +65,7 @@ public class ProductosPaquete extends Activity {
 		nombrePaquete = bundle.getString("nombrePaquete");
 		paquete_prod = paquete_productos.obtenerPaquete(this, nombrePaquete);
 		Log.e("ProductoPaquete", nombrePaquete);
-
+		colores_Lista = new ArrayList();
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
 			tag_recibido.setAtendido(true);
@@ -88,7 +89,18 @@ public class ProductosPaquete extends Activity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					// TODO Auto-generated method stub
-					view.setBackgroundColor(Color.GREEN);
+					if (!colores_Lista.isEmpty()) {
+						if (colores_Lista.get(position).equals("GREEN")) {
+							view.setBackgroundColor(Color.WHITE);
+							colores_Lista.add(position, "WHITE");
+						} else {
+							view.setBackgroundColor(Color.GREEN);
+							colores_Lista.add(position, "GREEN");
+						}
+					} else {
+						view.setBackgroundColor(Color.GREEN);
+						colores_Lista.add(position, "GREEN");
+					}
 					String nombre_producto = parent.getItemAtPosition(position)
 							.toString();
 					String nombre_comercio = darComercio(nombre_producto);
@@ -165,7 +177,7 @@ public class ProductosPaquete extends Activity {
 		if (item.getItemId() == 0) {
 			Nube agregarCarrito = new Nube(
 					ShoppingNube.OPE_AGREGAR_ITEM_CARRITO);
-			usuario user = com.fortmin.proshopping.usuario.getInstance();
+			Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 			agregarCarrito.agregarItemCarrito(nombrePaquete, user.getNombre());
 			// miscompras.agregarPaqueteCarrito(nombrePaquete);
 			mostrarMensaje("Paquete agregado a su canasto");

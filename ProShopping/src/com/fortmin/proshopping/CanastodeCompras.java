@@ -40,9 +40,11 @@ import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 public class CanastodeCompras extends Activity implements Runnable {
 	private ListView lstOpciones;
 	private String nombre_paquete;
+	private Usuario user = Usuario.getInstance();
 	private int posicion;
 	private ImageView btnRecibo;
-	TextView precio_puntos;
+	private TextView precio_puntos;
+	private ArrayList<String> colores_Lista;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,18 @@ public class CanastodeCompras extends Activity implements Runnable {
 							final View view, int position, long id) {
 						nombre_paquete = (String) parent
 								.getItemAtPosition(position);
-						view.setBackgroundColor(Color.RED);
+						if (!colores_Lista.isEmpty()) {
+							if (colores_Lista.get(position).equals("GREEN")) {
+								view.setBackgroundColor(Color.WHITE);
+								colores_Lista.add(position, "WHITE");
+							} else {
+								view.setBackgroundColor(Color.GREEN);
+								colores_Lista.add(position, "GREEN");
+							}
+						} else {
+							view.setBackgroundColor(Color.GREEN);
+							colores_Lista.add(position, "GREEN");
+						}
 						posicion = position;
 
 					}
@@ -69,6 +82,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 			public void onClick(View view) {
 
 				makeAndSharePDF(view);
+				volver();
 			}
 		});
 
@@ -107,7 +121,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 		if (item.getItemId() == 0) {
 			Nube borrarPaquete = new Nube(
 					ShoppingNube.OPE_ELIMINAR_ITEM_CARRITO);
-			usuario user = usuario.getInstance();
+			Usuario user = Usuario.getInstance();
 			borrarPaquete.eliminarItemCarrito(nombre_paquete, user.getNombre());
 			CanastaCompras miscompras = CanastaCompras.getInstance();
 			miscompras.anularCanasta();
@@ -149,7 +163,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 
 	public void actualizarCarro() {
 		Nube carrito = new Nube(ShoppingNube.OPE_GET_CARRITO_COMPLETO);
-		usuario user = com.fortmin.proshopping.usuario.getInstance();
+		Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 		CarritoVO micarrito = carrito.getCarritoCompleto(user.getNombre());
 		if (micarrito.getCantItems() == 0) {
 			Intent menuprincipal = new Intent(this, LecturaNfc.class);
@@ -242,6 +256,18 @@ public class CanastodeCompras extends Activity implements Runnable {
 		// Attach the PDf as a Uri, since Android can't take it as bytes yet.
 		mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);
 		startActivity(mShareIntent);
+		checkOutCarrito();// hago el chekout
 		return;
+	}
+
+	public void checkOutCarrito() {
+		Nube hacer_checkout = new Nube(ShoppingNube.OPE_CHECKOUT_CARRITO);
+		hacer_checkout.checkoutCarrito(user.getNombre());
+	}
+
+	public void volver() {
+		Intent lecturanfc = new Intent(this, LecturaNfc.class);
+		startActivity(lecturanfc);
+		this.finish();
 	}
 }

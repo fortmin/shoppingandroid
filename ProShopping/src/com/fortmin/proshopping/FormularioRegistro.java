@@ -21,7 +21,7 @@ public class FormularioRegistro extends Activity {
 	private EditText nombre;
 	private EditText e_mail;
 	private EditText user;
-	private usuario user_guardado;
+	private Usuario user_guardado;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class FormularioRegistro extends Activity {
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putString("Usuario", user.getText().toString());
 						editor.commit();
-						user_guardado = usuario.getInstance();
+						user_guardado = Usuario.getInstance();
 						user_guardado.setNombre(user.getText().toString());
 						mostrarMensaje("Registrado correctamente");
 						verOpciones();

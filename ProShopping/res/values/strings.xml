@@ -54,4 +54,5 @@
     <string name="invoice_tax">Tax:</string>
     <string name="pdf_hint">Enter text to be PDF\'d</string>
     <string name="pdf_go">Save And Share</string>
+    <string name="titulo_transferencia_puntos">TransferenciaPuntos</string>
 </resources>

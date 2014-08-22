@@ -1,27 +1,15 @@
 package com.fortmin.proshopping;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfDocument.Page;
-import android.graphics.pdf.PdfDocument.PageInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.print.PrintAttributes;
-import android.print.PrintAttributes.Margins;
-import android.print.PrintAttributes.Resolution;
-import android.print.pdf.PrintedPdfDocument;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends Activity implements Runnable {
+public class MainActivity extends Activity {
 
 	private Intent mShareIntent;
 
@@ -31,75 +19,13 @@ public class MainActivity extends Activity implements Runnable {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	}
+		Button btn = (Button) findViewById(R.id.ejecutar);
+		btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				pasarPuntos();
 
-	/** PDF Gen should run in own thread to not slow the GUI */
-	public void makeAndSharePDF(View buttonSource) {
-		new Thread(this).start();
-	}
-
-	public void run() {
-
-		// Create a shiny new (but blank) PDF document in memory
-		// We want it to optionally be printable, so add PrintAttributes
-		// and use a PrintedPdfDocument. Simpler: new PdfDocument().
-		PrintAttributes printAttrs = new PrintAttributes.Builder()
-				.setColorMode(PrintAttributes.COLOR_MODE_COLOR)
-				.setMediaSize(PrintAttributes.MediaSize.NA_LETTER)
-				.setResolution(new Resolution("zooey", PRINT_SERVICE, 700, 700))
-				.setMinMargins(Margins.NO_MARGINS).build();
-		PdfDocument document = new PrintedPdfDocument(this, printAttrs);
-		// crate a page description
-		PageInfo pageInfo = new PageInfo.Builder(1200, 1200, 1).create();
-
-		// create a new page from the PageInfo
-		Page page = document.startPage(pageInfo);
-
-		// repaint the user's text into the page
-		View content = findViewById(R.id.pantalla);
-
-		content.draw(page.getCanvas());
-
-		// do final processing of the page
-		document.finishPage(page);
-
-		// Here you could add more pages in a longer doc app, but you'd have
-		// to handle page-breaking yourself in e.g., write your own word
-		// processor...
-
-		// Now write the PDF document to a file; it actually needs to be a file
-		// since the Share mechanism can't accept a byte[]. though it can
-		// accept a String/CharSequence. Meh.
-		try {
-			File pdfDirPath = new File(getFilesDir(), "pdfs");
-
-			pdfDirPath.mkdirs();
-			File file = new File(pdfDirPath, "pdfsend.pdf");
-			Uri contentUri = FileProvider.getUriForFile(this,
-					"com.fortmin.proshopping", file);
-			Log.e("PDF", "contentUri");
-			os = new FileOutputStream(file);
-			document.writeTo(os);
-			document.close();
-			os.close();
-
-			shareDocument(contentUri);
-		} catch (IOException e) {
-			throw new RuntimeException("Error generating file", e);
-		}
-
-	}
-
-	private void shareDocument(Uri uri) {
-		mShareIntent = new Intent();
-		mShareIntent.setAction(Intent.ACTION_SEND);
-		mShareIntent.setType("application/pdf");
-		// Assuming it may go via eMail:
-		mShareIntent.putExtra(Intent.EXTRA_SUBJECT, "Enviado de Proshooping");
-		// Attach the PDf as a Uri, since Android can't take it as bytes yet.
-		mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-		startActivity(mShareIntent);
-		return;
+			}
+		});
 	}
 
 	@Override
@@ -107,5 +33,10 @@ public class MainActivity extends Activity implements Runnable {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	public void pasarPuntos() {
+		mShareIntent = new Intent(this, TransferenciaPuntos.class);
+		startActivity(mShareIntent);
 	}
 }

@@ -30,8 +30,8 @@ import com.fortmin.proshopping.persistencia.DatosLocales;
 public class LecturaNfc extends Activity {
 
 	private Intent servicio, paquete, lectura_tag;
-	private usuario nombre_usuario;
-	private tagRecibido tag_recibido;
+	private Usuario nombre_usuario;
+	private TagRecibido tag_recibido;
 	private DatosLocales datos = DatosLocales.getInstance();
 	private com.fortmin.proshopapi.ble.EscucharIbeacons beacons;
 	private BeaconRecibido beacon_recibido;
@@ -39,20 +39,23 @@ public class LecturaNfc extends Activity {
 	private boolean servicioiniciado = false;
 	private boolean scanning = false;
 	private String nombre_paquete;
-	private tipoTag tipo;
+	private TipoTag tipo;
+	private ListadoCompras miscompras;
 	ProShopMgr apiNfc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		tipo=new tipoTag();
+		tipo = new TipoTag();
 		super.onCreate(savedInstanceState);
 		apiNfc = new ProShopMgr();
-		tag_recibido = tagRecibido.getInstance();
+		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_nfc);
 		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
 		ImageButton btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
-		ImageButton btn_compras = (ImageButton) findViewById(R.id.btnMiCarrito);
-		nombre_usuario = usuario.getInstance();// para que el nombre de usuario
+		ImageButton btn_micarrito = (ImageButton) findViewById(R.id.btnMiCarrito);
+		ImageButton btn_miscompras = (ImageButton) findViewById(R.id.btnMisCompras);
+		ImageButton btn_pasarpuntos = (ImageButton) findViewById(R.id.btnPasarPuntos);
+		nombre_usuario = Usuario.getInstance();// para que el nombre de usuario
 												// pueda ser utilizado en
 												// cualquier activity
 		beacon_recibido = BeaconRecibido.getInstance();// esta clase la
@@ -79,9 +82,22 @@ public class LecturaNfc extends Activity {
 					mostrarMensaje("No ha visto paquetes aun");
 			}
 		});
-		btn_compras.setOnClickListener(new View.OnClickListener() {
+		btn_micarrito.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				hacerCompra();
+			}
+		});
+
+		btn_miscompras.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+
+				verMisCompras();
+			}
+		});
+		btn_pasarpuntos.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+
+				pasarPuntos();
 			}
 		});
 		// escucho tag propietario
@@ -105,6 +121,7 @@ public class LecturaNfc extends Activity {
 					beacon_recibido.setDispositivoencendido(beacons
 							.getEsta_recibiendo());
 					beacons.setEsta_recibiendo(false);
+					beacon_recibido.fijarDistanca();
 
 				}
 
@@ -156,7 +173,8 @@ public class LecturaNfc extends Activity {
 
 	}
 
-	public void entradaEstacionamiento(String acceso, String nom_usuario,String id) {
+	public void entradaEstacionamiento(String acceso, String nom_usuario,
+			String id) {
 		// llamo a mostrarPaquete
 		if (acceso.equals("entrada")) {// entrada
 			Nube nube = new Nube(ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO);
@@ -224,11 +242,11 @@ public class LecturaNfc extends Activity {
 			Log.e("estacionamiento", nombre_usuario.getNombre());
 			entradaEstacionamiento("entrada", nombre_usuario.getNombre(), nfc);
 
-		} else if (id.contains("SAL")){
+		} else if (id.contains("SAL")) {
 			entradaEstacionamiento("salida", nombre_usuario.getNombre(), nfc);
 		} else {
 			// si es nfc de comercio o smartposter
-			
+
 			Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
 			Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(id);
 
@@ -238,11 +256,13 @@ public class LecturaNfc extends Activity {
 				nombre_paquete = paquete.getNombre();
 			}
 			Log.e("Nombre Paquete", nombre_paquete);
-			BDElementoRf tag = new BDElementoRf(id, tipo.tipoNFC, 0, nombre_paquete);
-			comNube.actualizarPosicion(nombre_usuario.getNombre(),id,tipo.tipoNFC);
+			BDElementoRf tag = new BDElementoRf(id, tipo.tipoNFC, 0,
+					nombre_paquete);
+			comNube.actualizarPosicion(nombre_usuario.getNombre(), id,
+					tipo.tipoNFC);
 			tag_recibido.setTipo(tipo.tipoNFC);
 			DatosLocales datos = DatosLocales.getInstance();
-            datos.encontreElementoRf(this, tag);
+			datos.encontreElementoRf(this, tag);
 			verPaquete(nombre_paquete);
 		}
 	}
@@ -255,9 +275,13 @@ public class LecturaNfc extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		boolean inicializar = true;
 		// check for Bluetooth enabled on each resume
-		if (beacons.isBtEnabled() == false) {
+		if (beacons.checkBleHardwareAvailable() == false) {
+			mostrarMensaje("Su dispositivo no admite lectura de ibeacon");
+			inicializar = false;
+
+		} else if (beacons.isBtEnabled() == false) {
 			// BT not enabled. Request to turn it on. User needs to restart app
 			// once it's turned on.
 			Intent enableBtIntent = new Intent(
@@ -267,9 +291,11 @@ public class LecturaNfc extends Activity {
 		}
 
 		// inicializacion del ble
-		beacons.initialize();
-		beacons.startScanning();
-		scanning = true;
+		if (inicializar) {
+			beacons.initialize();
+			beacons.startScanning();
+			scanning = true;
+		}
 		// ListaIbeacon Ibeacons=beacons.getIbeacons();
 		// ArrayList<Ibeacon> dispositivos=Ibeacons.IbeaconsEncendidos();
 		// beacon=dispositivos.get(0);
@@ -286,7 +312,8 @@ public class LecturaNfc extends Activity {
 					tag_recibido.getTipo(), tag_recibido.getRssi(),
 					paquete.getNombre());
 			DatosLocales datos = DatosLocales.getInstance();
-			comNube.actualizarPosicion(nombre_usuario.getNombre(),tag_recibido.getNombre(),tipo.tipoBEACON);
+			comNube.actualizarPosicion(nombre_usuario.getNombre(),
+					tag_recibido.getNombre(), tipo.tipoBEACON);
 			Log.e("grabacion beacon", "antes de ir a la tabla");
 			String resultado = datos.encontreElementoRf(this, tag);
 			Log.e("grabacion beacon", resultado);
@@ -313,26 +340,35 @@ public class LecturaNfc extends Activity {
 	}
 
 	public void hacerCompra() {
-		Nube carrito= new Nube(ShoppingNube.OPE_GET_CARRITO_COMPLETO);
-		usuario user=com.fortmin.proshopping.usuario.getInstance();
+		Nube carrito = new Nube(ShoppingNube.OPE_GET_CARRITO_COMPLETO);
+		Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 		CarritoVO micarrito = carrito.getCarritoCompleto(user.getNombre());
-		if (micarrito.getCantItems()==0){
+		if (micarrito.getCantItems() == 0) {
 			mostrarMensaje("No tiene paquetes en su canasto");
+		} else {
+			CanastaCompras canasta = CanastaCompras.getInstance();
+			canasta.anularCanasta();
+			canasta.setPrecio(micarrito.getPrecioCarrito());
+			canasta.setPuntos(Integer.valueOf(micarrito.getPuntosCarrito()));
+			List<PaqueteVO> paquetes = micarrito.getPaquetes();
+			Iterator<PaqueteVO> ipaquetes = paquetes.iterator();
+			while (ipaquetes.hasNext()) {
+				PaqueteVO paqueteVO = ipaquetes.next();
+				canasta.agregarPaqueteCarrito(paqueteVO);
+			}
+			Intent hacer_compra = new Intent(this, CanastodeCompras.class);
+			startActivity(hacer_compra);
 		}
-		else {
-		  CanastaCompras canasta=CanastaCompras.getInstance();
-		  canasta.anularCanasta();
-		  canasta.setPrecio(micarrito.getPrecioCarrito());
-		  canasta.setPuntos(Integer.valueOf(micarrito.getPuntosCarrito()));
-		  List<PaqueteVO> paquetes = micarrito.getPaquetes();
-		  Iterator<PaqueteVO> ipaquetes = paquetes.iterator();
-		  while(ipaquetes.hasNext()){
-			  PaqueteVO paqueteVO = ipaquetes.next();
-			  canasta.agregarPaqueteCarrito(paqueteVO);
-		  }
-		  Intent hacer_compra = new Intent(this, CanastodeCompras.class);
-		  startActivity(hacer_compra);
-		}
+	}
+
+	public void verMisCompras() {
+		Intent vercompras = new Intent(this, ListadoMisCompras.class);
+		startActivity(vercompras);
+	}
+
+	public void pasarPuntos() {
+		Intent pasarpuntos = new Intent(this, TransferenciaPuntos.class);
+		startActivity(pasarpuntos);
 	}
 
 }

@@ -82,6 +82,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+         <activity
+            android:name="com.fortmin.proshopping.ListadoMisCompras"
+            android:label="@string/title_activity_paquete" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.fortmin.proshopping.Inicio"
             android:label="@string/title_activity_inicio" >
@@ -96,6 +103,15 @@
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+         <activity
+            android:name="com.fortmin.proshopping.TransferenciaPuntos"
+            android:label="@string/titulo_transferencia_puntos" >
+            <intent-filter>
+               <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+               <category android:name="android.intent.category.LAUNCHER" />
+               <data android:mimeType="application/com.fortmin.proshopping" />
             </intent-filter>
         </activity>
         <activity
@@ -120,6 +136,7 @@
             android:name="com.fortmin.proshopping.PruebasUnitarias"
             android:label="@string/title_activity_pruebas_unitarias" >
             <intent-filter>
+                 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -130,6 +147,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name="com.fortmin.proshopping.CanastodeCompras"
             android:label="@string/title_activity_canastode_compras" >
@@ -143,6 +161,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <meta-data
+            android:name="android.nfc.disable_beam_default"
+            android:value="true" />
     </application>
 
 </manifest>
