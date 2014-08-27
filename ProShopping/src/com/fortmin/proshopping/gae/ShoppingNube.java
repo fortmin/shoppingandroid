@@ -1,6 +1,7 @@
 package com.fortmin.proshopping.gae;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -267,9 +268,11 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 					Log.i(TAG,
 							"ShoppingNube->Cantidad de compras->"
 									+ compras.size());
-				else
+				else {
+					compras = new ArrayList<ComprasVO>();
 					Log.i(TAG,
 							"ShoppingNube->Cantidad de compras->Devolvio null");
+				}
 				return compras;
 			}
 			if (operacion.equals(OPE_AGREGAR_PUNTOS)) {

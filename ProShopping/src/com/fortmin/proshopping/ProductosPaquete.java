@@ -24,22 +24,18 @@ import android.widget.Toast;
 
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
-import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.ProductoVO;
 import com.fortmin.proshopping.persistencia.DatosLocales;
 
 public class ProductosPaquete extends Activity {
-	private Paquete paquete = null;
 	private ArrayList<String> datos = new ArrayList<String>();
 	private List<ProductoVO> productos;
 	private ListView lstOpciones;
-	private ShoppingNube comNube;
 	private Iterator<ProductoVO> iprods;
 	private ImageView imagen;
 	private TextView detalle_producto;
 	private ProgressDialog PD = null;
-	private String nombrepaquete;
 	private TagRecibido tag_recibido;
 	private DatosLocales paquete_productos;
 	private String nombrePaquete;

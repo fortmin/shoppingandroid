@@ -1,8 +1,13 @@
 package com.fortmin.proshopping;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +17,7 @@ import android.widget.Toast;
 
 public class Inicio extends Activity {
 	private String nombre;
+	ProgressDialog pDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,10 @@ public class Inicio extends Activity {
 			mostrarMensaje("Bienvenido " + nombre);
 			verOpciones();
 		}
+		if (!verificaConexion(this)) {
+			mostrarMensaje("Para Usar la APP necesita estar conectado a internet");
+			this.finish();
+		}
 
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -34,8 +44,13 @@ public class Inicio extends Activity {
 					mostrarMensaje("Bienvenido " + nombre);
 					verOpciones();
 				} else {
+					pDialog = new ProgressDialog(Inicio.this);
+					pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					pDialog.setMessage("Procesando...");
 
-					logearse();
+					TareaAsincrona iralanube = new TareaAsincrona();
+					Void params = null;
+					iralanube.execute(params);
 				}
 			}
 
@@ -88,5 +103,47 @@ public class Inicio extends Activity {
 	public void mostrarMensaje(String mensaje) {
 		Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG)
 				.show();
+	}
+
+	// para chequear si tiene conexion a internet
+	public static boolean verificaConexion(Context ctx) {
+		boolean bConectado = false;
+		ConnectivityManager connec = (ConnectivityManager) ctx
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		// No sólo wifi, también GPRS
+		NetworkInfo[] redes = connec.getAllNetworkInfo();
+		for (int i = 0; i < 2; i++) {
+			// true si hay conexión
+			if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+				bConectado = true;
+			}
+		}
+		return bConectado;
+	}
+
+	private class TareaAsincrona extends AsyncTask<Void, Integer, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			logearse();
+			return true;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+
+		}
+
+		@Override
+		protected void onPreExecute() {
+
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result)
+				pDialog.dismiss();
+		}
+
 	}
 }

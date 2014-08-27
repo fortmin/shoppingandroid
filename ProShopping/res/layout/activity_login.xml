@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FB9836"
+    android:background="#5B90FF"
     tools:context="com.fortmin.proshopping.Login"
     tools:ignore="MergeRootFrame" >
      <FrameLayout 
@@ -62,9 +62,9 @@
                android:id="@+id/btnLogeo"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:src="@drawable/btn_ent"
+               android:src="@drawable/btn_entrar"
                android:clickable="true"
-               android:background="#FB9836"
+               android:background="#5B90FF"
                android:layout_marginTop="30dp"
                />
          </TableRow>

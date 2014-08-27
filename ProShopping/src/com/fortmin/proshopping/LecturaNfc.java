@@ -29,7 +29,7 @@ import com.fortmin.proshopping.persistencia.DatosLocales;
 
 public class LecturaNfc extends Activity {
 
-	private Intent servicio, paquete, lectura_tag;
+	private Intent servicio, paquete;
 	private Usuario nombre_usuario;
 	private TagRecibido tag_recibido;
 	private DatosLocales datos = DatosLocales.getInstance();
@@ -41,7 +41,7 @@ public class LecturaNfc extends Activity {
 	private String nombre_paquete;
 	private TipoTag tipo;
 	private ListadoCompras miscompras;
-	ProShopMgr apiNfc;
+	private ProShopMgr apiNfc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class LecturaNfc extends Activity {
 		ImageButton btn_micarrito = (ImageButton) findViewById(R.id.btnMiCarrito);
 		ImageButton btn_miscompras = (ImageButton) findViewById(R.id.btnMisCompras);
 		ImageButton btn_pasarpuntos = (ImageButton) findViewById(R.id.btnPasarPuntos);
+
 		nombre_usuario = Usuario.getInstance();// para que el nombre de usuario
 												// pueda ser utilizado en
 												// cualquier activity
@@ -212,17 +213,7 @@ public class LecturaNfc extends Activity {
 					}
 				}
 			}
-			// Respuesta puede ser:
-			// SIN_ACCESO_RELACIONADO si es un Tag NFC pero no esta
-			// relacionado con un Acceso
-			// NO_ES_ACCESO_ESTACIONAMIENTO porque es un Acceso pero no para
-			// Autos (ej: Peatonal)
-			// CLIENTE_INEXISTENTE no se encontro el usuario
-			// OK si todo salio bien
-			// PLAZO_VENCIDO si la fecha hora de salida supera a la fecha
-			// hora de entrada
-			// en mas del valor del parametro PLAZO_ESTACIONAMIENTO
-			// establecido en la tabla Config
+
 		}
 
 	}
@@ -277,11 +268,12 @@ public class LecturaNfc extends Activity {
 		super.onResume();
 		boolean inicializar = true;
 		// check for Bluetooth enabled on each resume
-		if (beacons.checkBleHardwareAvailable() == false) {
+		ProShopMgr mgr = new ProShopMgr();
+		if (mgr.bleSoportado(this) == false) {
 			mostrarMensaje("Su dispositivo no admite lectura de ibeacon");
 			inicializar = false;
 
-		} else if (beacons.isBtEnabled() == false) {
+		} else if (mgr.bluetoothHabilitado(this) == false) {
 			// BT not enabled. Request to turn it on. User needs to restart app
 			// once it's turned on.
 			Intent enableBtIntent = new Intent(
@@ -362,8 +354,15 @@ public class LecturaNfc extends Activity {
 	}
 
 	public void verMisCompras() {
-		Intent vercompras = new Intent(this, ListadoMisCompras.class);
-		startActivity(vercompras);
+		miscompras = ListadoCompras.getInstance();
+		miscompras.cargarCompras();
+		if (miscompras.tieneCompras()) {
+			Intent vercompras = new Intent(this, ListadoMisCompras.class);
+			startActivity(vercompras);
+		} else {
+			mostrarMensaje("no tiene compras registradas");
+		}
+
 	}
 
 	public void pasarPuntos() {

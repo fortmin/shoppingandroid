@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="#FB9836"
+    android:background="#5B90FF"
     tools:context="com.fortmin.proshopping.Inicio"
     tools:ignore="MergeRootFrame" >
     <FrameLayout 
@@ -30,9 +30,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#FB9836"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:clickable="true"
-                android:src="@drawable/btn_ent"
+                android:src="@drawable/btn_entrar"
                 /> 
            
         </TableRow>
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#FB9836"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/btn_reg"
             />
         </TableRow>

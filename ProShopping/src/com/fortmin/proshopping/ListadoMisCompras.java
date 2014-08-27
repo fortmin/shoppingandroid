@@ -25,7 +25,6 @@ public class ListadoMisCompras extends Activity {
 	private ListView lstOpciones;
 	private Iterator<ComprasVO> icompras;
 	private TextView datos_compra;
-	private Usuario user = Usuario.getInstance();
 	private ProgressDialog PD = null;
 	private ArrayList<ComprasVO> compras;
 	private ListadoCompras mis_compras = ListadoCompras.getInstance();
@@ -146,7 +145,7 @@ public class ListadoMisCompras extends Activity {
 					+ "La compra tenia " + datos_mi_compra.getTotalpaquetes()
 					+ " paquetes" + "\n" + "El costo ascendio a $ "
 					+ datos_mi_compra.getPrecio() + "\n" + "La compra genero "
-					+ datos_mi_compra.getPuntosgenerados() + "puntos" + "\n");
+					+ datos_mi_compra.getPuntosgenerados() + " puntos" + "\n");
 
 		} else {
 			estado = "pendiente";
@@ -154,7 +153,7 @@ public class ListadoMisCompras extends Activity {
 					+ "La compra tenia " + datos_mi_compra.getTotalpaquetes()
 					+ " paquetes" + "\n" + "El costo ascendio a $ "
 					+ datos_mi_compra.getPrecio() + "\n" + "La compra genero "
-					+ datos_mi_compra.getPuntosgenerados() + "puntos" + "\n");
+					+ datos_mi_compra.getPuntosgenerados() + " puntos" + "\n");
 		}
 
 	}

@@ -41,7 +41,6 @@ public class CanastodeCompras extends Activity implements Runnable {
 	private ListView lstOpciones;
 	private String nombre_paquete;
 	private Usuario user = Usuario.getInstance();
-	private int posicion;
 	private ImageView btnRecibo;
 	private TextView precio_puntos;
 	private ArrayList<String> colores_Lista;
@@ -73,7 +72,6 @@ public class CanastodeCompras extends Activity implements Runnable {
 							view.setBackgroundColor(Color.GREEN);
 							colores_Lista.add(position, "GREEN");
 						}
-						posicion = position;
 
 					}
 
@@ -82,6 +80,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 			public void onClick(View view) {
 
 				makeAndSharePDF(view);
+				checkOutCarrito();
 				volver();
 			}
 		});

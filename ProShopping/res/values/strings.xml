@@ -55,4 +55,5 @@
     <string name="pdf_hint">Enter text to be PDF\'d</string>
     <string name="pdf_go">Save And Share</string>
     <string name="titulo_transferencia_puntos">TransferenciaPuntos</string>
+    <string name="titulo_activity_listado_compras">Listado_de_Mis_Compras</string>
 </resources>

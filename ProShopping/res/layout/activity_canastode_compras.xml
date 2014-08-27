@@ -3,7 +3,7 @@
     android:id="@+id/mirecibo"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FB9836"
+    android:background="#5B90FF"
     android:orientation="vertical" >
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="10dp"
-        android:background="#FB9836"
+        android:background="#5B90FF"
         android:clickable="true"
         android:src="@drawable/btn_checkout" />
 

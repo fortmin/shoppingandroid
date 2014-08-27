@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FB9836"
+    android:background="#5B90FF"
     tools:context="com.fortmin.proshopping.FormularioRegistro"
     tools:ignore="MergeRootFrame" >
 
@@ -72,7 +72,7 @@
                android:clickable="true"
               android:background="#FB9836"
               android:layout_marginTop="15dp"
-              android:src="@drawable/btn_registrarse"
+              android:src="@drawable/btn_reg"
               />
          </TableRow>
      </TableLayout>

@@ -3,7 +3,7 @@
   android:orientation="vertical"  
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
-  android:background="#FB9836"> 
+  android:background="#5B90FF"> 
      
     <TextView
          android:id="@+id/mispuntos"
@@ -26,10 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/transfpuntos"
         android:layout_centerHorizontal="true"
-        android:background="#FB9836"
+        android:background="#5B90FF"
         android:clickable="true"
         android:layout_marginTop="10dp"
-        android:src="@drawable/btn_pasarpuntos" >
+        android:src="@drawable/btn_intercambio_puntos" >
     </ImageButton>    
       
 </RelativeLayout>

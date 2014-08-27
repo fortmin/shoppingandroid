@@ -18,13 +18,10 @@ import com.fortmin.proshopping.persistencia.DatosLocales;
 public class ServicioBle extends Service {
 	private BeaconRecibido beacon;
 	Ibeacon ble;
-	private boolean notificacion = false;
 	private NotifyManager notify;
 	private String uuid;
-	private int rssi = 0;
 	private TagRecibido tag_recibido;
 	private boolean beacondescubierto = false;
-	private boolean notificar = false;
 	private Timer mTimer;
 	private DatosLocales bd;
 

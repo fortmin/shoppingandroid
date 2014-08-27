@@ -11,15 +11,22 @@ public class ListadoCompras {
 	private Usuario user = Usuario.getInstance();
 	private ArrayList<ComprasVO> compras;
 	private static ListadoCompras instancia;
+	private boolean tienecompras = false;
 
 	private ListadoCompras() {
 		Nube miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
 		compras = miscompras.getCompras(user.getNombre());
+		if (!compras.isEmpty())
+			compras = miscompras.getCompras(user.getNombre());
+
+		tienecompras = !(compras.isEmpty());
+
 	}
 
 	public static ListadoCompras getInstance() {
 		if (instancia == null)
 			instancia = new ListadoCompras();
+
 		return instancia;
 
 	}
@@ -30,21 +37,37 @@ public class ListadoCompras {
 
 	public datosCompra darDatosCompra(String idcompra) {
 		datosCompra dcompra = new datosCompra();
-		Iterator<ComprasVO> icompras = compras.iterator();
-		boolean termine = false;
-		while (icompras.hasNext() && !termine) {
-			ComprasVO p = icompras.next();
-			String nombre = p.getCompra();
-			if (nombre.equals(idcompra)) {
-				termine = true;
-				dcompra.setEntregado(p.getEntregada());
-				dcompra.setPrecio(p.getPrecioTotal());
-				dcompra.setPuntosgenerados((int) p.getPuntosOtorgados());
-				dcompra.setTotalpaquetes((int) p.getCantItems());
+		if (tienecompras) {
+			Iterator<ComprasVO> icompras = compras.iterator();
+			boolean termine = false;
+			while (icompras.hasNext() && !termine) {
+				ComprasVO p = icompras.next();
+				String nombre = p.getCompra();
+				if (nombre.equals(idcompra)) {
+					termine = true;
+					dcompra.setEntregado(p.getEntregada());
+					dcompra.setPrecio(p.getPrecioTotal());
+					dcompra.setPuntosgenerados((int) p.getPuntosOtorgados());
+					dcompra.setTotalpaquetes((int) p.getCantItems());
+				}
+
 			}
 
 		}
 		return dcompra;
+
+	}
+
+	public boolean tieneCompras() {
+		// true si realizo compras
+		return tienecompras;
+	}
+
+	public void cargarCompras() {
+		Nube miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
+		compras = miscompras.getCompras(user.getNombre());
+		tienecompras = !(compras.isEmpty());
+
 	}
 
 	public class datosCompra {
