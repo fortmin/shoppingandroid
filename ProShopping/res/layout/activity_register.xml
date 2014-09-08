@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
+    android:background="#5B90FF"
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
     
@@ -17,6 +17,6 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="0"
-      android:text="Register" />
+      android:text="@string/Registro" />
 
 </LinearLayout>

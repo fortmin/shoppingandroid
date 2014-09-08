@@ -3,8 +3,9 @@
     android:id="@+id/mirecibo"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical" 
     android:background="#5B90FF"
-    android:orientation="vertical" >
+    >
 
     <TextView
         android:id="@+id/precioPuntos"
@@ -22,11 +23,12 @@
     </ListView>
 
     <ImageButton
+        android:contentDescription="@string/registro_nombre"
         android:id="@+id/btnRecibo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
         android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:background="#5B90FF"
         android:clickable="true"
         android:src="@drawable/btn_checkout" />

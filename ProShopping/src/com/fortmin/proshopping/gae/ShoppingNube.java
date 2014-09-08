@@ -15,21 +15,23 @@ import com.fortmin.proshopping.logica.shopping.Shopping.AgregarPuntos;
 import com.fortmin.proshopping.logica.shopping.Shopping.CheckoutCarrito;
 import com.fortmin.proshopping.logica.shopping.Shopping.EgresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.Shopping.EliminarItemCarrito;
+import com.fortmin.proshopping.logica.shopping.Shopping.EstablecerVisibilidad;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetCalibradoBeacon;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetCarritoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetCompras;
-import com.fortmin.proshopping.logica.shopping.Shopping.GetImagen;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPaqueteRf;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductoCompleto;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetProductosPaquete;
 import com.fortmin.proshopping.logica.shopping.Shopping.GetPuntajeCliente;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetTiempoEstacionamiento;
+import com.fortmin.proshopping.logica.shopping.Shopping.GetVisibilidadCliente;
 import com.fortmin.proshopping.logica.shopping.Shopping.IngresoEstacionamiento;
 import com.fortmin.proshopping.logica.shopping.Shopping.QuitarPuntos;
 import com.fortmin.proshopping.logica.shopping.model.CarritoVO;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVOCollection;
-import com.fortmin.proshopping.logica.shopping.model.Imagen;
+import com.fortmin.proshopping.logica.shopping.model.EstacionamientoVO;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
@@ -50,7 +52,6 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_INGRESO_ESTACIONAMIENTO = "IngresoEstacionamiento";
 	public static String OPE_EGRESO_ESTACIONAMIENTO = "EgresoEstacionamiento";
 	public static String OPE_GET_CALIBRADO_BEACON = "GetCalibradoBeacon";
-	public static String OPE_GET_IMAGEN = "GetImagen";
 	public static String OPE_GET_PUNTAJE_CLIENTE = "GetPuntajeCliente";
 	public static String OPE_ACTUALIZAR_POSICION = "ActualizarPosicion";
 	public static String OPE_AGREGAR_ITEM_CARRITO = "AgregarItemCarrito";
@@ -60,6 +61,12 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 	public static String OPE_GET_COMPRAS = "GetCompras";
 	public static String OPE_AGREGAR_PUNTOS = "AgregarPuntos";
 	public static String OPE_QUITAR_PUNTOS = "QuitarPuntos";
+	public static String OPE_GET_TIEMPO_ESTACIONAMIENTO = "GetTiempoEstacionamiento";
+	public static String OPE_ESTABLECER_VISIBILIDAD = "EstablecerVisibilidad";
+	public static String OPE_GET_VISIBILIDAD_CLIENTE = "GetVisibilidadCliente";
+
+	public static String CLIENTE_VISIBLE = "Visible";
+	public static String CLIENTE_INVISIBLE = "Invisible";
 
 	private String TAG = "ProShopping";
 	private String operacion; // Señala el nombre de la operacion a ejecutar
@@ -168,18 +175,6 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 						"ShoppingNube->" + resp.getOperacion() + "->"
 								+ resp.getMensaje());
 				return resp;
-			}
-			if (operacion.equals(OPE_GET_IMAGEN)) {
-				String comercio = (String) params[0];
-				String producto = (String) params[1];
-				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_IMAGEN + "->"
-						+ comercio + "::" + producto);
-				GetImagen execgae = endpoint.getImagen(comercio, producto);
-				Imagen imagen = execgae.execute();
-				Log.i(TAG,
-						"ShoppingNube->imagen recibida de size "
-								+ imagen.size());
-				return imagen;
 			}
 			if (operacion.equals(OPE_GET_PUNTAJE_CLIENTE)) {
 				String usuario = (String) params[0];
@@ -293,6 +288,49 @@ public class ShoppingNube extends AsyncTask<Object, Void, Object> {
 				Log.i(this.TAG, "ShoppingNube->" + OPE_QUITAR_PUNTOS + "->"
 						+ usuario + "->" + puntos);
 				QuitarPuntos execgae = endpoint.quitarPuntos(puntos, usuario);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->" + resp.getOperacion() + "->"
+								+ resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_GET_TIEMPO_ESTACIONAMIENTO)) {
+				String usuario = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->"
+						+ OPE_GET_TIEMPO_ESTACIONAMIENTO + "->" + usuario);
+				GetTiempoEstacionamiento execgae = endpoint
+						.getTiempoEstacionamiento(usuario);
+				EstacionamientoVO estvo = execgae.execute();
+				if (estvo != null)
+					Log.i(TAG, "ShoppingNube->Devolvio EstacionamientoVO");
+				else {
+					estvo = new EstacionamientoVO();
+					Log.i(TAG, "ShoppingNube->NO Devolvio EstacionamientoVO");
+				}
+				return estvo;
+			}
+			if (operacion.equals(OPE_ESTABLECER_VISIBILIDAD)) {
+				String usuario = (String) params[0];
+				String visibilidad = (String) params[1];
+				boolean estado = false;
+				if (visibilidad.equals(CLIENTE_VISIBLE))
+					estado = true;
+				Log.i(this.TAG, "ShoppingNube->" + OPE_ESTABLECER_VISIBILIDAD
+						+ "->" + usuario);
+				EstablecerVisibilidad execgae = endpoint.establecerVisibilidad(
+						usuario, estado);
+				Mensaje resp = execgae.execute();
+				Log.i(TAG,
+						"ShoppingNube->" + resp.getOperacion() + "->"
+								+ resp.getMensaje());
+				return resp;
+			}
+			if (operacion.equals(OPE_GET_VISIBILIDAD_CLIENTE)) {
+				String usuario = (String) params[0];
+				Log.i(this.TAG, "ShoppingNube->" + OPE_GET_VISIBILIDAD_CLIENTE
+						+ "->" + usuario);
+				GetVisibilidadCliente execgae = endpoint
+						.getVisibilidadCliente(usuario);
 				Mensaje resp = execgae.execute();
 				Log.i(TAG,
 						"ShoppingNube->" + resp.getOperacion() + "->"

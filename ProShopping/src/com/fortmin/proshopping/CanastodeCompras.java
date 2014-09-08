@@ -53,6 +53,8 @@ public class CanastodeCompras extends Activity implements Runnable {
 		lstOpciones = (ListView) findViewById(R.id.listaComprados);
 		btnRecibo = (ImageView) findViewById(R.id.btnRecibo);
 		listarNombresProductos();
+		nombre_paquete = "VACIO";
+		colores_Lista = new ArrayList<String>();
 		lstOpciones
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
@@ -117,20 +119,24 @@ public class CanastodeCompras extends Activity implements Runnable {
 
 	private boolean MenuSelecciona(MenuItem item) {
 		// TODO Auto-generated method stub
-		if (item.getItemId() == 0) {
-			Nube borrarPaquete = new Nube(
-					ShoppingNube.OPE_ELIMINAR_ITEM_CARRITO);
-			Usuario user = Usuario.getInstance();
-			borrarPaquete.eliminarItemCarrito(nombre_paquete, user.getNombre());
-			CanastaCompras miscompras = CanastaCompras.getInstance();
-			miscompras.anularCanasta();
+		if (!nombre_paquete.equals("VACIO")) {
+			if (item.getItemId() == 0) {
+				Nube borrarPaquete = new Nube(
+						ShoppingNube.OPE_ELIMINAR_ITEM_CARRITO);
 
-			// precio_puntos.setText("El precio y los puntos actualizan en la próxima entrada");
-			actualizarCarro();
-			listarNombresProductos();
-			mostrarMensaje("Paquete Eliminado");
+				borrarPaquete.eliminarItemCarrito(nombre_paquete,
+						user.getNombre());
+				CanastaCompras miscompras = CanastaCompras.getInstance();
+				miscompras.anularCanasta();
 
-		}
+				// precio_puntos.setText("El precio y los puntos actualizan en la próxima entrada");
+				actualizarCarro();
+				listarNombresProductos();
+				mostrarMensaje("Paquete Eliminado");
+
+			}
+		} else
+			mostrarMensaje("debe seleccionar el paquete que quiere eliminar del carrito");
 		return true;
 	}
 
@@ -165,7 +171,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 		Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 		CarritoVO micarrito = carrito.getCarritoCompleto(user.getNombre());
 		if (micarrito.getCantItems() == 0) {
-			Intent menuprincipal = new Intent(this, LecturaNfc.class);
+			Intent menuprincipal = new Intent(this, LecturaRF.class);
 			startActivity(menuprincipal);
 			this.finish();
 		} else {
@@ -265,7 +271,7 @@ public class CanastodeCompras extends Activity implements Runnable {
 	}
 
 	public void volver() {
-		Intent lecturanfc = new Intent(this, LecturaNfc.class);
+		Intent lecturanfc = new Intent(this, LecturaRF.class);
 		startActivity(lecturanfc);
 		this.finish();
 	}

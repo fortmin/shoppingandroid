@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/seguridad/v1/20140821203229/java/1.16.0-rc/fortmin.com-seguridad-v1-20140821203229-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-seguridad-v1-20140821203229-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/seguridad/v1/20140908220124/java/1.16.0-rc/fortmin.com-seguridad-v1-20140908220124-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-seguridad-v1-20140908220124-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-08-21 20:32"
+      "timestamp": "2014-09-08 22:01"
     }, 
     {
-      "path": "fortmin.com-seguridad-v1-20140821203229-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-seguridad-v1-20140908220124-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "proshopping.logica", 
   "language_version": "1.16.0-rc", 
   "id": "seguridad:v1", 
-  "revision": 20140821203229
+  "revision": 20140908220124
 }

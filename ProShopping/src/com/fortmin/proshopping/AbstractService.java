@@ -35,21 +35,24 @@ public abstract class AbstractService extends Service {
 																// current
 																// registered
 																// clients.
-	final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target
-																		// we
-																		// publish
-																		// for
-																		// clients
-																		// to
-																		// send
-																		// messages
-																		// to
-																		// IncomingHandler.
+	final Messenger mMessenger = new Messenger((IBinder) new IncomingHandler()); // Target
 
-	private class IncomingHandler extends Handler { // Handler of incoming
-													// messages from clients.
+	// we
+	// publish
+	// for
+	// clients
+	// to
+	// send
+	// messages
+	// to
+	// IncomingHandler.
+
+	private class IncomingHandler implements Handler.Callback { // Handler of
+																// incoming
+
+		// messages from clients.
 		@Override
-		public void handleMessage(Message msg) {
+		public boolean handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_REGISTER_CLIENT:
 				Log.i("MyService", "Client registered: " + msg.replyTo);
@@ -63,6 +66,7 @@ public abstract class AbstractService extends Service {
 				// super.handleMessage(msg);
 				onReceiveMessage(msg);
 			}
+			return false;
 		}
 	}
 

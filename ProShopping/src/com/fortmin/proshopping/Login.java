@@ -98,7 +98,7 @@ public class Login extends Activity {
 	}
 
 	public void verOpciones() {
-		Intent opciones = new Intent(this, LecturaNfc.class);
+		Intent opciones = new Intent(this, LecturaRF.class);
 		startActivity(opciones);
 	}
 

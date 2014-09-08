@@ -5,9 +5,9 @@ import java.util.concurrent.ExecutionException;
 
 import android.util.Log;
 
-import com.fortmin.proshopping.logica.gestion.model.Imagen;
 import com.fortmin.proshopping.logica.shopping.model.CarritoVO;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
+import com.fortmin.proshopping.logica.shopping.model.EstacionamientoVO;
 import com.fortmin.proshopping.logica.shopping.model.Paquete;
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.Producto;
@@ -76,21 +76,6 @@ public class Nube {
 		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_PAQUETE_RF);
 		try {
 			resp = (Paquete) comNube.execute(elemRf).get();
-		} catch (InterruptedException e) {
-			Log.e(TAG, e.toString());
-		} catch (ExecutionException e) {
-			Log.e(TAG, e.toString());
-		}
-		return resp;
-	}
-
-	public com.fortmin.proshopping.logica.shopping.model.Imagen ejecutarGetImagen(
-			String comercio, String producto) {
-		com.fortmin.proshopping.logica.shopping.model.Imagen resp = null;
-		ShoppingNube comNube = new ShoppingNube(ShoppingNube.OPE_GET_IMAGEN);
-		try {
-			resp = (com.fortmin.proshopping.logica.shopping.model.Imagen) comNube
-					.execute(comercio, producto).get();
 		} catch (InterruptedException e) {
 			Log.e(TAG, e.toString());
 		} catch (ExecutionException e) {
@@ -189,18 +174,6 @@ public class Nube {
 			Log.e(TAG, e.toString());
 		}
 		return resp;
-	}
-
-	public void ejecutarCargarImagen(String comercio, String producto,
-			Imagen imagen) {
-		GestionNube comNube = new GestionNube(GestionNube.OPE_CARGAR_IMAGEN);
-		try {
-			comNube.execute(comercio, producto, imagen).get();
-		} catch (InterruptedException e) {
-			Log.e(TAG, e.toString());
-		} catch (ExecutionException e) {
-			Log.e(TAG, e.toString());
-		}
 	}
 
 	/*
@@ -377,6 +350,70 @@ public class Nube {
 		try {
 			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
 					.execute(usuario, puntos).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	/*
+	 * Devuelve el tiempo de estacionamiento del cliente basado en el usuario y
+	 * la hora de entrada que tiene registrada
+	 */
+	public EstacionamientoVO getTiempoEstacionamiento(String usuario) {
+		EstacionamientoVO resp = null;
+		ShoppingNube comNube = new ShoppingNube(
+				ShoppingNube.OPE_GET_TIEMPO_ESTACIONAMIENTO);
+		try {
+			resp = (EstacionamientoVO) comNube.execute(usuario).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	/*
+	 * Obtiene el estado de visibilidad del cliente Devuelve: VISIBLE - Si el
+	 * cliente esta configurado como visible INVISIBLE - Si el cliente no esta
+	 * configurado como visible USUARIO_INEXISTENTE - Si el usuario no existe
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje getVisibilidadCliente(
+			String usuario) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(
+				ShoppingNube.OPE_GET_VISIBILIDAD_CLIENTE);
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario).get();
+		} catch (InterruptedException e) {
+			Log.e(TAG, e.toString());
+		} catch (ExecutionException e) {
+			Log.e(TAG, e.toString());
+		}
+		return resp;
+	}
+
+	/*
+	 * Establece el estado de visibilidad para el cliente. Se le pasa como
+	 * parametro el usuario y True/False para el estado de visibilidad
+	 */
+	public com.fortmin.proshopping.logica.shopping.model.Mensaje establecerVisibilidad(
+			String usuario, boolean estado) {
+		com.fortmin.proshopping.logica.shopping.model.Mensaje resp = null;
+		ShoppingNube comNube = new ShoppingNube(
+				ShoppingNube.OPE_ESTABLECER_VISIBILIDAD);
+		String visible;
+		if (estado)
+			visible = ShoppingNube.CLIENTE_VISIBLE;
+		else
+			visible = ShoppingNube.CLIENTE_INVISIBLE;
+		try {
+			resp = (com.fortmin.proshopping.logica.shopping.model.Mensaje) comNube
+					.execute(usuario, visible).get();
 		} catch (InterruptedException e) {
 			Log.e(TAG, e.toString());
 		} catch (ExecutionException e) {

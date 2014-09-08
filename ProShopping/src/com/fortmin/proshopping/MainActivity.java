@@ -1,7 +1,5 @@
 package com.fortmin.proshopping;
 
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +10,6 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	private Intent mShareIntent;
-
-	private OutputStream os;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

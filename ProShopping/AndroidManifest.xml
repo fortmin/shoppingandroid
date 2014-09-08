@@ -6,7 +6,8 @@
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="23"/>
+        
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -41,6 +42,7 @@
             </intent-filter> 
            
         </activity>
+           
 
         <service android:name="com.fortmin.proshopping.GCMIntentService" />
 
@@ -63,8 +65,8 @@
             android:name="com.fortmin.proshopping.RegisterActivity"
             android:launchMode="singleTop" />
         <activity
-            android:name="com.fortmin.proshopping.LecturaNfc"
-            android:label="@string/title_activity_lectura_nfc" >
+            android:name="com.fortmin.proshopping.LecturaRF"
+            android:label="@string/title_activity_lectura_rf" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -151,7 +153,8 @@
         
         <activity
             android:name="com.fortmin.proshopping.CanastodeCompras"
-            android:label="@string/title_activity_canastode_compras" >
+            android:label="@string/title_activity_canastode_compras" 
+            android:theme="@style/AppTheme" >
         </activity>
          <provider
             android:name="android.support.v4.content.FileProvider"

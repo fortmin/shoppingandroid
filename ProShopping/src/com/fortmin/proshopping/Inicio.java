@@ -95,8 +95,9 @@ public class Inicio extends Activity {
 
 	private void verOpciones() {
 		// TODO Auto-generated method stub
-		Intent opciones = new Intent(this, LecturaNfc.class);
+		Intent opciones = new Intent(this, LecturaRF.class);
 		startActivity(opciones);
+
 		this.finish();
 	}
 

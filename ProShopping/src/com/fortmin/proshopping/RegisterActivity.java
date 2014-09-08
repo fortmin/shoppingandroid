@@ -2,6 +2,7 @@ package com.fortmin.proshopping;
 
 import java.io.IOException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -50,13 +51,14 @@ import com.google.api.client.json.jackson.JacksonFactory;
  * For a comprehensive walkthrough, check out the documentation at
  * http://developers.google.com/eclipse/docs/cloud_endpoints
  */
+@SuppressLint("ClickableViewAccessibility")
 public class RegisterActivity extends Activity {
 
 	enum State {
-		REGISTERED, REGISTERING, UNREGISTERED, UNREGISTERING
+		REGISTRADO, REGISTRANDO, SINREGISTRO, UNREGISTERING
 	}
 
-	private State curState = State.UNREGISTERED;
+	private State curState = State.SINREGISTRO;
 	private OnTouchListener registerListener = null;
 	private OnTouchListener unregisterListener = null;
 	private MessageEndpoint messageEndpoint = null;
@@ -79,7 +81,7 @@ public class RegisterActivity extends Activity {
 								+ "Your application's PROJECT_NUMBER field is unset! You can change "
 								+ "it in GCMIntentService.java");
 					} else {
-						updateState(State.REGISTERING);
+						updateState(State.REGISTRANDO);
 						try {
 							GCMIntentService.register(getApplicationContext());
 						} catch (Exception e) {
@@ -93,7 +95,7 @@ public class RegisterActivity extends Activity {
 									+ "Google Cloud Messaging. If you're running in the emulator, "
 									+ "is the target of your virtual device set to 'Google APIs?' "
 									+ "See the Android log for more details.");
-							updateState(State.UNREGISTERED);
+							updateState(State.SINREGISTRO);
 						}
 					}
 					return true;
@@ -160,10 +162,10 @@ public class RegisterActivity extends Activity {
 					 * of unregistering, then we move back to the registered
 					 * state.
 					 */
-					if (curState == State.REGISTERING) {
-						updateState(State.UNREGISTERED);
+					if (curState == State.REGISTRANDO) {
+						updateState(State.SINREGISTRO);
 					} else {
-						updateState(State.REGISTERED);
+						updateState(State.REGISTRADO);
 					}
 				} else {
 					/*
@@ -173,10 +175,10 @@ public class RegisterActivity extends Activity {
 					 * unregistering, the we move back to the unregistered
 					 * state.
 					 */
-					if (curState == State.REGISTERING) {
-						updateState(State.REGISTERED);
+					if (curState == State.REGISTRANDO) {
+						updateState(State.REGISTRADO);
 					} else {
-						updateState(State.UNREGISTERED);
+						updateState(State.SINREGISTRO);
 					}
 				}
 			} else {
@@ -192,18 +194,18 @@ public class RegisterActivity extends Activity {
 	private void updateState(State newState) {
 		Button registerButton = (Button) findViewById(R.id.regButton);
 		switch (newState) {
-		case REGISTERED:
+		case REGISTRADO:
 			registerButton.setText("Unregister");
 			registerButton.setOnTouchListener(unregisterListener);
 			registerButton.setEnabled(true);
 			break;
 
-		case REGISTERING:
+		case REGISTRANDO:
 			registerButton.setText("Registering...");
 			registerButton.setEnabled(false);
 			break;
 
-		case UNREGISTERED:
+		case SINREGISTRO:
 			registerButton.setText("Register");
 			registerButton.setOnTouchListener(registerListener);
 			registerButton.setEnabled(true);

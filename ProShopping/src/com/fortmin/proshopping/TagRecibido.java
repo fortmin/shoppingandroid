@@ -7,7 +7,7 @@ public class TagRecibido {
 	private boolean atendido = true;
 	private String tipo = "";
 	private int rssi = 0;
-
+	private boolean persitido = false;
 	private static TagRecibido instancia;
 
 	public static TagRecibido getInstance() {
@@ -19,6 +19,14 @@ public class TagRecibido {
 
 	private TagRecibido() {
 
+	}
+
+	public boolean isPersitido() {
+		return persitido;
+	}
+
+	public void setPersitido(boolean persitido) {
+		this.persitido = persitido;
 	}
 
 	public String getNombre() {

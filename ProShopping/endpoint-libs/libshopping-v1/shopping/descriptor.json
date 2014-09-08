@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/shopping/v1/20140821202905/java/1.16.0-rc/fortmin.com-shopping-v1-20140821202905-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-shopping-v1-20140821202905-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/shopping/v1/20140908220112/java/1.16.0-rc/fortmin.com-shopping-v1-20140908220112-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-shopping-v1-20140908220112-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-08-21 20:29"
+      "timestamp": "2014-09-08 22:01"
     }, 
     {
-      "path": "fortmin.com-shopping-v1-20140821202905-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-shopping-v1-20140908220112-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "proshopping.logica", 
   "language_version": "1.16.0-rc", 
   "id": "shopping:v1", 
-  "revision": 20140821202905
+  "revision": 20140908220112
 }

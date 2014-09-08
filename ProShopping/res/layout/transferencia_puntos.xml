@@ -3,7 +3,8 @@
   android:orientation="vertical"  
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
-  android:background="#5B90FF"> 
+  android:background="#5B90FF"
+ > 
      
     <TextView
          android:id="@+id/mispuntos"
@@ -17,10 +18,11 @@
          android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
          android:layout_below="@+id/mispuntos"
-         android:hint="Digite los puntos a transferir">
+         android:hint="@string/edit_text_pasar_puntos">
     </EditText>
      
    <ImageButton
+        android:contentDescription="@string/desc"
         android:id="@+id/btnpasarPtos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

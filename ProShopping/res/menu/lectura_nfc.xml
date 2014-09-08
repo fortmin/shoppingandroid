@@ -2,10 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fortmin.proshopping.LecturaNfc" >
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+   <item android:id="@+id/visible"
+          android:icon="@drawable/ic_visible"
+          android:title="@string/visible"
+          android:showAsAction="ifRoom"/>
+    <item android:id="@+id/invisible"
+          android:icon="@drawable/ic_invisible"
+          android:title="@string/novisible"
+          android:showAsAction="ifRoom"/>
 
 </menu>

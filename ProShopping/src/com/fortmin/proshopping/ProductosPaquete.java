@@ -6,9 +6,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,7 +33,6 @@ public class ProductosPaquete extends Activity {
 	private Iterator<ProductoVO> iprods;
 	private ImageView imagen;
 	private TextView detalle_producto;
-	private ProgressDialog PD = null;
 	private TagRecibido tag_recibido;
 	private DatosLocales paquete_productos;
 	private String nombrePaquete;
@@ -61,7 +58,7 @@ public class ProductosPaquete extends Activity {
 		nombrePaquete = bundle.getString("nombrePaquete");
 		paquete_prod = paquete_productos.obtenerPaquete(this, nombrePaquete);
 		Log.e("ProductoPaquete", nombrePaquete);
-		colores_Lista = new ArrayList();
+		colores_Lista = new ArrayList<String>();
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
 			tag_recibido.setAtendido(true);
@@ -116,28 +113,6 @@ public class ProductosPaquete extends Activity {
 
 		}
 
-		class DownloadTask extends AsyncTask<Object, Object, Object> {
-			@Override
-			protected void onPreExecute() {
-
-				super.onPreExecute();
-				PD = new ProgressDialog(ProductosPaquete.this);
-				PD.setTitle("Please Wait..");
-				PD.setMessage("Loading...");
-				PD.setCancelable(false);
-				PD.show();
-
-			}
-
-			@Override
-			protected Object doInBackground(Object... paq) {
-				// TODO Auto-generated method stub
-
-				return paq;
-
-			}
-		}
-
 	}
 
 	@Override
@@ -178,6 +153,7 @@ public class ProductosPaquete extends Activity {
 			// miscompras.agregarPaqueteCarrito(nombrePaquete);
 			mostrarMensaje("Paquete agregado a su canasto");
 			opcion_elegida = true;
+			this.finish();
 		}
 		return opcion_elegida;
 	}

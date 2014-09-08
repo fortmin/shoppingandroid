@@ -92,15 +92,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		sendNotificationIntent(
 				context,
-				"Registration with Google Cloud Messaging...FAILED!\n\n"
-						+ "A Google Cloud Messaging registration error occurred (errorid: "
-						+ errorId
-						+ "). "
-						+ "Do you have your project number ("
-						+ ("".equals(PROJECT_NUMBER) ? "<unset>"
-								: PROJECT_NUMBER)
-						+ ")  set correctly, and do you have Google Cloud Messaging enabled for the "
-						+ "project?", true, true);
+				"Ha habido un error al registrarse, no podra recibir notificaciones de presencia de amigo",
+				true, true);
 	}
 
 	/**
@@ -110,7 +103,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	public void onMessage(Context context, Intent intent) {
 		sendNotificationIntent(
 				context,
-				"Message received via Google Cloud Messaging:\n\n"
+				"Estimado Cliente, hay un amigo cerca:\n\n"
 						+ intent.getStringExtra("message"), true, false);
 	}
 
@@ -124,7 +117,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	public void onRegistered(Context context, String registration) {
 		boolean alreadyRegisteredWithEndpointServer = false;
-
+		Usuario user = Usuario.getInstance();// singleton de proshooping
+		String nom_user = user.getNombre();// agrego nombre usario
 		try {
 
 			/*
@@ -157,11 +151,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 								.setDeviceRegistrationID(registration)
 								.setTimestamp(System.currentTimeMillis())
 								.setDeviceInformation(
-										URLEncoder
-												.encode(android.os.Build.MANUFACTURER
-														+ " "
-														+ android.os.Build.PRODUCT,
-														"UTF-8"))).execute();
+										URLEncoder.encode(nom_user // android.os.Build.MANUFACTURER
+												// iba " "
+												/*
+												 * + android.os.Build.PRODUCT
+												 */, "UTF-8"))).execute();
 			}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
@@ -170,27 +164,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			sendNotificationIntent(
 					context,
-					"1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
-							+ "2) Registration with Endpoints Server...FAILED!\n\n"
-							+ "Unable to register your device with your Cloud Endpoints server running at "
-							+ endpoint.getRootUrl()
-							+ ". Either your Cloud Endpoints server is not deployed to App Engine, or "
-							+ "your settings need to be changed to run against a local instance "
-							+ "by setting LOCAL_ANDROID_RUN to 'true' in CloudEndpointUtils.java.",
+					"Ha habido un error, y no podra ser notificado si entra un amigo",
 					true, true);
 			return;
 		}
 
-		sendNotificationIntent(
-				context,
-				"1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
-						+ "2) Registration with Endpoints Server...SUCCEEDED!\n\n"
-						+ "Device registration with Cloud Endpoints Server running at  "
-						+ endpoint.getRootUrl()
-						+ " succeeded!\n\n"
-						+ "To send a message to this device, "
-						+ "open your browser and navigate to the sample application at "
-						+ getWebSampleUrl(endpoint.getRootUrl()), false, true);
+		sendNotificationIntent(context,
+				"Sera Notificado cuando ingrese un amigo", false, true);
 	}
 
 	/**
@@ -224,12 +204,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			}
 		}
 
-		sendNotificationIntent(
-				context,
-				"1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
-						+ "2) De-registration with Endpoints Server...SUCCEEDED!\n\n"
-						+ "Device de-registration with Cloud Endpoints server running at  "
-						+ endpoint.getRootUrl() + " succeeded!", false, true);
+		sendNotificationIntent(context, "No sera visible por sus Amigos",
+				false, true);
 	}
 
 	/**
@@ -252,22 +228,37 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	private void sendNotificationIntent(Context context, String message,
 			boolean isError, boolean isRegistrationMessage) {
-		Intent notificationIntent = new Intent(context, RegisterActivity.class);
-		notificationIntent.putExtra("gcmIntentServiceMessage", true);
-		notificationIntent.putExtra("registrationMessage",
-				isRegistrationMessage);
-		notificationIntent.putExtra("error", isError);
-		notificationIntent.putExtra("message", message);
-		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(notificationIntent);
+		NotifyManager notify = new NotifyManager();
+		notify.playNotification(getApplicationContext(), LecturaRF.class,
+				message, "Presencia Amigo", R.drawable.ic_launcher);
+
+		/*
+		 * String Amigo = "Amigo Presente"; Intent notificationIntent = new
+		 * Intent(context, LecturaRF.class);
+		 * notificationIntent.putExtra("gcmIntentServiceMessage", true);
+		 * notificationIntent.putExtra("registrationMessage",
+		 * isRegistrationMessage); notificationIntent.putExtra("error",
+		 * isError); notificationIntent.putExtra("Amigo", Amigo);
+		 * notificationIntent.putExtra("message", message);
+		 * notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// //
+		 * FLAG_ACTIVITY_NEW_TASK startActivity(notificationIntent);
+		 */
+
+		/*
+		 * try { JSONObject json = new JSONObject(notificationIntent.getExtras()
+		 * .getString("com.parse.Data")); NotificationCompat.Builder mBuilder =
+		 * new NotificationCompat.Builder(
+		 * context).setSmallIcon(R.drawable.ic_launcher)
+		 * .setContentTitle(json.getString("Amigo"))
+		 * .setContentText(json.getString("message")); NotificationManager
+		 * mNotificationManager = (NotificationManager) context
+		 * .getSystemService(Context.NOTIFICATION_SERVICE);
+		 * mNotificationManager.notify(1, mBuilder.build());
+		 * 
+		 * } catch (JSONException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
 	}
 
-	private String getWebSampleUrl(String endpointUrl) {
-		// Not the most elegant solution; we'll improve this in the future
-		if (CloudEndpointUtils.LOCAL_ANDROID_RUN) {
-			return CloudEndpointUtils.LOCAL_APP_ENGINE_SERVER_URL
-					+ "index.html";
-		}
-		return endpointUrl.replace("/_ah/api/", "/index.html");
-	}
 }

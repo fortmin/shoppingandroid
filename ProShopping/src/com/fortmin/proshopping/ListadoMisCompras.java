@@ -43,7 +43,7 @@ public class ListadoMisCompras extends Activity {
 		setContentView(R.layout.activity_listadomiscompras);
 		datos_compra = (TextView) findViewById(R.id.datosMisCompras);
 		lstOpciones = (ListView) findViewById(R.id.miListaCompras);
-		colores_Lista = new ArrayList();
+		colores_Lista = new ArrayList<String>();
 		// paso los nombres de productos a
 		// cargar en el listview a un
 		// arreglo de string
