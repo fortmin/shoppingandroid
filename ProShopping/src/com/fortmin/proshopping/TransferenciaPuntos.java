@@ -49,8 +49,8 @@ public class TransferenciaPuntos extends Activity implements
 		ImageButton pasarpuntos = (ImageButton) findViewById(R.id.btnpasarPtos);
 		Nube nube = new Nube(ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
 		Mensaje resp = nube.ejecutarGetPuntajeCliente(user.getNombre());
-		puntos.setTextColor(Color.YELLOW);
-		puntos.setTextSize(18);
+		puntos.setTextColor(Color.WHITE);
+		puntos.setTextSize(30);
 		mis_puntos = resp.getValor();
 		puntos.setText("Usted disponde de " + mis_puntos + " puntos");
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);

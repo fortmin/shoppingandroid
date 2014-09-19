@@ -38,6 +38,7 @@ public class ProductosPaquete extends Activity {
 	private String nombrePaquete;
 	PaqueteVO paquete_prod = null;
 	private ArrayList<String> colores_Lista;
+	private static float tam_letra = 35;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +63,9 @@ public class ProductosPaquete extends Activity {
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
 			tag_recibido.setAtendido(true);
-			detalle_producto.setText("Este paquete tiene "
-					+ paquete_prod.getCantProductos() + " " + "Productos"
-					+ "\n" + paquete_prod.getPrecio() + " $" + "\n"
-					+ paquete_prod.getPuntos() + "puntos acumulados");
+			detalle_producto.setTextSize(tam_letra);
+			detalle_producto.setText("Precio: " + paquete_prod.getPrecio()
+					+ " $" + "\n" + "Puntos : " + paquete_prod.getPuntos());
 
 			// Toast.makeText(getApplicationContext(), "Obteniendo productos",
 			// Toast.LENGTH_LONG).show();

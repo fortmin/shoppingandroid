@@ -52,6 +52,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 *            the activity's context.
 	 */
 	public static void register(Context mContext) {
+
 		GCMRegistrar.checkDevice(mContext);
 		GCMRegistrar.checkManifest(mContext);
 		GCMRegistrar.register(mContext, PROJECT_NUMBER);
@@ -116,6 +117,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onRegistered(Context context, String registration) {
+
 		boolean alreadyRegisteredWithEndpointServer = false;
 		Usuario user = Usuario.getInstance();// singleton de proshooping
 		String nom_user = user.getNombre();// agrego nombre usario
@@ -228,6 +230,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	private void sendNotificationIntent(Context context, String message,
 			boolean isError, boolean isRegistrationMessage) {
+		IngresoAmigo amigo = IngresoAmigo.getInstance();
+		if (message.contains("hay un amigo cerca")) {
+			amigo.setIngreso(true);
+		}
 		NotifyManager notify = new NotifyManager();
 		notify.playNotification(getApplicationContext(), LecturaRF.class,
 				message, "Presencia Amigo", R.drawable.ic_launcher);

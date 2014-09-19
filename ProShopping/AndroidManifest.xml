@@ -33,7 +33,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.fortmin.proshopping.MainActivity"
+            android:name="com.fortmin.proshopping.PresenciaAmigo"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
              <intent-filter>
                
@@ -63,9 +64,11 @@
 
         <activity
             android:name="com.fortmin.proshopping.RegisterActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name="com.fortmin.proshopping.LecturaRF"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_lectura_rf" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -80,6 +83,7 @@
         </activity>
         <activity
             android:name="com.fortmin.proshopping.ProductosPaquete"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_paquete" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -87,6 +91,7 @@
         </activity>
          <activity
             android:name="com.fortmin.proshopping.ListadoMisCompras"
+            android:screenOrientation="portrait"
             android:label="@string/titulo_activity_listado_compras" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -94,6 +99,7 @@
         </activity>
         <activity
             android:name="com.fortmin.proshopping.Inicio"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_inicio" >
              <intent-filter>
                
@@ -103,6 +109,7 @@
         </activity>
         <activity
             android:name="com.fortmin.proshopping.Login"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -110,6 +117,7 @@
         </activity>
          <activity
             android:name="com.fortmin.proshopping.TransferenciaPuntos"
+            android:screenOrientation="portrait"
             android:label="@string/titulo_transferencia_puntos" >
             <intent-filter>
                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -119,6 +127,7 @@
         </activity>
         <activity
             android:name="com.fortmin.proshopping.FormularioRegistro"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_registro" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -133,6 +142,7 @@
 
         <activity
             android:name="com.fortmin.proshopping.MostrarPaquetes"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_mostrar_paquetes" >
         </activity>
         <activity
@@ -145,6 +155,7 @@
         </activity>
         <activity
             android:name="com.fortmin.proshopping.CargarImagen"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_cargar_imagen" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -153,6 +164,7 @@
         
         <activity
             android:name="com.fortmin.proshopping.CanastodeCompras"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_canastode_compras" 
             android:theme="@style/AppTheme" >
         </activity>

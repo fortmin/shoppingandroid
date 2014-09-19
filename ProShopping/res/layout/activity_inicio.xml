@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     tools:context="com.fortmin.proshopping.Inicio"
-    android:background="#5B90FF"
+    android:background="#000000"
     tools:ignore="MergeRootFrame" >
     <FrameLayout 
         android:id="@+id/titulo"
@@ -30,7 +30,7 @@
                 android:id="@+id/btnusuarioR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#5B90FF"
+                android:background="#000000"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:src="@drawable/btn_entrar"
@@ -48,7 +48,7 @@
                 android:id="@+id/btnusuarioNR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#5B90FF"
+                android:background="#000000"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/btn_reg"
             />

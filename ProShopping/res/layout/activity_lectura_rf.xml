@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.fortmin.proshopping.LecturaRF"
-    android:background="#5B90FF"
+    android:background="#000000"
     tools:ignore="MergeRootFrame" >
 
     <FrameLayout

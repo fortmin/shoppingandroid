@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,11 +29,9 @@ public class Login extends Activity {
 		nom_user = (EditText) findViewById(R.id.usuario);
 		pass = (EditText) findViewById(R.id.pass);
 		ImageButton login = (ImageButton) findViewById(R.id.btnLogeo);
-		Typeface fuente = Typeface.createFromAsset(getAssets(),
-				"Roboto-Regular.ttf");
-		nom_user.setTypeface(fuente);
-		pass.setTypeface(fuente);
-
+		int blanco = R.color.white;
+		nom_user.setTextColor(blanco);
+		pass.setTextColor(blanco);
 		login.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 

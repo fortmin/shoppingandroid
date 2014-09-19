@@ -44,12 +44,14 @@ public class LecturaRF extends Activity {
 	private String nombre_paquete;
 	private ListadoCompras miscompras;
 	private ProShopMgr apiNfc;
+	private IngresoAmigo amigo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		new TipoTag();
 		super.onCreate(savedInstanceState);
-		apiNfc = new ProShopMgr();
+
+		apiNfc = new ProShopMgr(getApplicationContext());
 		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_rf);
 		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
@@ -111,9 +113,13 @@ public class LecturaRF extends Activity {
 			}
 
 		});
+		amigo = IngresoAmigo.getInstance();
+		if (amigo.getIngreso()) {
+			mostrarAmigo();
+		}
 		// escucho tag propietario
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-			AnalizarId(apiNfc.id_tag_leido(getIntent()));
+			AnalizarId(apiNfc.getNFC().nombreTagRecibido(getIntent()));
 		}
 
 		escuchar_ibeacons = new com.fortmin.proshopapi.ble.EscucharIbeacons(
@@ -144,8 +150,8 @@ public class LecturaRF extends Activity {
 			}
 		}, 0, 1000 * 60);
 
-		if (tag_recibido.isPersitido()) {
-			tag_recibido.setPersitido(false);
+		if (!tag_recibido.fueMostrado()) {
+			tag_recibido.setMostrado(true);
 			persistirBeacon();
 		}
 
@@ -165,11 +171,15 @@ public class LecturaRF extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		Nube comNube = new Nube(ShoppingNube.OPE_ESTABLECER_VISIBILIDAD);
 		switch (item.getItemId()) {
 		case R.id.visible:
+
+			comNube.establecerVisibilidad(nombre_usuario.getNombre(), true);
 			GCMIntentService.register(getApplicationContext());
 			return true;
 		case R.id.invisible:
+			comNube.establecerVisibilidad(nombre_usuario.getNombre(), false);
 			GCMIntentService.unregister(getApplicationContext());
 			return true;
 		default:
@@ -275,18 +285,23 @@ public class LecturaRF extends Activity {
 		super.onResume();
 		boolean inicializar = true;
 		// check for Bluetooth enabled on each resume
-		ProShopMgr mgr = new ProShopMgr();
-		if (mgr.bleSoportado(this) == false) {
+		ProShopMgr mgr = new ProShopMgr(getApplicationContext());
+		if (mgr.getBLE(this).bleSoportado(this) == false) {
 			mostrarMensaje("Su dispositivo no admite lectura de ibeacon");
 			inicializar = false;
 
 		} else if (mgr.bluetoothHabilitado(this) == false) {
 			// BT not enabled. Request to turn it on. User needs to restart app
 			// once it's turned on.
-			Intent enableBtIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivity(enableBtIntent);
-			// finish();
+			/*
+			 * Intent enableBtIntent = new Intent(
+			 * BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			 * startActivity(enableBtIntent); finish();
+			 */
+			// enciendo automaticamente el bluetooth
+			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+					.getDefaultAdapter();
+			mBluetoothAdapter.enable();
 		}
 
 		// inicializacion del ble
@@ -415,6 +430,12 @@ public class LecturaRF extends Activity {
 		hora = String.valueOf(hhnueva);
 		hora = hora + hora_entrada.substring(2, 5);
 		return hora;
+	}
+
+	public void mostrarAmigo() {
+		Intent mostrar_amigo = new Intent(this, PresenciaAmigo.class);
+		amigo.setIngreso(false);
+		startActivity(mostrar_amigo);
 	}
 
 }

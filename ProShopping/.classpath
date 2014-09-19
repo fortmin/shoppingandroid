@@ -20,5 +20,6 @@
 	<classpathentry kind="src" path="endpoint-libs/libmessageEndpoint-v1/messageEndpoint/messageendpoint-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libseguridad-v1/seguridad/seguridad-v1-generated-source"/>
 	<classpathentry kind="src" path="endpoint-libs/libshopping-v1/shopping/shopping-v1-generated-source"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

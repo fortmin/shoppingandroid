@@ -52,7 +52,7 @@ public class ServicioBle extends Service {
 							tag_recibido.setRssi(ble.darValorRssi());
 							tag_recibido.setAtendido(false);
 							beacon_recibido.setEstadoNotificacion(true);
-							tag_recibido.setPersitido(true);
+							tag_recibido.setMostrado(false);
 							Nube comNube = new Nube(
 									ShoppingNube.OPE_GET_PAQUETE_RF);
 							Paquete paquete = (Paquete) comNube
