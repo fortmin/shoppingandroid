@@ -10,7 +10,6 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.Page;
 import android.graphics.pdf.PdfDocument.PageInfo;
@@ -43,7 +42,6 @@ public class CanastodeCompras extends Activity implements Runnable {
 	private Usuario user = Usuario.getInstance();
 	private ImageView btnRecibo;
 	private TextView precio_puntos;
-	private ArrayList<String> colores_Lista;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,6 @@ public class CanastodeCompras extends Activity implements Runnable {
 		btnRecibo = (ImageView) findViewById(R.id.btnRecibo);
 		listarNombresProductos();
 		nombre_paquete = "VACIO";
-		colores_Lista = new ArrayList<String>();
 		lstOpciones
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
@@ -62,17 +59,13 @@ public class CanastodeCompras extends Activity implements Runnable {
 							final View view, int position, long id) {
 						nombre_paquete = (String) parent
 								.getItemAtPosition(position);
-						if (!colores_Lista.isEmpty()) {
-							if (colores_Lista.get(position).equals("GREEN")) {
-								view.setBackgroundColor(Color.WHITE);
-								colores_Lista.add(position, "WHITE");
-							} else {
-								view.setBackgroundColor(Color.GREEN);
-								colores_Lista.add(position, "GREEN");
-							}
+						view.setSelected(true);
+						if (view.isEnabled()) {
+
+							view.setEnabled(false);
 						} else {
-							view.setBackgroundColor(Color.GREEN);
-							colores_Lista.add(position, "GREEN");
+							view.setEnabled(true);
+
 						}
 
 					}
@@ -144,8 +137,8 @@ public class CanastodeCompras extends Activity implements Runnable {
 		// pasa todos os productos del paquete a un arreglo de string
 
 		CanastaCompras miscompras = CanastaCompras.getInstance();
-		precio_puntos.setText(miscompras.getPrecio() + " $" + "\n"
-				+ miscompras.getPuntos() + " " + "Puntos generados");
+		precio_puntos.setText("Precio: " + " $" + miscompras.getPrecio() + "\n"
+				+ "Puntos: " + miscompras.getPuntos());
 		Iterator<PaqueteVO> icompras = miscompras.getPaquetes_comprados()
 				.iterator();
 		ArrayList<String> datos = new ArrayList<String>();
@@ -275,4 +268,5 @@ public class CanastodeCompras extends Activity implements Runnable {
 		startActivity(lecturanfc);
 		this.finish();
 	}
+
 }

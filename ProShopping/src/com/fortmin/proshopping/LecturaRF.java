@@ -7,7 +7,11 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +43,7 @@ public class LecturaRF extends Activity {
 	private com.fortmin.proshopapi.ble.EscucharIbeacons escuchar_ibeacons;
 	private BeaconRecibido beacon_recibido;
 	private Timer mTimer;
-	private boolean servicioiniciado = false;
+	private boolean servicioiniciado;
 	private boolean scanning = false;
 	private String nombre_paquete;
 	private ListadoCompras miscompras;
@@ -50,7 +54,10 @@ public class LecturaRF extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		new TipoTag();
 		super.onCreate(savedInstanceState);
-
+		if (!verificaConexion(this)) {
+			mostrarMensaje("Para Usar la APP necesita estar conectado a internet");
+			this.finish();
+		}
 		apiNfc = new ProShopMgr(getApplicationContext());
 		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_rf);
@@ -141,9 +148,11 @@ public class LecturaRF extends Activity {
 					beacon_recibido.fijarDistanca();
 
 				}
-
+				SharedPreferences prefs = getSharedPreferences(
+						"estadoservicio", MODE_PRIVATE);
+				String estado_servicio = prefs.getString("conectado", "no");
+				servicioiniciado = estado_servicio.equals("ok");
 				if (!servicioiniciado && beacon_recibido.getBeacon_leido()) {
-					servicioiniciado = true;
 					encenderServicio();
 				}
 
@@ -192,7 +201,6 @@ public class LecturaRF extends Activity {
 		this.setVisible(false);
 		paquete = new Intent(this, ProductosPaquete.class);
 		paquete.putExtra("nombrePaquete", nombrepaquete);
-		this.setVisible(false);
 		startActivity(paquete);
 		this.finish();
 
@@ -277,6 +285,8 @@ public class LecturaRF extends Activity {
 
 	protected void onPause() {
 		super.onPause();
+		this.mTimer.cancel();
+		this.mTimer.purge();
 
 	}
 
@@ -341,7 +351,13 @@ public class LecturaRF extends Activity {
 	}
 
 	public void encenderServicio() {
-
+		// se guarda el estado del servicio en una preferencia para cuando se
+		// vuelva a correr la app
+		SharedPreferences prefs = getSharedPreferences("estadoservicio",
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("conectado", "ok");
+		editor.commit();
 		servicio = new Intent(this, ServicioBle.class);
 		startService(servicio);
 
@@ -436,6 +452,22 @@ public class LecturaRF extends Activity {
 		Intent mostrar_amigo = new Intent(this, PresenciaAmigo.class);
 		amigo.setIngreso(false);
 		startActivity(mostrar_amigo);
+	}
+
+	// para chequear si tiene conexion a internet
+	public static boolean verificaConexion(Context ctx) {
+		boolean bConectado = false;
+		ConnectivityManager connec = (ConnectivityManager) ctx
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		// No sólo wifi, también GPRS
+		NetworkInfo[] redes = connec.getAllNetworkInfo();
+		for (int i = 0; i < 2; i++) {
+			// true si hay conexión
+			if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+				bConectado = true;
+			}
+		}
+		return bConectado;
 	}
 
 }

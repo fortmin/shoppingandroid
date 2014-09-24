@@ -30,6 +30,8 @@ public class Inicio extends Activity {
 				MODE_PRIVATE);
 		nombre = prefs.getString("Usuario", "no existe");
 		if (!nombre.equals("no existe")) {
+			Usuario user = Usuario.getInstance();
+			user.setNombre(nombre);
 			mostrarMensaje("Bienvenido " + nombre);
 			verOpciones();
 		}
@@ -60,6 +62,13 @@ public class Inicio extends Activity {
 				registrarse();
 			}
 		});
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		this.finish();
 
 	}
 

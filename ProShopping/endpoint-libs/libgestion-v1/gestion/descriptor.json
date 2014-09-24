@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/gestion/v1/20140908220136/java/1.16.0-rc/fortmin.com-gestion-v1-20140908220136-java-1.16.0-rc-sources.jar", 
-      "path": "fortmin.com-gestion-v1-20140908220136-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/gestion/v1/20140924030637/java/1.16.0-rc/fortmin.com-gestion-v1-20140924030637-java-1.16.0-rc-sources.jar", 
+      "path": "fortmin.com-gestion-v1-20140924030637-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2014-09-08 22:01"
+      "timestamp": "2014-09-24 03:06"
     }, 
     {
-      "path": "fortmin.com-gestion-v1-20140908220136-java-1.16.0-rc.jar.properties", 
+      "path": "fortmin.com-gestion-v1-20140924030637-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "proshopping.logica", 
   "language_version": "1.16.0-rc", 
   "id": "gestion:v1", 
-  "revision": 20140908220136
+  "revision": 20140924030637
 }

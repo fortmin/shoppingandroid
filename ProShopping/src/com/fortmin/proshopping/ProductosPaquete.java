@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -36,8 +35,7 @@ public class ProductosPaquete extends Activity {
 	private TagRecibido tag_recibido;
 	private DatosLocales paquete_productos;
 	private String nombrePaquete;
-	PaqueteVO paquete_prod = null;
-	private ArrayList<String> colores_Lista;
+	private PaqueteVO paquete_prod = null;
 	private static float tam_letra = 35;
 
 	@Override
@@ -59,7 +57,7 @@ public class ProductosPaquete extends Activity {
 		nombrePaquete = bundle.getString("nombrePaquete");
 		paquete_prod = paquete_productos.obtenerPaquete(this, nombrePaquete);
 		Log.e("ProductoPaquete", nombrePaquete);
-		colores_Lista = new ArrayList<String>();
+
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
 			tag_recibido.setAtendido(true);
@@ -82,24 +80,19 @@ public class ProductosPaquete extends Activity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					// TODO Auto-generated method stub
-					if (!colores_Lista.isEmpty()) {
-						if (colores_Lista.get(position).equals("GREEN")) {
-							view.setBackgroundColor(Color.WHITE);
-							colores_Lista.add(position, "WHITE");
-						} else {
-							view.setBackgroundColor(Color.GREEN);
-							colores_Lista.add(position, "GREEN");
-						}
+					view.setSelected(true);
+					if (view.isEnabled()) {
+						view.setEnabled(false);
 					} else {
-						view.setBackgroundColor(Color.GREEN);
-						colores_Lista.add(position, "GREEN");
+						view.setEnabled(true);
+
 					}
 					String nombre_producto = parent.getItemAtPosition(position)
 							.toString();
 					String nombre_comercio = darComercio(nombre_producto);
 					String precio = darPrecio(nombre_producto);
-					detalle_producto.setText(nombre_comercio + "\n" + "$ "
-							+ precio);
+					detalle_producto.setText("Comercio: " + nombre_comercio
+							+ "\n" + "Precio: " + "$ " + precio);
 					if (nombre_producto.contains("Led"))
 						imagen.setImageResource(R.drawable.img_tvled32);
 					else if (nombre_producto.contains("Bebe"))

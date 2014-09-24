@@ -102,10 +102,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
-		sendNotificationIntent(
-				context,
-				"Estimado Cliente, hay un amigo cerca:\n\n"
-						+ intent.getStringExtra("message"), true, false);
+		sendNotificationIntent(context,
+				"Ingreso de amigo " + intent.getStringExtra("message"), true,
+				false);
 	}
 
 	/**
@@ -171,8 +170,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return;
 		}
 
-		sendNotificationIntent(context,
-				"Sera Notificado cuando ingrese un amigo", false, true);
+		sendNotificationIntent(context, "Notificaremos cuando ingrese amigo",
+				false, true);
 	}
 
 	/**
@@ -206,8 +205,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			}
 		}
 
-		sendNotificationIntent(context, "No sera visible por sus Amigos",
-				false, true);
+		sendNotificationIntent(context, "Invisible para Amigos", false, true);
 	}
 
 	/**
@@ -231,12 +229,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private void sendNotificationIntent(Context context, String message,
 			boolean isError, boolean isRegistrationMessage) {
 		IngresoAmigo amigo = IngresoAmigo.getInstance();
-		if (message.contains("hay un amigo cerca")) {
+		if (message.contains("Ingreso de amigo ")) {
 			amigo.setIngreso(true);
 		}
 		NotifyManager notify = new NotifyManager();
 		notify.playNotification(getApplicationContext(), LecturaRF.class,
-				message, "Presencia Amigo", R.drawable.ic_launcher);
+				message, "Ingresó amigo", R.drawable.ic_launcher);
 
 		/*
 		 * String Amigo = "Amigo Presente"; Intent notificationIntent = new
