@@ -39,7 +39,7 @@ public class LecturaRF extends Activity {
 	private Intent servicio, paquete;
 	private Usuario nombre_usuario;
 	private TagRecibido tag_recibido;
-	private DatosLocales datos = DatosLocales.getInstance();
+	private DatosLocales datos;
 	private com.fortmin.proshopapi.ble.EscucharIbeacons escuchar_ibeacons;
 	private BeaconRecibido beacon_recibido;
 	private Timer mTimer;
@@ -52,6 +52,7 @@ public class LecturaRF extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		datos = DatosLocales.getInstance();
 		new TipoTag();
 		super.onCreate(savedInstanceState);
 		if (!verificaConexion(this)) {
@@ -61,16 +62,24 @@ public class LecturaRF extends Activity {
 		apiNfc = new ProShopMgr(getApplicationContext());
 		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_rf);
+
 		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
 		ImageButton btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
 		ImageButton btn_micarrito = (ImageButton) findViewById(R.id.btnMiCarrito);
 		ImageButton btn_miscompras = (ImageButton) findViewById(R.id.btnMisCompras);
 		ImageButton btn_pasarpuntos = (ImageButton) findViewById(R.id.btnPasarPuntos);
 		ImageButton btn_parking = (ImageButton) findViewById(R.id.btnParking);
+		SharedPreferences prefs = getSharedPreferences("configuracion",
+				MODE_PRIVATE);
+		// para que el nombre de usuario
+		// pueda ser utilizado en
+		// cualquier activity
+		String nombre = prefs.getString("Usuario", "no existe");
+		if (!nombre.equals("no existe")) {
+			nombre_usuario = Usuario.getInstance();
+			nombre_usuario.setNombre(nombre);
+		}
 
-		nombre_usuario = Usuario.getInstance();// para que el nombre de usuario
-												// pueda ser utilizado en
-												// cualquier activity
 		beacon_recibido = BeaconRecibido.getInstance();// esta clase la
 														// actualiza
 														// ActualizarBeacons,
@@ -88,10 +97,21 @@ public class LecturaRF extends Activity {
 		});
 		btn_paquetes.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				if (datos.getHaydatos()) // si aun no se ha crado la base de
-											// datos
+				SharedPreferences pref = getSharedPreferences("bd",
+						MODE_PRIVATE);
+				String base_datos = pref.getString("haydatos", "no");
+				boolean hay_datos = base_datos.equals("no");
+				if (!hay_datos) {
+					datos.setHaydatos(true);
+				} else
+					datos.setHaydatos(false);
+				if (datos.getHaydatos()) {
+					// si aun no se ha crado la base de
+					// datos
+					datos.obtenerBaseLectura(getBaseContext());
 					verPaquetes();
-				else
+					datos.cerrarBase();
+				} else
 					mostrarMensaje("No ha visto paquetes aun");
 			}
 		});
@@ -132,32 +152,33 @@ public class LecturaRF extends Activity {
 		escuchar_ibeacons = new com.fortmin.proshopapi.ble.EscucharIbeacons(
 				this);
 
-		// hace un loop cada 60 segundos
+		// hace un loop cada 5 segundos
 		this.mTimer = new Timer();
 		this.mTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				Log.e("run", "seteando beacon");
 				// si ya fue inicializado el hardware y ya esta escuchando
+
 				if (scanning && escuchar_ibeacons.getEsta_recibiendo()) {
 					beacon_recibido.setBeacon(escuchar_ibeacons.darIbeacon());
 					beacon_recibido.setBeacon_leido(true);
 					beacon_recibido.setDispositivoencendido(escuchar_ibeacons
-							.getEsta_recibiendo());
-					// beacons.setEsta_recibiendo(false);
+							.getEsta_recibiendo()); // beacons.setEsta_recibiendo(false);
 					beacon_recibido.fijarDistanca();
 
 				}
-				SharedPreferences prefs = getSharedPreferences(
-						"estadoservicio", MODE_PRIVATE);
-				String estado_servicio = prefs.getString("conectado", "no");
-				servicioiniciado = estado_servicio.equals("ok");
-				if (!servicioiniciado && beacon_recibido.getBeacon_leido()) {
-					encenderServicio();
-				}
+
+				/*
+				 * SharedPreferences prefs = getSharedPreferences(
+				 * "estadoservicio", MODE_PRIVATE); String estado_servicio =
+				 * prefs.getString("conectado", "no"); servicioiniciado =
+				 * estado_servicio.equals("ok"); if (!servicioiniciado) {
+				 * encenderServicio(); }
+				 */
 
 			}
-		}, 0, 1000 * 60);
+		}, 0, 1000 * 5);
 
 		if (!tag_recibido.fueMostrado()) {
 			tag_recibido.setMostrado(true);
@@ -170,6 +191,7 @@ public class LecturaRF extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.lectura_nfc, menu);
 		return true;
@@ -191,6 +213,12 @@ public class LecturaRF extends Activity {
 			comNube.establecerVisibilidad(nombre_usuario.getNombre(), false);
 			GCMIntentService.unregister(getApplicationContext());
 			return true;
+		case R.id.ribeacon:
+			encenderServicio();
+			return true;
+		case R.id.nribeacon:
+			stopServicio();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -199,6 +227,13 @@ public class LecturaRF extends Activity {
 	public void verPaquete(String nombrepaquete) {
 		// llamo a mostrarPaquete
 		this.setVisible(false);
+		if (datos.getHaydatos()) {
+			SharedPreferences prefs = getSharedPreferences("bd",
+					Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString("haydatos", "TRUE");
+			editor.commit();
+		}
 		paquete = new Intent(this, ProductosPaquete.class);
 		paquete.putExtra("nombrePaquete", nombrepaquete);
 		startActivity(paquete);
@@ -285,8 +320,24 @@ public class LecturaRF extends Activity {
 
 	protected void onPause() {
 		super.onPause();
-		this.mTimer.cancel();
-		this.mTimer.purge();
+		if (datos.getHaydatos()) {
+			SharedPreferences prefs = getSharedPreferences("bd",
+					Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString("haydatos", "TRUE");
+			editor.commit();
+		}
+		// this.mTimer.cancel();
+		// this.mTimer.purge();
+
+	}
+
+	protected void onDetroy() {
+		/*
+		 * super.onDestroy(); Log.e("onDetroy()", "entro");
+		 * this.mTimer.cancel(); this.mTimer.purge(); servicio = new
+		 * Intent(this, ServicioBle.class); stopService(servicio);
+		 */
 
 	}
 
@@ -319,6 +370,7 @@ public class LecturaRF extends Activity {
 			escuchar_ibeacons.initialize();
 			escuchar_ibeacons.startScanning();
 			scanning = true;
+
 		}
 		// ListaIbeacon Ibeacons=beacons.getIbeacons();
 		// ArrayList<Ibeacon> dispositivos=Ibeacons.IbeaconsEncendidos();
@@ -363,7 +415,14 @@ public class LecturaRF extends Activity {
 
 	}
 
+	public void stopServicio() {
+
+		stopService(new Intent(LecturaRF.this, ServicioBle.class));
+
+	}
+
 	public void verPaquetes() {
+
 		Intent mostrar_paquetes = new Intent(this, MostrarPaquetes.class);
 		startActivity(mostrar_paquetes);
 
@@ -393,7 +452,8 @@ public class LecturaRF extends Activity {
 
 	public void verMisCompras() {
 		miscompras = ListadoCompras.getInstance();
-		miscompras.cargarCompras();
+		if (!miscompras.tieneCompras())
+			miscompras.cargarCompras();
 		if (miscompras.tieneCompras()) {
 			Intent vercompras = new Intent(this, ListadoMisCompras.class);
 			startActivity(vercompras);

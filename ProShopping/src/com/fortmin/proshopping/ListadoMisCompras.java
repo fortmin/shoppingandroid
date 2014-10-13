@@ -23,13 +23,13 @@ public class ListadoMisCompras extends Activity {
 	private Iterator<ComprasVO> icompras;
 	private TextView datos_compra;
 	private ArrayList<ComprasVO> compras;
-	private ListadoCompras mis_compras = ListadoCompras.getInstance();
+	private ListadoCompras mis_compras;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
+		mis_compras = ListadoCompras.getInstance();
 		/*
 		 * this.PD = ProgressDialog.show(this, "Procesando",
 		 * "Espere unos segundos...", true, false);
@@ -75,6 +75,8 @@ public class ListadoMisCompras extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (!mis_compras.tieneCompras())
+			mis_compras.cargarCompras();
 
 	}
 
@@ -100,8 +102,13 @@ public class ListadoMisCompras extends Activity {
 	}
 
 	public void cargarCompras() {
+		if (mis_compras.tieneCompras())
+			compras = mis_compras.getMisCompras();
+		else {
+			mis_compras.cargarCompras();
+			compras = mis_compras.getMisCompras();
+		}
 
-		compras = mis_compras.getMisCompras();
 		listarMisCompras();
 	}
 

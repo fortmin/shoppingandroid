@@ -17,7 +17,7 @@ import com.fortmin.proshopping.persistencia.DatosLocales;
 import com.fortmin.proshopping.persistencia.PaquetesVO;
 
 public class MostrarPaquetes extends Activity {
-	private DatosLocales datos = DatosLocales.getInstance();
+	private DatosLocales datos;
 	private PaquetesVO paquetes;
 	private ListView lstOpciones;
 	private ArrayList<String> lista_paquetes = new ArrayList<String>();
@@ -25,6 +25,7 @@ public class MostrarPaquetes extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		datos = DatosLocales.getInstance();
 		setContentView(R.layout.activity_mostrar_paquetes);
 		paquetes = datos.obtenerPaquetes(this);
 		lstOpciones = (ListView) findViewById(R.id.listaPaquetes);

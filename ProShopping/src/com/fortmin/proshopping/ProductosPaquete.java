@@ -57,19 +57,16 @@ public class ProductosPaquete extends Activity {
 		nombrePaquete = bundle.getString("nombrePaquete");
 		paquete_prod = paquete_productos.obtenerPaquete(this, nombrePaquete);
 		Log.e("ProductoPaquete", nombrePaquete);
+		if (nombrePaquete.contains("Klip")) {
+			imagen.setImageResource(R.drawable.mouse);
+		} else if (nombrePaquete.contains("Promo")) {
+			imagen.setImageResource(R.drawable.img_tvled32);
 
+		}
 		// Si pude obtener el paquete procedo a pedir la lista de productos
 		if (paquete_prod != null) {
-			tag_recibido.setAtendido(true);
-			detalle_producto.setTextSize(tam_letra);
-			detalle_producto.setText("Precio: " + paquete_prod.getPrecio()
-					+ " $" + "\n" + "Puntos : " + paquete_prod.getPuntos());
-
-			// Toast.makeText(getApplicationContext(), "Obteniendo productos",
-			// Toast.LENGTH_LONG).show();
-			// comNube = new Nube(ShoppingNube.OPE_GET_PRODUCTOS_PAQUETE);
+			descripcion(paquete_prod.getPuntos());
 			productos = paquete_prod.getProductos();
-
 			listarNombresProductos();// paso los nombres de productos a
 										// cargar en el listview a un
 										// arreglo de string
@@ -99,6 +96,9 @@ public class ProductosPaquete extends Activity {
 						imagen.setImageResource(R.drawable.img_buzobebe);
 					else if (nombre_producto.contains("audifonos"))
 						imagen.setImageResource(R.drawable.img_auriculares);
+					else if (nombre_producto.contains("Klip")) {
+						imagen.setImageResource(R.drawable.mouse);
+					}
 
 				}
 
@@ -171,7 +171,9 @@ public class ProductosPaquete extends Activity {
 			while (iprods.hasNext()) {
 				ProductoVO p = new ProductoVO();
 				p = iprods.next();
+
 				String nombre = p.getNombre();
+
 				datos.add(nombre);
 				Log.e("dato", nombre);
 				// iprods.next();
@@ -224,6 +226,18 @@ public class ProductosPaquete extends Activity {
 		}
 		return precio;
 
+	}
+
+	public void descripcion(int puntos) {
+		tag_recibido.setAtendido(true);
+		detalle_producto.setTextSize(tam_letra);
+		if (puntos == 0) {
+			detalle_producto.setText("Precio: " + paquete_prod.getPrecio()
+					+ " $");
+		} else {
+			detalle_producto.setText("Precio: " + paquete_prod.getPrecio()
+					+ " $" + "\n" + "Puntos : " + puntos);
+		}
 	}
 
 }

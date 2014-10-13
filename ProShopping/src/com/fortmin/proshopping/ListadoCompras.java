@@ -8,18 +8,19 @@ import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 
 public class ListadoCompras {
-	private Usuario user = Usuario.getInstance();
+	private Usuario user;
 	private ArrayList<ComprasVO> compras;
 	private static ListadoCompras instancia;
 	private boolean tienecompras = false;
 
 	private ListadoCompras() {
+		user = Usuario.getInstance();
 		Nube miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
 		compras = miscompras.getCompras(user.getNombre());
-		if (!compras.isEmpty())
+		if (compras.size() != 0)
 			compras = miscompras.getCompras(user.getNombre());
 
-		tienecompras = !(compras.isEmpty());
+		tienecompras = (compras.size() != 0);
 
 	}
 
@@ -66,7 +67,7 @@ public class ListadoCompras {
 	public void cargarCompras() {
 		Nube miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
 		compras = miscompras.getCompras(user.getNombre());
-		tienecompras = !(compras.isEmpty());
+		tienecompras = (compras.size() != 0);
 
 	}
 

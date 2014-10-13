@@ -345,6 +345,7 @@ public class DatosLocales {
 
 	public void setHaydatos(boolean haydatos) {
 		this.haydatos = haydatos;
+
 	}
 
 	/*

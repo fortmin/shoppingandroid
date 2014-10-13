@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,11 +30,6 @@ public class FormularioRegistro extends Activity {
 		e_mail = (EditText) findViewById(R.id.registroemail);
 		user = (EditText) findViewById(R.id.registrousuario);
 		ImageButton registro = (ImageButton) findViewById(R.id.btnRegistro);
-		Typeface fuente = Typeface.createFromAsset(getAssets(),
-				"Roboto-Regular.ttf");
-		user.setTypeface(fuente);
-		e_mail.setTypeface(fuente);
-		nombre.setTypeface(fuente);
 
 		registro.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {

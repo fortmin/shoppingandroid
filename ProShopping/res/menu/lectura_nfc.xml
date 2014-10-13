@@ -5,10 +5,16 @@
    <item android:id="@+id/visible"
           android:icon="@drawable/ic_visible"
           android:title="@string/visible"
-          android:showAsAction="ifRoom"/>
+          android:showAsAction="never"/>
     <item android:id="@+id/invisible"
           android:icon="@drawable/ic_invisible"
           android:title="@string/novisible"
-          android:showAsAction="ifRoom"/>
+          android:showAsAction="never"/>
+    <item android:id="@+id/ribeacon"
+          android:title="@string/recibir_ofertas"
+          android:showAsAction="never"/>
+      <item android:id="@+id/nribeacon"
+          android:title="@string/no_recibir_ofertas"
+          android:showAsAction="never"/>
 
 </menu>

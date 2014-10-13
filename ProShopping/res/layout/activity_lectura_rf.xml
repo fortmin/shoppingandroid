@@ -10,8 +10,8 @@
     <FrameLayout
         android:id="@+id/titulo"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/shopping" >
+        android:layout_height="5dp"
+        >
     </FrameLayout>
    <TableLayout
    		 android:id="@+id/table1"

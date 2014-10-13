@@ -5,14 +5,15 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="23"/>
-        
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <permission
         android:name="com.fortmin.proshopping.permission.C2D_MESSAGE"
@@ -24,28 +25,24 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.fortmin.proshopping.PresenciaAmigo"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
-             <intent-filter>
-               
-                 
+            android:name=".PresenciaAmigo"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> 
-           
+            </intent-filter>
         </activity>
-           
 
-        <service android:name="com.fortmin.proshopping.GCMIntentService" />
+        <service android:name=".GCMIntentService" />
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -63,13 +60,14 @@
         </receiver>
 
         <activity
-            android:name="com.fortmin.proshopping.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop" />
+            android:name=".RegisterActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.fortmin.proshopping.LecturaRF"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_lectura_rf" >
+            android:name=".LecturaRF"
+            android:label="@string/title_activity_lectura_rf"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"  
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -80,95 +78,104 @@
                     android:pathPrefix="/com.fortmin.proshopping:Shopping"
                     android:scheme="vnd.android.nfc" />
             </intent-filter>
+           
         </activity>
         <activity
-            android:name="com.fortmin.proshopping.ProductosPaquete"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_paquete" >
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-         <activity
-            android:name="com.fortmin.proshopping.ListadoMisCompras"
-            android:screenOrientation="portrait"
-            android:label="@string/titulo_activity_listado_compras" >
+            android:name=".ProductosPaquete"
+            android:label="@string/title_activity_paquete"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.fortmin.proshopping.Inicio"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_inicio" >
-             <intent-filter>
-               
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> 
-        </activity>
-        <activity
-            android:name="com.fortmin.proshopping.Login"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_login" >
+            android:name=".ListadoMisCompras"
+            android:label="@string/titulo_activity_listado_compras"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
-            android:name="com.fortmin.proshopping.TransferenciaPuntos"
-            android:screenOrientation="portrait"
-            android:label="@string/titulo_transferencia_puntos" >
+        <activity
+            android:name=".Inicio"
+            android:label="@string/title_activity_inicio"
+            android:screenOrientation="portrait" >
             <intent-filter>
-               <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-               <category android:name="android.intent.category.LAUNCHER" />
-               <data android:mimeType="application/com.fortmin.proshopping" />
+                
+                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.fortmin.proshopping.FormularioRegistro"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_registro" >
+            android:name=".Login"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TransferenciaPuntos"
+            android:label="@string/titulo_transferencia_puntos"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:mimeType="application/com.fortmin.proshopping" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FormularioRegistro"
+            android:label="@string/title_activity_registro"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <service
-            android:name="com.fortmin.proshopping.ServicioBle"
+            android:name=".ServicioBle"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".ServicioClienteCerca"
             android:enabled="true"
             android:exported="false" >
         </service>
 
         <activity
-            android:name="com.fortmin.proshopping.MostrarPaquetes"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_mostrar_paquetes" >
+            android:name=".MostrarPaquetes"
+            android:label="@string/title_activity_mostrar_paquetes"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.fortmin.proshopping.PruebasUnitarias"
+            android:name=".PruebasUnitarias"
             android:label="@string/title_activity_pruebas_unitarias" >
             <intent-filter>
-                 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.fortmin.proshopping.CargarImagen"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_cargar_imagen" >
+            android:name=".CargarImagen"
+            android:label="@string/title_activity_cargar_imagen"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="com.fortmin.proshopping.CanastodeCompras"
+            android:name=".CanastodeCompras"
+            android:label="@string/title_activity_canastode_compras"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_canastode_compras" 
-            android:theme="@style/AppTheme" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+             >
         </activity>
-         <provider
+
+        <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.fortmin.proshopping"
             android:exported="false"
@@ -177,9 +184,21 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <meta-data
             android:name="android.nfc.disable_beam_default"
             android:value="true" />
+
+        <activity
+            android:name=".Tablet"
+            android:label="@string/title_activity_tablet"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+               
+                
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

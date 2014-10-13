@@ -3,13 +3,15 @@
 
     <string name="app_name">ProShopping</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_lectura_rf">Menu</string>
+    <string name="recibir_ofertas">Recibir Ofertas</string>
+    <string name="no_recibir_ofertas">No Recibir Ofertas</string>
+    <string name="title_activity_lectura_rf">Proshopping</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_paquete">Productos del Paquete</string>
+    <string name="title_activity_paquete">Producto</string>
     <string name="title_activity_login">Login de Cliente</string>
     <string name="title_activity_registro">Registro de Cliente</string>
-    <string name="title_activity_inicio">Bienvenido Cliente</string>
-     <string name="desc">boton</string>
+    <string name="title_activity_inicio">Proshopping</string>
+    <string name="desc">boton</string>
     <string name="edit_text_pasar_puntos">Digite los puntos a pasar</string>
     <string name="usuario">Usuario</string>
     <string name="registro_nombre">Nombre Completo </string>
@@ -17,12 +19,14 @@
     <string name="pass">Contraseña</string>
     <string name="Registro"> Registrarse </string>
     <string name="visible"> Visible para Amigos </string>
-     <string name="novisible">No Visible para Amigos </string>
+    <string name="novisible">No Visible para Amigos </string>
     <string name="title_activity_mostrar_paquetes">Ofertas</string>
     <string name="title_activity_pruebas_unitarias">Pruebas Unitarias</string>
     <string name="title_activity_cargar_imagen">Cargar Imagen</string>
-    <string name="title_activity_canastode_compras">Carrito</string>
+    <string name="title_activity_canastode_compras">Eliminar</string>
     <string name="pdf_go">Save And Share</string>
     <string name="titulo_transferencia_puntos">Transferir puntos</string>
     <string name="titulo_activity_listado_compras">Compras realizadas</string>
+    <string name="title_activity_tablet">Ofertas Especiales</string>
+
 </resources>
