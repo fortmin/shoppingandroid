@@ -188,16 +188,18 @@ public class TransferenciaPuntos extends Activity implements
 		mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
 	}
 
-	private final Handler mHandler = new Handler() {
+	private final Handler mHandler = new Handler(new Handler.Callback() {
 		@Override
-		public void handleMessage(Message msg) {
+		public boolean handleMessage(Message msg) {
 			switch (msg.what) {
 			case MESSAGE_SENT:
-				mostrarMensaje("Puntos Enviados");
+				mostrarMensaje("Puntos transferidos");
 				break;
 			}
+			return false;
 		}
-	};
+
+	});
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {

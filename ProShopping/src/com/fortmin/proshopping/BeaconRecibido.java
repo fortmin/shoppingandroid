@@ -7,7 +7,7 @@ public class BeaconRecibido {
 	private boolean beacon_leido = false;
 	private boolean notificar = false;
 	private boolean dispositivoencendido;
-	private static int rssi = -97; // con este valor fijo la potencia
+	private static int rssi = -47; // con este valor fijo la potencia
 
 	private static BeaconRecibido instancia;
 

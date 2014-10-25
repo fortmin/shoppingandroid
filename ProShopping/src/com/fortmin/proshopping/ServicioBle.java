@@ -110,12 +110,16 @@ public class ServicioBle extends Service {
 												nombre_paquete);
 										bd.encontreElementoRf(getBaseContext(),
 												tag);
+										DatosLocales datos = DatosLocales
+												.getInstance();
+										datos.encontreElementoRf(
+												getBaseContext(), tag);
 										notify = new NotifyManager();
 										notify.playNotification(
 												getApplicationContext(),
 												LecturaRF.class,
 												ble.getProximityUuid(),
-												"Ver Paquete",
+												"Oferta",
 												R.drawable.ic_launcher);
 
 									} else {

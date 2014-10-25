@@ -3,11 +3,9 @@
     tools:context="com.fortmin.proshopping.LecturaNfc" >
 
    <item android:id="@+id/visible"
-          android:icon="@drawable/ic_visible"
           android:title="@string/visible"
           android:showAsAction="never"/>
     <item android:id="@+id/invisible"
-          android:icon="@drawable/ic_invisible"
           android:title="@string/novisible"
           android:showAsAction="never"/>
     <item android:id="@+id/ribeacon"

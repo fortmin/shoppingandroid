@@ -6,8 +6,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -43,7 +45,6 @@ public class LecturaRF extends Activity {
 	private com.fortmin.proshopapi.ble.EscucharIbeacons escuchar_ibeacons;
 	private BeaconRecibido beacon_recibido;
 	private Timer mTimer;
-	private boolean servicioiniciado;
 	private boolean scanning = false;
 	private String nombre_paquete;
 	private ListadoCompras miscompras;
@@ -59,6 +60,7 @@ public class LecturaRF extends Activity {
 			mostrarMensaje("Para Usar la APP necesita estar conectado a internet");
 			this.finish();
 		}
+
 		apiNfc = new ProShopMgr(getApplicationContext());
 		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_rf);
@@ -90,8 +92,8 @@ public class LecturaRF extends Activity {
 				Nube nube = new Nube(ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
 				Mensaje resp = nube.ejecutarGetPuntajeCliente(nombre_usuario
 						.getNombre());
-				mostrarMensaje("Usted dispone de : "
-						+ resp.getValor().toString() + " puntos");
+				mostrarDialogo("Dispone de  " + resp.getValor().toString()
+						+ " puntos", "Puntos");
 
 			}
 		});
@@ -111,8 +113,10 @@ public class LecturaRF extends Activity {
 					datos.obtenerBaseLectura(getBaseContext());
 					verPaquetes();
 					datos.cerrarBase();
-				} else
-					mostrarMensaje("No ha visto paquetes aun");
+				} else {
+					mostrarDialogo("No ha visto paquetes aun", "Paquetes");
+				}
+
 			}
 		});
 		btn_micarrito.setOnClickListener(new View.OnClickListener() {
@@ -348,7 +352,8 @@ public class LecturaRF extends Activity {
 		// check for Bluetooth enabled on each resume
 		ProShopMgr mgr = new ProShopMgr(getApplicationContext());
 		if (mgr.getBLE(this).bleSoportado(this) == false) {
-			mostrarMensaje("Su dispositivo no admite lectura de ibeacon");
+			mostrarDialogo("Su dispositivo no admite lectura de ibeacon",
+					"Beacon");
 			inicializar = false;
 
 		} else if (mgr.bluetoothHabilitado(this) == false) {
@@ -433,7 +438,7 @@ public class LecturaRF extends Activity {
 		Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 		CarritoVO micarrito = carrito.getCarritoCompleto(user.getNombre());
 		if (micarrito.getCantItems() == 0) {
-			mostrarMensaje("No tiene paquetes en su canasto");
+			mostrarDialogo("No tiene paquetes en su canasto", "Carrito");
 		} else {
 			CanastaCompras canasta = CanastaCompras.getInstance();
 			canasta.anularCanasta();
@@ -458,7 +463,7 @@ public class LecturaRF extends Activity {
 			Intent vercompras = new Intent(this, ListadoMisCompras.class);
 			startActivity(vercompras);
 		} else {
-			mostrarMensaje("no tiene compras registradas");
+			mostrarDialogo("no tiene compras registradas", "Compras");
 		}
 
 	}
@@ -474,7 +479,7 @@ public class LecturaRF extends Activity {
 		EstacionamientoVO tiempo_parking = parking
 				.getTiempoEstacionamiento(nombre);
 		if (!tiempo_parking.getPresente())
-			mostrarMensaje("Usted no esta en el estacionamiento");
+			mostrarDialogo("No ingreso al parking", "Parking");
 		else {
 			DateTime hora1 = tiempo_parking.getTopSalidaGratis();
 			String hora = hora1.toString();
@@ -530,4 +535,18 @@ public class LecturaRF extends Activity {
 		return bConectado;
 	}
 
+	public void mostrarDialogo(String mensaje, String title) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(mensaje)
+				.setTitle(title)
+				.setCancelable(false)
+				.setNeutralButton("Aceptar",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 }

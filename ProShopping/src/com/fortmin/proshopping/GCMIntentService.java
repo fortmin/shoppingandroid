@@ -102,8 +102,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
-		sendNotificationIntent(context,
-				"Ingreso de amigo " + intent.getStringExtra("message"), true,
+		sendNotificationIntent(context, intent.getStringExtra("message"), true,
 				false);
 	}
 
@@ -170,8 +169,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return;
 		}
 
-		sendNotificationIntent(context, "Notificaremos cuando ingrese amigo",
-				false, true);
+		sendNotificationIntent(context, "alerta amigo encendida", false, true);
 	}
 
 	/**
@@ -234,7 +232,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}
 		NotifyManager notify = new NotifyManager();
 		notify.playNotification(getApplicationContext(), LecturaRF.class,
-				message, "Ingresó amigo", R.drawable.ic_launcher);
+				message, "Alerta Amigo", R.drawable.ic_launcher);
 
 		/*
 		 * String Amigo = "Amigo Presente"; Intent notificationIntent = new
