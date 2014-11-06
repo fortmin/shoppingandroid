@@ -12,6 +12,7 @@ import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 import com.fortmin.proshopping.persistencia.BDElementoRf;
 import com.fortmin.proshopping.persistencia.DatosLocales;
 
+// clase para  testing
 public class PruebasUnitarias extends Activity {
 
 	@Override

@@ -1,6 +1,7 @@
 package com.fortmin.proshopping;
 
 public class TagRecibido {
+
 	private String nombre = "";
 	private String nombre_paquete = "";
 

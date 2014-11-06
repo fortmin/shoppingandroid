@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 
+/* Clase Singleton con el contenido de las compras realizadas
+ * cuya finalidad es tener una persistencia local
+ */
 public class CanastaCompras {
 	private static CanastaCompras instancia;
 	private List<PaqueteVO> paquetes_comprados;
@@ -71,4 +74,5 @@ public class CanastaCompras {
 	public void setPuntos(int puntos) {
 		this.puntos = puntos;
 	}
+
 }

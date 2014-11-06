@@ -14,5 +14,8 @@
       <item android:id="@+id/nribeacon"
           android:title="@string/no_recibir_ofertas"
           android:showAsAction="never"/>
+      <item android:id="@+id/borrardatos"
+          android:title="@string/borrardatos"
+          android:showAsAction="never"/>
 
 </menu>

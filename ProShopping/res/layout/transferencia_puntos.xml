@@ -6,27 +6,22 @@
   android:background="#000000"
  > 
      
-    <TextView
-         android:id="@+id/mispuntos"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content">
-        
-    </TextView>
-    <EditText
-        android:id="@+id/transfpuntos"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-         android:layout_below="@+id/mispuntos"
-         android:hint="@string/edit_text_pasar_puntos">
-    </EditText>
+    
+     <NumberPicker
+        android:id="@+id/numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp" />
+    
      
    <ImageButton
         android:contentDescription="@string/desc"
         android:id="@+id/btnpasarPtos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/transfpuntos"
+        android:layout_below="@+id/numberPicker"
         android:layout_centerHorizontal="true"
         android:background="#000000"
         android:clickable="true"

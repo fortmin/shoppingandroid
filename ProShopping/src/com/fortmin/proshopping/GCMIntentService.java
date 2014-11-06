@@ -16,41 +16,17 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
 
-/**
- * This class is started up as a service of the Android application. It listens
- * for Google Cloud Messaging (GCM) messages directed to this device.
- * 
- * When the device is successfully registered for GCM, a message is sent to the
- * App Engine backend via Cloud Endpoints, indicating that it wants to receive
- * broadcast messages from the it.
- * 
- * Before registering for GCM, you have to create a project in Google's Cloud
- * Console (https://code.google.com/apis/console). In this project, you'll have
- * to enable the "Google Cloud Messaging for Android" Service.
- * 
- * Once you have set up a project and enabled GCM, you'll have to set the
- * PROJECT_NUMBER field to the project number mentioned in the "Overview" page.
- * 
- * See the documentation at
- * http://developers.google.com/eclipse/docs/cloud_endpoints for more
- * information.
+/* Esta clase corre como servicio y esta escuchando Google Clou Messaging enviados al dispositivo
+ * Cuando el dispositivo se resgistra correctamente para GCM, se envia un mensaje al backend de app engine via Cloud Endpoint
+ * indicando que pueden recibir mensajes brodcast desde el
+ * se necesita el numero de proyecto
  */
+
 public class GCMIntentService extends GCMBaseIntentService {
 	private final Deviceinfoendpoint endpoint;
-
-	/*
-	 * TODO: Set this to a valid project number. See
-	 * http://developers.google.com/eclipse/docs/cloud_endpoints for more
-	 * information.
-	 */
+	// Numero del proyecto Proshopping
 	protected static final String PROJECT_NUMBER = "368922725826";
 
-	/**
-	 * Register the device for GCM.
-	 * 
-	 * @param mContext
-	 *            the activity's context.
-	 */
 	public static void register(Context mContext) {
 
 		GCMRegistrar.checkDevice(mContext);
@@ -58,12 +34,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		GCMRegistrar.register(mContext, PROJECT_NUMBER);
 	}
 
-	/**
-	 * Unregister the device from the GCM service.
-	 * 
-	 * @param mContext
-	 *            the activity's context.
-	 */
 	public static void unregister(Context mContext) {
 		GCMRegistrar.unregister(mContext);
 	}
@@ -79,15 +49,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		endpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
 	}
 
-	/**
-	 * Called on registration error. This is called in the context of a Service
-	 * - no dialog or UI.
-	 * 
-	 * @param context
-	 *            the Context
-	 * @param errorId
-	 *            an error message
-	 */
 	@Override
 	public void onError(Context context, String errorId) {
 
@@ -98,7 +59,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 	/**
-	 * Called when a cloud message has been received.
+	 * llamado cuando se recibe un cloud mensaje.
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
@@ -106,25 +67,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 				false);
 	}
 
-	/**
-	 * Called back when a registration token has been received from the Google
-	 * Cloud Messaging service.
-	 * 
-	 * @param context
-	 *            the Context
-	 */
 	@Override
 	public void onRegistered(Context context, String registration) {
-
+		// Se uso un artilujio para registrar con el nombre de usuario
 		boolean alreadyRegisteredWithEndpointServer = false;
 		Usuario user = Usuario.getInstance();// singleton de proshooping
 		String nom_user = user.getNombre();// agrego nombre usario
 		try {
 
-			/*
-			 * Using cloud endpoints, see if the device has already been
-			 * registered with the backend
-			 */
 			DeviceInfo existingInfo = endpoint.getDeviceInfo(registration)
 					.execute();
 
@@ -139,28 +89,19 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		try {
 			if (!alreadyRegisteredWithEndpointServer) {
-				/*
-				 * We are not registered as yet. Send an endpoint message
-				 * containing the GCM registration id and some of the device's
-				 * product information over to the backend. Then, we'll be
-				 * registered.
-				 */
 				DeviceInfo deviceInfo = new DeviceInfo();
 				endpoint.insertDeviceInfo(
 						deviceInfo
 								.setDeviceRegistrationID(registration)
 								.setTimestamp(System.currentTimeMillis())
 								.setDeviceInformation(
-										URLEncoder.encode(nom_user // android.os.Build.MANUFACTURER
-												// iba " "
-												/*
-												 * + android.os.Build.PRODUCT
-												 */, "UTF-8"))).execute();
+										URLEncoder.encode(nom_user
+
+										, "UTF-8"))).execute();
 			}
 		} catch (IOException e) {
 			Log.e(GCMIntentService.class.getName(),
-					"Exception received when attempting to register with server at "
-							+ endpoint.getRootUrl(), e);
+					"Excepción por tiempo agotado  " + endpoint.getRootUrl(), e);
 
 			sendNotificationIntent(
 					context,
@@ -172,13 +113,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		sendNotificationIntent(context, "alerta amigo encendida", false, true);
 	}
 
-	/**
-	 * Called back when the Google Cloud Messaging service has unregistered the
-	 * device.
-	 * 
-	 * @param context
-	 *            the Context
-	 */
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
 
@@ -188,16 +122,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 				endpoint.removeDeviceInfo(registrationId).execute();
 			} catch (IOException e) {
 				Log.e(GCMIntentService.class.getName(),
-						"Exception received when attempting to unregister with server at "
+						"Excepcion por tiempo de espera al querer conectarse al servidor "
 								+ endpoint.getRootUrl(), e);
 				sendNotificationIntent(
 						context,
-						"1) De-registration with Google Cloud Messaging....SUCCEEDED!\n\n"
-								+ "2) De-registration with Endpoints Server...FAILED!\n\n"
-								+ "We were unable to de-register your device from your Cloud "
-								+ "Endpoints server running at "
+						"1) No esta registrado!\n\n"
+								+ "2) Falla al intentar desregistrar usuario!\n\n"
+								+ "No es posible registrarse en la nube"
+								+ "Endpoint server conocido como "
 								+ endpoint.getRootUrl() + "."
-								+ "See your Android log for more information.",
+								+ "ver el log de android por mas informacion.",
 						true, true);
 				return;
 			}
@@ -206,24 +140,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		sendNotificationIntent(context, "Invisible para Amigos", false, true);
 	}
 
-	/**
-	 * Generate a notification intent and dispatch it to the RegisterActivity.
-	 * This is how we get information from this service (non-UI) back to the
-	 * activity.
-	 * 
-	 * For this to work, the 'android:launchMode="singleTop"' attribute needs to
-	 * be set for the RegisterActivity in AndroidManifest.xml.
-	 * 
-	 * @param context
-	 *            the application context
-	 * @param message
-	 *            the message to send
-	 * @param isError
-	 *            true if the message is an error-related message; false
-	 *            otherwise
-	 * @param isRegistrationMessage
-	 *            true if this message is related to registration/unregistration
-	 */
+	// envio de la notificación al movil en la clase LecturaRF
 	private void sendNotificationIntent(Context context, String message,
 			boolean isError, boolean isRegistrationMessage) {
 		IngresoAmigo amigo = IngresoAmigo.getInstance();
@@ -233,33 +150,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		NotifyManager notify = new NotifyManager();
 		notify.playNotification(getApplicationContext(), LecturaRF.class,
 				message, "Alerta Amigo", R.drawable.ic_launcher);
-
-		/*
-		 * String Amigo = "Amigo Presente"; Intent notificationIntent = new
-		 * Intent(context, LecturaRF.class);
-		 * notificationIntent.putExtra("gcmIntentServiceMessage", true);
-		 * notificationIntent.putExtra("registrationMessage",
-		 * isRegistrationMessage); notificationIntent.putExtra("error",
-		 * isError); notificationIntent.putExtra("Amigo", Amigo);
-		 * notificationIntent.putExtra("message", message);
-		 * notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// //
-		 * FLAG_ACTIVITY_NEW_TASK startActivity(notificationIntent);
-		 */
-
-		/*
-		 * try { JSONObject json = new JSONObject(notificationIntent.getExtras()
-		 * .getString("com.parse.Data")); NotificationCompat.Builder mBuilder =
-		 * new NotificationCompat.Builder(
-		 * context).setSmallIcon(R.drawable.ic_launcher)
-		 * .setContentTitle(json.getString("Amigo"))
-		 * .setContentText(json.getString("message")); NotificationManager
-		 * mNotificationManager = (NotificationManager) context
-		 * .getSystemService(Context.NOTIFICATION_SERVICE);
-		 * mNotificationManager.notify(1, mBuilder.build());
-		 * 
-		 * } catch (JSONException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
 
 	}
 

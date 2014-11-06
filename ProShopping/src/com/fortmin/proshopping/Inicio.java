@@ -1,8 +1,10 @@
 package com.fortmin.proshopping;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -12,19 +14,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Inicio extends Activity {
 	private String nombre;
-	ProgressDialog pDialog;
+	private ProgressDialog pDialog;
+	private ImageButton usuarioR;
+	private ImageButton usuarioNR;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
-		ImageButton usuarioR = (ImageButton) findViewById(R.id.btnusuarioR);
-		ImageButton usuarioNR = (ImageButton) findViewById(R.id.btnusuarioNR);
+		usuarioR = (ImageButton) findViewById(R.id.btnusuarioR);
+		usuarioNR = (ImageButton) findViewById(R.id.btnusuarioNR);
 
 		SharedPreferences prefs = getSharedPreferences("configuracion",
 				MODE_PRIVATE);
@@ -36,12 +44,13 @@ public class Inicio extends Activity {
 			verOpciones();
 		}
 		if (!verificaConexion(this)) {
-			mostrarMensaje("Para Usar la APP necesita estar conectado a internet");
+			mostrarMensaje("No tiene conecición a internet");
 			this.finish();
 		}
 
 		usuarioR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				startAnimation(usuarioR);
 				if (!nombre.equals("no existe")) {
 					mostrarMensaje("Bienvenido " + nombre);
 					verOpciones();
@@ -59,6 +68,7 @@ public class Inicio extends Activity {
 		});
 		usuarioNR.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				startAnimation(usuarioR);
 				registrarse();
 			}
 		});
@@ -75,16 +85,16 @@ public class Inicio extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.inicio, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		/*
+		 * controlador del action bar, esta ligado al manifest
+		 */
+
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -103,10 +113,9 @@ public class Inicio extends Activity {
 	}
 
 	private void verOpciones() {
-		// TODO Auto-generated method stub
+
 		Intent opciones = new Intent(this, LecturaRF.class);
 		startActivity(opciones);
-
 		this.finish();
 	}
 
@@ -129,6 +138,21 @@ public class Inicio extends Activity {
 			}
 		}
 		return bConectado;
+	}
+
+	public void mostrarDialogo(String mensaje, String title) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(mensaje)
+				.setTitle(title)
+				.setCancelable(false)
+				.setNeutralButton("Aceptar",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	private class TareaAsincrona extends AsyncTask<Void, Integer, Boolean> {
@@ -156,4 +180,16 @@ public class Inicio extends Activity {
 		}
 
 	}
+
+	public void startAnimation(ImageView ivDH) {
+
+		Animation rotateAnim = new RotateAnimation(0, 360);
+		rotateAnim.setDuration(5000);
+		rotateAnim.setRepeatCount(1);
+		rotateAnim.setInterpolator(new AccelerateInterpolator());
+		rotateAnim.setRepeatMode(Animation.REVERSE);
+
+		ivDH.startAnimation(rotateAnim);
+	}
+
 }

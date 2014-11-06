@@ -1,5 +1,8 @@
 package com.fortmin.proshopping;
 
+/*clase singleton que se usa al recibir la notificación de presencia de amigo y como mecanismo
+ * de intercambio de informacion entre actividades
+ */
 public class IngresoAmigo {
 	private boolean ingreso = false;
 	private static IngresoAmigo instancia;

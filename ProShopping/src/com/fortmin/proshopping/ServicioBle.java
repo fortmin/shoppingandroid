@@ -54,23 +54,22 @@ public class ServicioBle extends Service {
 				beacon_recibido = BeaconRecibido.getInstance();
 				if (beacon_recibido != null) {
 
-					ble = beacon_recibido.getBeacon(); // Exito, obtuve un
-														// beacon
-					// para jugar
+					ble = beacon_recibido.getBeacon();
+					/*
+					 * Exito, obtuve un beaconpara obtener la info
+					 */
 					if (ble != null) {
 						uuid = ble.getProximityUuid();
-						if (ble.clienteCerca() && uuid != null) { // Si no esta
-																	// cerca ni
-																	// me
-																	// molesto
-							if (!beacon_recibido.getEstadoNotificacion()) { // No
-																			// lo
-								// notifique
-								// nunca
-								if (uuid.contains("3705")) { // Esto solo va por
-																// que
-									// tenemos 1 beacon
-									// nada mas
+						if (ble.clienteCerca() && uuid != null) {
+							/* Si no esta cerca ni me molesto */
+							if (!beacon_recibido.getEstadoNotificacion()) {
+								/* Si no lo notifique nunca */
+								if (uuid.contains("3705")) {
+									/*
+									 * Esto solo va por que tenemos 1 beacon
+									 * nada mas Pensando en la masificacion
+									 * dispositivos hay que cambiar la logica.
+									 */
 									Log.e("notificacion", "beacon001");
 									tag_recibido.setNombre("BEACON001");
 									tag_recibido.setTipo("BEACON");
@@ -98,9 +97,8 @@ public class ServicioBle extends Service {
 									Paquete paquete = (Paquete) comNube
 											.ejecutarGetPaqueteRf(tag_recibido
 													.getNombre());
-									if (paquete != null) { // Baje la
-															// informacion,
-										// puedo notificar
+									if (paquete != null) {
+										/* Baje la informacion, puedo notificar */
 										String nombre_paquete = paquete
 												.getNombre();
 										BDElementoRf tag = new BDElementoRf(
@@ -123,7 +121,7 @@ public class ServicioBle extends Service {
 												R.drawable.ic_launcher);
 
 									} else {
-										// TODO, Evaluar si le pasamos un
+										// Evaluar si le pasamos un
 										// mensaje de
 										// que no tiene Internet o nada
 										// Observar que solo notifique en el if
@@ -156,13 +154,13 @@ public class ServicioBle extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO: Return the communication channel to the service.
+
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
+
 		super.onDestroy();
 		stopForeground(true);
 		this.mTimer.cancel();

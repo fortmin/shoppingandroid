@@ -8,19 +8,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.SeguridadNube;
 import com.fortmin.proshopping.logica.seguridad.model.Mensaje;
 
+// Clase cuya finalidad es ver el formulario de registro de nuevo usuario
 public class FormularioRegistro extends Activity {
 	private EditText nombre;
 	private EditText e_mail;
 	private EditText user;
 	private Usuario user_guardado;
+	private ImageButton registro;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +35,21 @@ public class FormularioRegistro extends Activity {
 		nombre = (EditText) findViewById(R.id.registronombre);
 		e_mail = (EditText) findViewById(R.id.registroemail);
 		user = (EditText) findViewById(R.id.registrousuario);
-		ImageButton registro = (ImageButton) findViewById(R.id.btnRegistro);
+		registro = (ImageButton) findViewById(R.id.btnRegistro);
 
 		registro.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				startAnimation(registro);
 				Nube comNube = new Nube(SeguridadNube.OPE_REGISTRO_USUARIO);
 				Mensaje resp = comNube.ejecutarRegistro(user.getText()
 						.toString(), e_mail.getText().toString(), nombre
 						.getText().toString());
 				if (resp != null) {
-					String mensaje = resp.getMensaje(); // Respuesta puede ser
-														// OK o
-														// USUARIO_INEXISTENTE o
-														// CLAVE_INCORRECTA
+					/*
+					 * Respuesta puede ser OK o USUARIO_INEXISTENTE o
+					 * CLAVE_INCORRECTA
+					 */
+					String mensaje = resp.getMensaje();
 					if (mensaje.equals("OK")) {
 						SharedPreferences prefs = getSharedPreferences(
 								"configuracion", Context.MODE_PRIVATE);
@@ -64,18 +72,20 @@ public class FormularioRegistro extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	protected void onPause() {
+		super.onPause();
+		this.finish();
 
-		// Inflate the menu; this adds items to the action bar if it is present.
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.inicio, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -91,5 +101,18 @@ public class FormularioRegistro extends Activity {
 	public void verOpciones() {
 		Intent opciones = new Intent(this, LecturaRF.class);
 		startActivity(opciones);
+	}
+
+	// Metodo para rotar los botones, para que no quede fijo cuando se lo
+	// presiona
+	public void startAnimation(ImageView ivDH) {
+
+		Animation rotateAnim = new RotateAnimation(0, 360);
+		rotateAnim.setDuration(5000);
+		rotateAnim.setRepeatCount(1);
+		rotateAnim.setInterpolator(new AccelerateInterpolator());
+		rotateAnim.setRepeatMode(Animation.REVERSE);
+
+		ivDH.startAnimation(rotateAnim);
 	}
 }

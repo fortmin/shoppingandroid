@@ -3,6 +3,7 @@
 
     <string name="app_name">ProShopping</string>
     <string name="hello_world">Hello world!</string>
+    <string name="borrardatos">Borrar Paquetes</string>
     <string name="recibir_ofertas">Recibir Ofertas</string>
     <string name="no_recibir_ofertas">No Recibir Ofertas</string>
     <string name="title_activity_lectura_rf">Proshopping</string>

@@ -21,7 +21,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fortmin.proshopapi.ProShopMgr;
@@ -50,9 +54,18 @@ public class LecturaRF extends Activity {
 	private ListadoCompras miscompras;
 	private ProShopMgr apiNfc;
 	private IngresoAmigo amigo;
+	private ImageButton btn_puntos;
+	private ImageButton btn_paquetes;
+	private ImageButton btn_micarrito;
+	private ImageButton btn_miscompras;
+	private ImageButton btn_pasarpuntos;
+	private ImageButton btn_parking;
+	private SharedPreferences prefs;
+	private String nombre;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		datos = DatosLocales.getInstance();
 		new TipoTag();
 		super.onCreate(savedInstanceState);
@@ -64,31 +77,35 @@ public class LecturaRF extends Activity {
 		apiNfc = new ProShopMgr(getApplicationContext());
 		tag_recibido = TagRecibido.getInstance();
 		setContentView(R.layout.activity_lectura_rf);
+		btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
+		btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
+		btn_micarrito = (ImageButton) findViewById(R.id.btnMiCarrito);
+		btn_miscompras = (ImageButton) findViewById(R.id.btnMisCompras);
+		btn_pasarpuntos = (ImageButton) findViewById(R.id.btnPasarPuntos);
+		btn_parking = (ImageButton) findViewById(R.id.btnParking);
+		// me fijo si el usuario ya se habia logoneado en la app
+		prefs = getSharedPreferences("configuracion", MODE_PRIVATE);
 
-		ImageButton btn_puntos = (ImageButton) findViewById(R.id.btnPuntos);
-		ImageButton btn_paquetes = (ImageButton) findViewById(R.id.btnPaquetes);
-		ImageButton btn_micarrito = (ImageButton) findViewById(R.id.btnMiCarrito);
-		ImageButton btn_miscompras = (ImageButton) findViewById(R.id.btnMisCompras);
-		ImageButton btn_pasarpuntos = (ImageButton) findViewById(R.id.btnPasarPuntos);
-		ImageButton btn_parking = (ImageButton) findViewById(R.id.btnParking);
-		SharedPreferences prefs = getSharedPreferences("configuracion",
-				MODE_PRIVATE);
-		// para que el nombre de usuario
-		// pueda ser utilizado en
-		// cualquier activity
-		String nombre = prefs.getString("Usuario", "no existe");
+		nombre = prefs.getString("Usuario", "no existe");
 		if (!nombre.equals("no existe")) {
 			nombre_usuario = Usuario.getInstance();
 			nombre_usuario.setNombre(nombre);
+		} else {
+			// mostrarDialogo("Debe estar logeado", "Sistema");
+			Intent inicio = new Intent(this, Inicio.class);
+			startActivity(inicio);
+
 		}
 
-		beacon_recibido = BeaconRecibido.getInstance();// esta clase la
-														// actualiza
-														// ActualizarBeacons,
-														// muestra el ibeacons
-														// instantaneo
+		beacon_recibido = BeaconRecibido.getInstance();// clase que me da el
+														// valor real del beacon
 		btn_puntos.setOnClickListener(new View.OnClickListener() {
+
 			public void onClick(View view) {
+				/*
+				 * boton que me dice de cuantos puntos acumulados dispongo
+				 */
+				startAnimation(btn_puntos);
 				Nube nube = new Nube(ShoppingNube.OPE_GET_PUNTAJE_CLIENTE);
 				Mensaje resp = nube.ejecutarGetPuntajeCliente(nombre_usuario
 						.getNombre());
@@ -98,7 +115,12 @@ public class LecturaRF extends Activity {
 			}
 		});
 		btn_paquetes.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * me muestra los paquetes que fueron leidos meduiante tags NFC o
+			 * mediante las notificaciones del Ibeacon
+			 */
 			public void onClick(View view) {
+				startAnimation(btn_paquetes);
 				SharedPreferences pref = getSharedPreferences("bd",
 						MODE_PRIVATE);
 				String base_datos = pref.getString("haydatos", "no");
@@ -108,8 +130,11 @@ public class LecturaRF extends Activity {
 				} else
 					datos.setHaydatos(false);
 				if (datos.getHaydatos()) {
-					// si aun no se ha crado la base de
-					// datos
+					/*
+					 * cuando los usiarios matan la aplicacion, la app pierde la
+					 * clase singleton que permite recuperar la base en solo
+					 * lectura
+					 */
 					datos.obtenerBaseLectura(getBaseContext());
 					verPaquetes();
 					datos.cerrarBase();
@@ -120,25 +145,44 @@ public class LecturaRF extends Activity {
 			}
 		});
 		btn_micarrito.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * desde aqui se ven los paquetes que se han pasado al carrito puede
+			 * efectuarse la compra al hacer el checkout o eliminarse el paquete
+			 * del carrito
+			 */
 			public void onClick(View view) {
+				startAnimation(btn_micarrito);
 				hacerCompra();
 			}
 		});
 
 		btn_miscompras.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * muestra las comprar realizadas y su estado que puede ser
+			 * entregado o pendiente de entrega
+			 */
 			public void onClick(View view) {
-
+				startAnimation(btn_miscompras);
 				verMisCompras();
 			}
 		});
 		btn_pasarpuntos.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * desde esta nueva actividad puedo intercambiar puntos con otro
+			 * cliente
+			 */
 			public void onClick(View view) {
-
+				startAnimation(btn_pasarpuntos);
 				pasarPuntos();
 			}
 		});
 		btn_parking.setOnClickListener(new View.OnClickListener() {
+			/*
+			 * voy contra la nube y veo el tiempo que me queda disponible en el
+			 * parking
+			 */
 			public void onClick(View view) {
+				startAnimation(btn_parking);
 				verTiempoEstacionamiento(nombre_usuario.getNombre());
 
 			}
@@ -148,15 +192,32 @@ public class LecturaRF extends Activity {
 		if (amigo.getIngreso()) {
 			mostrarAmigo();
 		}
-		// escucho tag propietario
+		// escucho tag propietario es decir el que tiene grabado
+		// "com.fortmin.proshopping" ademas de la info
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-			AnalizarId(apiNfc.getNFC().nombreTagRecibido(getIntent()));
+			prefs = getSharedPreferences("configuracion", MODE_PRIVATE);
+
+			nombre = prefs.getString("Usuario", "no existe");
+			if (!nombre.equals("no existe")) {
+				nombre_usuario = Usuario.getInstance();
+				nombre_usuario.setNombre(nombre);
+				AnalizarId(apiNfc.getNFC().nombreTagRecibido(getIntent()));
+			} else {
+				Intent inicio = new Intent(this, Inicio.class);
+				startActivity(inicio);
+				this.finish();
+
+			}
+
 		}
 
 		escuchar_ibeacons = new com.fortmin.proshopapi.ble.EscucharIbeacons(
 				this);
 
-		// hace un loop cada 5 segundos
+		/*
+		 * hace un loop cada 5 segundos, crado para evitar disparar el servicio
+		 * antes de que el movil este preparado y scaneando los beacon
+		 */
 		this.mTimer = new Timer();
 		this.mTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -173,17 +234,11 @@ public class LecturaRF extends Activity {
 
 				}
 
-				/*
-				 * SharedPreferences prefs = getSharedPreferences(
-				 * "estadoservicio", MODE_PRIVATE); String estado_servicio =
-				 * prefs.getString("conectado", "no"); servicioiniciado =
-				 * estado_servicio.equals("ok"); if (!servicioiniciado) {
-				 * encenderServicio(); }
-				 */
-
 			}
 		}, 0, 1000 * 5);
-
+		/*
+		 * solo se muestra el beacon una vez, para evitar at izar al cliente
+		 */
 		if (!tag_recibido.fueMostrado()) {
 			tag_recibido.setMostrado(true);
 			persistirBeacon();
@@ -194,8 +249,6 @@ public class LecturaRF extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.lectura_nfc, menu);
 		return true;
@@ -203,9 +256,10 @@ public class LecturaRF extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		/*
+		 * controlador del menu con sus diferentes opciones, esta vinculado a
+		 * menu.xml
+		 */
 		Nube comNube = new Nube(ShoppingNube.OPE_ESTABLECER_VISIBILIDAD);
 		switch (item.getItemId()) {
 		case R.id.visible:
@@ -223,13 +277,25 @@ public class LecturaRF extends Activity {
 		case R.id.nribeacon:
 			stopServicio();
 			return true;
+		case R.id.borrardatos:
+			if (datos.getHaydatos()) {
+				datos.limpiarBase();
+				SharedPreferences prefs = getSharedPreferences("bd",
+						Context.MODE_PRIVATE);
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("haydatos", "no");
+				editor.commit();
+				datos.setHaydatos(false);
+			} else
+				mostrarDialogo("No hay Paquetes", "Sistema");
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
 	public void verPaquete(String nombrepaquete) {
-		// llamo a mostrarPaquete
+		// se muestra el paquete
 		this.setVisible(false);
 		if (datos.getHaydatos()) {
 			SharedPreferences prefs = getSharedPreferences("bd",
@@ -247,29 +313,30 @@ public class LecturaRF extends Activity {
 
 	public void entradaEstacionamiento(String acceso, String nom_usuario,
 			String id) {
-		// llamo a mostrarPaquete
-		if (acceso.equals("entrada")) {// entrada
+
+		if (acceso.equals("entrada")) {
+
 			Nube nube = new Nube(ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO);
 			Mensaje resp = nube.ejecutarIngresoEstacionamiento(id, nom_usuario);
 			if (resp != null) {
 				String mensaje = resp.getMensaje();
 				if (mensaje.equals("OK"))
-					mostrarMensaje("Acceso Permitido");
+					mostrarDialogo("Bienvenido " + nombre_usuario.getNombre(),
+							"Parking");
+
 			}
 
-		} else if (acceso.equals("salida")) { // salida
+		} else if (acceso.equals("salida")) {
 			Nube nube = new Nube(ShoppingNube.OPE_INGRESO_ESTACIONAMIENTO);
 			Mensaje resp = nube.ejecutarEgresoEstacionamiento(id, nom_usuario);
 			if (resp != null) {
 				String mensaje = resp.getMensaje();
 				if (!mensaje.equals("PLAZO_VENCIDO") || mensaje.equals("OK")) {
-					mostrarMensaje("Gracias por su visita");
-					try {
-						this.finalize();
-					} catch (Throwable e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					mostrarDialogo(
+							"Gracias por su visita "
+									+ nombre_usuario.getNombre(), "Parking");
+					this.finish();
+
 				}
 			}
 
@@ -287,7 +354,12 @@ public class LecturaRF extends Activity {
 	 * y tag de estacionamiento
 	 */
 	public void AnalizarId(String id) {
-
+		/*
+		 * cuando se graba el tag debe estar precedido por ENT en caso de ser
+		 * entrada al estacionamiento con SAL si es salida del estacionamiento,
+		 * y con PRU si es una tag de prueba, en este unico caso se muestra un
+		 * dialogo y es solo a los efectos de mostrar que el tag es propietario
+		 */
 		nombre_paquete = null;
 		Log.e("ID", id);
 		Log.e("NomUsuario", nombre_usuario.getNombre());
@@ -299,9 +371,10 @@ public class LecturaRF extends Activity {
 
 		} else if (id.contains("SAL")) {
 			entradaEstacionamiento("salida", nombre_usuario.getNombre(), nfc);
+		} else if (id.contains("PRU")) {
+			mostrarDialogo("Tag contiene " + id.substring(3), "tag de prueba");
 		} else {
 			// si es nfc de comercio o smartposter
-
 			Nube comNube = new Nube(ShoppingNube.OPE_GET_PAQUETE_RF);
 			Paquete paquete = (Paquete) comNube.ejecutarGetPaqueteRf(id);
 
@@ -311,6 +384,7 @@ public class LecturaRF extends Activity {
 				nombre_paquete = paquete.getNombre();
 			}
 			Log.e("Nombre Paquete", nombre_paquete);
+			// se guardo el tag en la base de datos
 			BDElementoRf tag = new BDElementoRf(id, TipoTag.tipoNFC, 0,
 					nombre_paquete);
 			comNube.actualizarPosicion(nombre_usuario.getNombre(), id,
@@ -324,6 +398,11 @@ public class LecturaRF extends Activity {
 
 	protected void onPause() {
 		super.onPause();
+		/*
+		 * cuando la app es pausada debemos saber si hay datos en la base porque
+		 * las clases singleton pueden ser borradas de memoria
+		 */
+
 		if (datos.getHaydatos()) {
 			SharedPreferences prefs = getSharedPreferences("bd",
 					Context.MODE_PRIVATE);
@@ -331,17 +410,6 @@ public class LecturaRF extends Activity {
 			editor.putString("haydatos", "TRUE");
 			editor.commit();
 		}
-		// this.mTimer.cancel();
-		// this.mTimer.purge();
-
-	}
-
-	protected void onDetroy() {
-		/*
-		 * super.onDestroy(); Log.e("onDetroy()", "entro");
-		 * this.mTimer.cancel(); this.mTimer.purge(); servicio = new
-		 * Intent(this, ServicioBle.class); stopService(servicio);
-		 */
 
 	}
 
@@ -349,7 +417,7 @@ public class LecturaRF extends Activity {
 	protected void onResume() {
 		super.onResume();
 		boolean inicializar = true;
-		// check for Bluetooth enabled on each resume
+		// Se chequea si el dispositivo es compatible con ble
 		ProShopMgr mgr = new ProShopMgr(getApplicationContext());
 		if (mgr.getBLE(this).bleSoportado(this) == false) {
 			mostrarDialogo("Su dispositivo no admite lectura de ibeacon",
@@ -357,29 +425,19 @@ public class LecturaRF extends Activity {
 			inicializar = false;
 
 		} else if (mgr.bluetoothHabilitado(this) == false) {
-			// BT not enabled. Request to turn it on. User needs to restart app
-			// once it's turned on.
-			/*
-			 * Intent enableBtIntent = new Intent(
-			 * BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			 * startActivity(enableBtIntent); finish();
-			 */
 			// enciendo automaticamente el bluetooth
 			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 					.getDefaultAdapter();
 			mBluetoothAdapter.enable();
 		}
 
-		// inicializacion del ble
+		// inicializacion del ble y comienzo del scanning
 		if (inicializar) {
 			escuchar_ibeacons.initialize();
 			escuchar_ibeacons.startScanning();
 			scanning = true;
 
 		}
-		// ListaIbeacon Ibeacons=beacons.getIbeacons();
-		// ArrayList<Ibeacon> dispositivos=Ibeacons.IbeaconsEncendidos();
-		// beacon=dispositivos.get(0);
 
 	}
 
@@ -398,10 +456,8 @@ public class LecturaRF extends Activity {
 			Log.e("grabacion beacon", "antes de ir a la tabla");
 			String resultado = datos.encontreElementoRf(this, tag);
 			Log.e("grabacion beacon", resultado);
-			// beacons.stopScanning();
 			Log.e("voy a ver el paquete", nombre_paquete);
 			verPaquete(nombre_paquete);
-			// beacons.startScanning();
 
 		}
 
@@ -474,21 +530,21 @@ public class LecturaRF extends Activity {
 	}
 
 	private void verTiempoEstacionamiento(String nombre) {
-		// TODO Auto-generated method stub
+
 		Nube parking = new Nube(ShoppingNube.OPE_GET_TIEMPO_ESTACIONAMIENTO);
 		EstacionamientoVO tiempo_parking = parking
 				.getTiempoEstacionamiento(nombre);
 		if (!tiempo_parking.getPresente())
 			mostrarDialogo("No ingreso al parking", "Parking");
 		else {
+			/*
+			 * hay que convertir la hora por el formatoq ue maneja google
+			 */
 			DateTime hora1 = tiempo_parking.getTopSalidaGratis();
 			String hora = hora1.toString();
 			String hora2 = hora.substring(11, 16);
-
-			// long hora2 = tiempo_parking.getActual().getValue();
-			// long tiempo_restante_segundos = (hora2 - hora1) / 1000;
-			// long tiempo_restante_minutos = tiempo_restante_segundos / 60;
-			mostrarMensaje("Hora de salida sin cargo " + convertirHora(hora2));
+			mostrarDialogo("Hora de salida sin cargo " + convertirHora(hora2),
+					"Parking");
 		}
 	}
 
@@ -543,10 +599,24 @@ public class LecturaRF extends Activity {
 				.setNeutralButton("Aceptar",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
+
 								dialog.cancel();
+
 							}
 						});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
+
+	public void startAnimation(ImageView ivDH) {
+
+		Animation rotateAnim = new RotateAnimation(0, 360);
+		rotateAnim.setDuration(5000);
+		rotateAnim.setRepeatCount(1);
+		rotateAnim.setInterpolator(new AccelerateInterpolator());
+		rotateAnim.setRepeatMode(Animation.REVERSE);
+
+		ivDH.startAnimation(rotateAnim);
+	}
+
 }

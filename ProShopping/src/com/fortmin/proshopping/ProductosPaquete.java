@@ -6,6 +6,8 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +27,9 @@ import com.fortmin.proshopping.logica.shopping.model.PaqueteVO;
 import com.fortmin.proshopping.logica.shopping.model.ProductoVO;
 import com.fortmin.proshopping.persistencia.DatosLocales;
 
+/* clase para mostrar los productos del paquete, con la opcion de pasar al carrito de compras
+ * 
+ */
 public class ProductosPaquete extends Activity {
 	private ArrayList<String> datos = new ArrayList<String>();
 	private List<ProductoVO> productos;
@@ -44,13 +49,8 @@ public class ProductosPaquete extends Activity {
 		super.onCreate(savedInstanceState);
 		paquete_productos = DatosLocales.getInstance();
 		tag_recibido = TagRecibido.getInstance();
-		/*
-		 * this.PD = ProgressDialog.show(this, "Procesando",
-		 * "Espere unos segundos...", true, false);
-		 */
 		setContentView(R.layout.activity_paquete);
 		imagen = (ImageView) findViewById(R.id.imagenProducto);
-
 		lstOpciones = (ListView) findViewById(R.id.mainListView);
 		detalle_producto = (TextView) findViewById(R.id.datosProducto);
 		Bundle bundle = getIntent().getExtras();
@@ -67,16 +67,17 @@ public class ProductosPaquete extends Activity {
 		if (paquete_prod != null) {
 			descripcion(paquete_prod.getPuntos());
 			productos = paquete_prod.getProductos();
-			listarNombresProductos();// paso los nombres de productos a
-										// cargar en el listview a un
-										// arreglo de string
+			listarNombresProductos();
+			/*
+			 * paso los nombres de productos acargar en el listview a un arreglo
+			 * de string
+			 */
 
 			lstOpciones.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// TODO Auto-generated method stub
 					view.setSelected(true);
 					if (view.isEnabled()) {
 						view.setEnabled(false);
@@ -86,6 +87,11 @@ public class ProductosPaquete extends Activity {
 					}
 					String nombre_producto = parent.getItemAtPosition(position)
 							.toString();
+					/*
+					 * las imagenes mostradas son locales, dado que faltan temas
+					 * por resolver con respecto a la persistencia de imagenes
+					 * en la nube
+					 */
 					String nombre_comercio = darComercio(nombre_producto);
 					String precio = darPrecio(nombre_producto);
 					detalle_producto.setText("Comercio: " + nombre_comercio
@@ -110,8 +116,6 @@ public class ProductosPaquete extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
 		super.onCreateOptionsMenu(menu);
 		CrearMenu(menu);
 		return true;
@@ -119,7 +123,7 @@ public class ProductosPaquete extends Activity {
 
 	@SuppressLint({ "NewApi", "InlinedApi" })
 	private void CrearMenu(Menu menu) {
-		// TODO Auto-generated method stub
+
 		MenuItem canasto = menu.add(0, 0, 0, "Agregar al Canasto");
 		{
 			canasto.setIcon(R.drawable.canasta);
@@ -129,22 +133,18 @@ public class ProductosPaquete extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		return MenuSelecciona(item);
 	}
 
 	private boolean MenuSelecciona(MenuItem item) {
-		// TODO Auto-generated method stub
+
 		boolean opcion_elegida = false;
 		if (item.getItemId() == 0) {
 			Nube agregarCarrito = new Nube(
 					ShoppingNube.OPE_AGREGAR_ITEM_CARRITO);
 			Usuario user = com.fortmin.proshopping.Usuario.getInstance();
 			agregarCarrito.agregarItemCarrito(nombrePaquete, user.getNombre());
-			// miscompras.agregarPaqueteCarrito(nombrePaquete);
-			mostrarMensaje("Paquete agregado a su canasto");
+			mostrarDialogo("Paquete agregado al carrito", "Compras");
 			opcion_elegida = true;
 			this.finish();
 		}
@@ -238,6 +238,21 @@ public class ProductosPaquete extends Activity {
 			detalle_producto.setText("Precio: " + paquete_prod.getPrecio()
 					+ " $" + "\n" + "Puntos : " + puntos);
 		}
+	}
+
+	public void mostrarDialogo(String mensaje, String title) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(mensaje)
+				.setTitle(title)
+				.setCancelable(false)
+				.setNeutralButton("Aceptar",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 }

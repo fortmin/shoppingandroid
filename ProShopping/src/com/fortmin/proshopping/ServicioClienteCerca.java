@@ -11,6 +11,7 @@ import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.Mensaje;
 
+// Servicio responsable de la interacción con el Ibeacon, toda la logica se simplifico al unico dispostivo
 public class ServicioClienteCerca extends Service {
 
 	private Timer mTimer;
@@ -54,13 +55,13 @@ public class ServicioClienteCerca extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO: Return the communication channel to the service.
+
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
+
 		super.onDestroy();
 	}
 

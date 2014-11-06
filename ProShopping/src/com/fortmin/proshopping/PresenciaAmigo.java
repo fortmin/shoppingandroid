@@ -6,6 +6,10 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/* clase para mostrar el amigo presente, solo esta pensada para dos, con la información cruzada
+ * la logica para mostrar el grafo de amigos de facebook o de google + es mucho mas compleja y hay que
+ * ponerle pienso
+ */
 public class PresenciaAmigo extends Activity {
 	private Usuario user;
 	private TextView mensaje;
@@ -32,7 +36,7 @@ public class PresenciaAmigo extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}

@@ -17,6 +17,9 @@ import android.widget.Toast;
 import com.fortmin.proshopping.ListadoCompras.datosCompra;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 
+/* clase para mostrar en pantalla el listado de las compras
+ * 
+ */
 public class ListadoMisCompras extends Activity {
 	private ArrayList<String> datos = new ArrayList<String>();
 	private ListView lstOpciones;
@@ -30,18 +33,14 @@ public class ListadoMisCompras extends Activity {
 
 		super.onCreate(savedInstanceState);
 		mis_compras = ListadoCompras.getInstance();
-		/*
-		 * this.PD = ProgressDialog.show(this, "Procesando",
-		 * "Espere unos segundos...", true, false);
-		 */
-
 		setContentView(R.layout.activity_listadomiscompras);
 		datos_compra = (TextView) findViewById(R.id.datosMisCompras);
 		lstOpciones = (ListView) findViewById(R.id.miListaCompras);
 
-		// paso los nombres de productos a
-		// cargar en el listview a un
-		// arreglo de string
+		/*
+		 * paso los nombres de productos a cargar en el listview a un arreglo de
+		 * string
+		 */
 		cargarCompras();
 		lstOpciones.setOnItemClickListener(new OnItemClickListener() {
 
@@ -50,7 +49,6 @@ public class ListadoMisCompras extends Activity {
 					int position, long id) {
 				String nombre_compra = parent.getItemAtPosition(position)
 						.toString();
-				// TODO Auto-generated method stub
 				view.setSelected(true);
 				if (view.isEnabled()) {
 					view.setEnabled(false);
@@ -91,13 +89,13 @@ public class ListadoMisCompras extends Activity {
 				String nombre = p.getCompra();
 				datos.add(nombre);
 				Log.e("dato", nombre);
-				// iprods.next();
+
 			}
-			// datos.add("productos");
+
 			ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
 					R.layout.simplerow, datos);
 			lstOpciones.setAdapter(adaptador);
-			// PD.dismiss();
+
 		}
 	}
 

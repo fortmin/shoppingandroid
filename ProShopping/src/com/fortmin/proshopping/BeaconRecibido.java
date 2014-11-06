@@ -2,6 +2,8 @@ package com.fortmin.proshopping;
 
 import com.fortmin.proshopapi.ble.Ibeacon;
 
+/* Clase para manejar un solo ibacon, sin necesidad de armar estructuras de datos*/
+
 public class BeaconRecibido {
 	private Ibeacon beacon;
 	private boolean beacon_leido = false;
@@ -62,8 +64,8 @@ public class BeaconRecibido {
 		return beacon.clienteCerca();
 	}
 
+	// fija la distacia a detectar el ble
 	public void fijarDistanca() {
-		// fija la distacia a detectar el ble
 		beacon.setCalibracion(rssi);
 	}
 }

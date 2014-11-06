@@ -51,6 +51,8 @@ import com.google.api.client.json.jackson.JacksonFactory;
  * For a comprehensive walkthrough, check out the documentation at
  * http://developers.google.com/eclipse/docs/cloud_endpoints
  */
+
+// Clase autogenerada, CloudEndPoint se dejan los comentarios originales.
 @SuppressLint("ClickableViewAccessibility")
 public class RegisterActivity extends Activity {
 
@@ -125,10 +127,6 @@ public class RegisterActivity extends Activity {
 
 		regButton.setOnTouchListener(registerListener);
 
-		/*
-		 * build the messaging endpoint so we can access old messages via an
-		 * endpoint call
-		 */
 		MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(
 				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
 				new HttpRequestInitializer() {

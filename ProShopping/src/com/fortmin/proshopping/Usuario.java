@@ -1,5 +1,8 @@
 package com.fortmin.proshopping;
 
+/* clase singleton  para guardar los datos del usuario
+ * como medio de intercambio de nombre de usuario entre las activitys.
+ */
 public class Usuario {
 	private String nombre;
 	private int numero_imagen = 0;

@@ -329,6 +329,7 @@ public class DatosLocales {
 	}
 
 	public void limpiarBase() {
+		db = base.getReadableDatabase();
 		int result = db.delete(Base.TABLE_ELEMENTOSRF, "1", null);
 		Log.i("FER", "Tabla ELEMENTOSRF -> Se borraron filas : " + result);
 		result = db.delete(Base.TABLE_PAQUETES, "1", null);
@@ -337,6 +338,9 @@ public class DatosLocales {
 		Log.i("FER", "Tabla PRODUCTOS -> Se borraron filas : " + result);
 		result = db.delete(Base.TABLE_IMAGENES, "1", null);
 		Log.i("FER", "Tabla IMAGENES -> Se borraron filas : " + result);
+		base = new Base(cont, DBPROSHOP, null, 1);
+		db.close();
+
 	}
 
 	public boolean getHaydatos() {

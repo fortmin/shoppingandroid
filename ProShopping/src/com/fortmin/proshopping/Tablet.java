@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/* clase que solo sirve para la tableta, a forma en que fue manejado es que cuando se va a instalar en tableta se cambia en el manifest la
+ * activity principal, esta activity si se pausa es levantada desde el servicio, poolea constantemente para saber el usuario que esta cerca
+ * para mostrar un mensaje personalizado, como la tableta tiene salida hdmi, la idea es mostrarlo en monitor grande
+ */
 public class Tablet extends Activity {
 	private Intent servicio;
 	private TextView mensaje;
@@ -23,7 +27,6 @@ public class Tablet extends Activity {
 		setContentView(R.layout.activity_tablet);
 		mensaje = (TextView) findViewById(R.id.texto);
 		imagen = (ImageView) findViewById(R.id.oferta);
-
 		mensaje.setTextSize(tam_letra);
 
 		if (!servicioiniciado) {
@@ -66,16 +69,14 @@ public class Tablet extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+
 		getMenuInflater().inflate(R.menu.tablet, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

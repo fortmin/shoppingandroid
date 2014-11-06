@@ -35,7 +35,6 @@ public class MostrarPaquetes extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				String nombre_paquete = parent.getItemAtPosition(position)
 						.toString();
 				verPaquete(nombre_paquete);
@@ -46,7 +45,6 @@ public class MostrarPaquetes extends Activity {
 	}
 
 	private void listarNombresPaquetes() {
-		// TODO Auto-generated method stub
 
 		Iterator<PaqueteVO> ipaquetes = paquetes.getPaquetes().iterator();
 		while (ipaquetes.hasNext()) {
@@ -62,7 +60,7 @@ public class MostrarPaquetes extends Activity {
 	}
 
 	public void verPaquete(String nombrepaquete) {
-		// llamo a mostrarPaquete
+		// muestro el paquete
 
 		Intent paquete = new Intent(this, ProductosPaquete.class);
 		paquete.putExtra("nombrePaquete", nombrepaquete);

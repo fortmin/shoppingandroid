@@ -7,10 +7,12 @@ import com.fortmin.proshopping.gae.Nube;
 import com.fortmin.proshopping.gae.ShoppingNube;
 import com.fortmin.proshopping.logica.shopping.model.ComprasVO;
 
+// En esta clase se guardan los datos de las compras
 public class ListadoCompras {
 	private Usuario user;
 	private ArrayList<ComprasVO> compras;
 	private static ListadoCompras instancia;
+	Nube miscompras;
 	private boolean tienecompras = false;
 
 	private ListadoCompras() {
@@ -65,7 +67,7 @@ public class ListadoCompras {
 	}
 
 	public void cargarCompras() {
-		Nube miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
+		miscompras = new Nube(ShoppingNube.OPE_GET_COMPRAS);
 		compras = miscompras.getCompras(user.getNombre());
 		tienecompras = (compras.size() != 0);
 
@@ -110,7 +112,7 @@ public class ListadoCompras {
 
 		public datosCompra() {
 			super();
-			// TODO Auto-generated constructor stub
+
 		}
 
 	}
